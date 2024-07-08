@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:testapp/add_review_screen.dart';
+import 'package:testapp/module/review/add_review_screen.dart';
 import 'package:testapp/core/constaints/icon_path.dart';
 import 'package:testapp/core/constaints/product_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';

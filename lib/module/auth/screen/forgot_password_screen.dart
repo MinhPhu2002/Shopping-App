@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:testapp/core/constaints/icon_path.dart';
 import 'package:testapp/core/constaints/image_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
-import 'package:testapp/vertification_code_screen.dart';
+import 'package:testapp/module/auth/screen/vertification_code_screen.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/foot_page.dart';
 

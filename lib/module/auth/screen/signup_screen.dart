@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testapp/core/constaints/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
-import 'package:testapp/login_screen.dart';
+import 'package:testapp/module/auth/screen/login_screen.dart';
 import 'package:testapp/widget/bottom_action_button.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/foot_page.dart';

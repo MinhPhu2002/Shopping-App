@@ -2,19 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:testapp/brand_screen.dart';
-import 'package:testapp/cart_screen.dart';
+import 'package:testapp/module/product/brand_screen.dart';
+import 'package:testapp/module/cart/cart_screen.dart';
 import 'package:testapp/core/constaints/icon_path.dart';
 import 'package:testapp/core/constaints/image_path.dart';
 import 'package:testapp/core/constaints/product_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
-import 'package:testapp/description_product_screen.dart';
-import 'package:testapp/start_screen.dart';
+import 'package:testapp/module/detail/description_product_screen.dart';
+import 'package:testapp/module/auth/screen/start_screen.dart';
 import 'package:testapp/utilities/ui/mediaquery_extention.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'dart:ui' show ImageFilter;
 
-import 'package:testapp/wishlish_screen.dart';
+import 'package:testapp/module/product/wishlish_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override

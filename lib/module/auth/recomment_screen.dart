@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:testapp/core/constaints/image_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
-import 'package:testapp/home_screen.dart';
+import 'package:testapp/module/home/home_screen.dart';
 
 class RecommentScreen extends StatelessWidget {
   @override

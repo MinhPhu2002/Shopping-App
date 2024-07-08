@@ -43,6 +43,9 @@ class AddReviewScreen extends StatelessWidget {
             TextFieldWidget(
                 filedSize: Size(MediaQuery.sizeOf(context).width - 40, 50),
                 filedName: "Name"),
+            SizedBox(
+              height: 30,
+            ),
             TextFieldWidget(
                 filedSize: Size(MediaQuery.sizeOf(context).width - 40, 213),
                 filedName: "How was your experience ?"),

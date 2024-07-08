@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:testapp/core/constaints/icon_path.dart';
 import 'package:testapp/core/constaints/product_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
-import 'package:testapp/new_card_screen.dart';
+import 'package:testapp/module/cart/new_card_screen.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/foot_page.dart';
 import 'package:testapp/widget/switch_widget.dart';

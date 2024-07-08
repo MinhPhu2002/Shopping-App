@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:testapp/cart_screen.dart';
+import 'package:testapp/module/cart/cart_screen.dart';
 import 'package:testapp/core/constaints/image_path.dart';
 import 'package:testapp/core/constaints/product_path.dart';
 import 'package:testapp/core/constaints/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
-import 'package:testapp/review_screen.dart';
+import 'package:testapp/module/review/review_screen.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/comment.dart';
 

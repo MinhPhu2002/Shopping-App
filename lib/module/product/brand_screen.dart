@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:testapp/cart_screen.dart';
+import 'package:testapp/module/cart/cart_screen.dart';
 import 'package:testapp/core/constaints/icon_path.dart';
 import 'package:testapp/core/constaints/image_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
-import 'package:testapp/description_product_screen.dart';
+import 'package:testapp/module/detail/description_product_screen.dart';
 import 'package:testapp/utilities/ui/mediaquery_extention.dart';
 import 'package:testapp/widget/circle_icon.dart';
 
