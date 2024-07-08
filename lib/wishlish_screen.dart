@@ -266,7 +266,13 @@ class FootWishlistPage extends StatelessWidget {
             ),
           ),
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CartScreen(),
+                    ));
+              },
               icon: SvgPicture.asset(
                 IconPath.bag,
                 colorFilter: const ColorFilter.mode(
