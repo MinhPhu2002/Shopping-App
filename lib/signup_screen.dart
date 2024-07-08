@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:testapp/core/constaints/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/login_screen.dart';
+import 'package:testapp/widget/bottom_action_button.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/foot_page.dart';
+import 'package:testapp/widget/switch_widget.dart';
 
 class SignupScreen extends StatelessWidget {
   const SignupScreen({
@@ -20,18 +22,20 @@ class SignupScreen extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          leading: Padding(
-            padding: const EdgeInsets.only(top: 5, left: 20),
-            child: InkWell(
+          leading: InkResponse(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            borderRadius: BorderRadius.circular(50),
+            highlightShape: BoxShape.rectangle,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 5, left: 20),
               child: CircleIcon(
                   iconname: IconPath.back,
                   colorCircle: Color.fromRGBO(245, 246, 250, 1),
                   sizeIcon: Size(25, 25),
                   sizeCircle: Size(45, 45),
                   colorBorder: Colors.transparent),
-              onTap: () {
-                Navigator.pop(context);
-              },
             ),
           ),
         ),
@@ -68,16 +72,7 @@ class SignupScreen extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.symmetric(
                               vertical: 40, horizontal: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Remember me",
-                                style: AppTextStyle.s13_w5,
-                              ),
-                              SwitchState(),
-                            ],
-                          ),
+                          child: SwitchWidget(nameSwitch: "Remember me"),
                         )
                       ],
                     ),
@@ -87,39 +82,16 @@ class SignupScreen extends StatelessWidget {
             ),
           ),
         ),
-        bottomNavigationBar: InkWell(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LoginScreen(),
-                  settings: RouteSettings(name: "loginScreen"),
-                ));
-          },
-          child: const FootPage(
-            textfootpage: 'Create an Account',
-          ),
-        ));
-  }
-}
-
-class SwitchState extends StatelessWidget {
-  const SwitchState({super.key});
-
-  // const SwitchState({super.key, required this.state});
-  @override
-  Widget build(BuildContext context) {
-    // ignore: unused_local_variable
-    bool light = true;
-    return Transform.scale(
-        scale: 0.7,
-        child: CupertinoSwitch(
-          value: light,
-          activeColor: const Color.fromRGBO(52, 199, 89, 1),
-          onChanged: (bool value) {
-            light = value;
-          },
-        ));
+        bottomNavigationBar: BottomActionButton(
+            textfootpage: "Sign Up",
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginScreen(),
+                    settings: RouteSettings(name: "loginScreen"),
+                  ));
+            }));
   }
 }
 

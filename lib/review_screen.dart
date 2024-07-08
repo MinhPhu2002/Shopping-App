@@ -6,6 +6,8 @@ import 'package:testapp/core/constaints/product_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:custom_rating_bar/custom_rating_bar.dart';
+import 'package:testapp/widget/comment.dart';
+import 'package:testapp/widget/rating.dart';
 
 class ReviewScreen extends StatelessWidget {
   @override
@@ -140,111 +142,6 @@ class NumberReviews extends StatelessWidget {
           ),
         )
       ],
-    );
-  }
-}
-
-class rating extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return Container(
-      width: 70,
-      height: 15,
-      child: RatingBar(
-        filledIcon: Icons.star,
-        emptyIcon: Icons.star_border,
-        onRatingChanged: (value) => debugPrint('$value'),
-        initialRating: 4.2,
-        maxRating: 5,
-        size: 13,
-        filledColor: const Color.fromRGBO(255, 152, 31, 1),
-      ),
-    );
-  }
-}
-
-class Comment extends StatelessWidget {
-  final String avatar;
-  final String name;
-  final String time;
-  final double ratingScore;
-  final String comment;
-
-  const Comment(
-      {super.key,
-      required this.avatar,
-      required this.name,
-      required this.time,
-      required this.ratingScore,
-      required this.comment});
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Container(
-        width: MediaQuery.sizeOf(context).width - 40,
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Image.asset(
-                      avatar,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: AppTextStyle.s15_w5,
-                    ),
-                    const SizedBox(width: 7),
-                    Row(
-                      children: [
-                        SvgPicture.asset(IconPath.clock),
-                        const SizedBox(width: 5),
-                        Text(time,
-                            style: AppTextStyle.s11_w5.copyWith(
-                                color: const Color.fromRGBO(143, 149, 158, 1)))
-                      ],
-                    )
-                  ],
-                ),
-                const Spacer(),
-                Column(
-                  children: [
-                    Text(
-                      ratingScore.toString() + " rating",
-                      style: AppTextStyle.s15_w5,
-                    ),
-                    rating(),
-                  ],
-                )
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              comment,
-              style: AppTextStyle.s15_w4
-                  .copyWith(color: const Color.fromRGBO(143, 149, 158, 1)),
-            )
-          ],
-        ),
-      ),
     );
   }
 }

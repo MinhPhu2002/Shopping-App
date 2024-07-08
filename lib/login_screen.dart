@@ -6,6 +6,7 @@ import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/recomment_screen.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/foot_page.dart';
+import 'package:testapp/widget/switch_widget.dart';
 
 import 'forgot_password_screen.dart';
 
@@ -92,21 +93,11 @@ class LoginScreen extends StatelessWidget {
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.only(
-                        top: 40 * MediaQuery.sizeOf(context).height / 812,
-                        left: 20,
-                        right: 20),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Remember me",
-                          style: AppTextStyle.s13_w5,
-                        ),
-                        SwitchState(),
-                      ],
-                    ),
-                  ),
+                      padding: EdgeInsets.only(
+                          top: 40 * MediaQuery.sizeOf(context).height / 812,
+                          left: 20,
+                          right: 20),
+                      child: SwitchWidget(nameSwitch: "Remember me")),
                   Spacer(),
                   Padding(
                     padding: EdgeInsets.only(left: 25, right: 25, bottom: 20),
@@ -143,26 +134,6 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     ));
-  }
-}
-
-class SwitchState extends StatelessWidget {
-  const SwitchState({super.key});
-
-  // const SwitchState({super.key, required this.state});
-  @override
-  Widget build(BuildContext context) {
-    // ignore: unused_local_variable
-    bool light = true;
-    return Transform.scale(
-        scale: 0.7,
-        child: CupertinoSwitch(
-          value: light,
-          activeColor: const Color.fromRGBO(52, 199, 89, 1),
-          onChanged: (bool value) {
-            light = value;
-          },
-        ));
   }
 }
 

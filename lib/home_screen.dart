@@ -295,10 +295,20 @@ class DrawerHomePage extends StatelessWidget {
               ),
               const ListMenu(icon: IconPath.point, name: "Account Information"),
               const ListMenu(icon: IconPath.lock, name: "Password"),
-              const ListMenu(icon: IconPath.bag, name: "Order"),
+              InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CartScreen(),
+                        ));
+                  },
+                  child: ListMenu(icon: IconPath.bag, name: "Order")),
               const ListMenu(icon: IconPath.wallet, name: "My Cards"),
               InkWell(
                   onTap: () {
+                    Navigator.pop(context);
                     Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -8,6 +8,7 @@ import 'package:testapp/core/constaints/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/review_screen.dart';
 import 'package:testapp/widget/circle_icon.dart';
+import 'package:testapp/widget/comment.dart';
 
 class DescriptionProductScreen extends StatelessWidget {
   const DescriptionProductScreen({super.key});

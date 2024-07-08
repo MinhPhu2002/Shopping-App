@@ -86,7 +86,7 @@ class CartScreen extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PaymentScreen(),
+                      builder: (context) => const PaymentScreen(),
                     ));
               },
               child: const TransactionDetails(
@@ -125,7 +125,7 @@ class CartScreen extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => OrderConfirmedScreen(),
+                builder: (context) => const OrderConfirmedScreen(),
               ));
         },
         child: const FootPage(
@@ -155,8 +155,8 @@ class CartProduct extends StatelessWidget {
         height: 120,
         width: MediaQuery.sizeOf(context).width - 40,
         decoration: BoxDecoration(
-            boxShadow: [
-              const BoxShadow(
+            boxShadow: const [
+              BoxShadow(
                   offset: Offset(0, 10),
                   blurRadius: 100,
                   spreadRadius: -15,
@@ -199,7 +199,7 @@ class CartProduct extends StatelessWidget {
                   ),
                   const Spacer(),
                   Text(
-                    Cost + " (+\$4.00 Tax)",
+                    "$Cost (+\$4.00 Tax)",
                     style: AppTextStyle.s11_w5.copyWith(
                       color: const Color.fromRGBO(143, 149, 158, 1),
                     ),
@@ -264,7 +264,6 @@ class TransactionDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
@@ -339,7 +338,6 @@ class TotalPayment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Padding(
       padding: const EdgeInsets.only(top: 10, right: 20, left: 20),
       child: Row(

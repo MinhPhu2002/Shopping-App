@@ -65,43 +65,38 @@ class VertificationCodeScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 60, left: 5, right: 5),
                 child: OtpInput(),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 80),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                        padding: const EdgeInsets.only(
-                            left: 36, right: 36, bottom: 25),
-                        child: Text.rich(TextSpan(children: [
-                          const TextSpan(
-                            text: "00:20",
-                            style: AppTextStyle.s13_w5,
-                          ),
-                          TextSpan(
-                              text: " resend confirmation code.",
-                              style: AppTextStyle.s13_w4.copyWith(
-                                  color:
-                                      const Color.fromRGBO(143, 149, 158, 1))),
-                        ])))
-                  ],
-                ),
-              ),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: InkWell(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => NewPasswordScreen(),
-              ));
-        },
-        child: const FootPage(
-          textfootpage: 'Confirm Code',
-        ),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+              padding: const EdgeInsets.only(left: 36, right: 36, bottom: 25),
+              child: Text.rich(TextSpan(children: [
+                const TextSpan(
+                  text: "00:20",
+                  style: AppTextStyle.s13_w5,
+                ),
+                TextSpan(
+                    text: " resend confirmation code.",
+                    style: AppTextStyle.s13_w4.copyWith(
+                        color: const Color.fromRGBO(143, 149, 158, 1))),
+              ]))),
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NewPasswordScreen(),
+                  ));
+            },
+            child: const FootPage(
+              textfootpage: 'Confirm Code',
+            ),
+          ),
+        ],
       ),
     ));
   }

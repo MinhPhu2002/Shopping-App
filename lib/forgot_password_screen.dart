@@ -62,16 +62,6 @@ class ForgotPasswordScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       NameList(Credentials: "Email Address"),
-                      Padding(
-                        padding:
-                            EdgeInsets.only(left: 36, right: 36, bottom: 25),
-                        child: Text(
-                          "Please write your email to receive a confirmation code to set a new password.",
-                          textAlign: TextAlign.center,
-                          style: AppTextStyle.s13_w4.copyWith(
-                              color: Color.fromRGBO(143, 149, 158, 1)),
-                        ),
-                      )
                     ],
                   ),
                 ),
@@ -80,47 +70,39 @@ class ForgotPasswordScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: InkWell(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => VertificationCodeScreen(),
-              ));
-        },
-        child: const FootPage(
-          textfootpage: 'Confirm Mail',
-        ),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 36, right: 36, bottom: 25),
+            child: Text(
+              "Please write your email to receive a confirmation code to set a new password.",
+              textAlign: TextAlign.center,
+              style: AppTextStyle.s13_w4
+                  .copyWith(color: Color.fromRGBO(143, 149, 158, 1)),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VertificationCodeScreen(),
+                  ));
+            },
+            child: const FootPage(
+              textfootpage: 'Confirm Mail',
+            ),
+          ),
+        ],
       ),
     ));
   }
 }
 
-class SwitchState extends StatelessWidget {
-  const SwitchState({super.key});
-
-  // const SwitchState({super.key, required this.state});
-  @override
-  Widget build(BuildContext context) {
-    // ignore: unused_local_variable
-    bool light = true;
-    return Transform.scale(
-        scale: 0.7,
-        child: CupertinoSwitch(
-          value: light,
-          activeColor: const Color.fromRGBO(52, 199, 89, 1),
-          onChanged: (bool value) {
-            light = value;
-          },
-        ));
-  }
-}
-
 class NameList extends StatelessWidget {
-  // ignore: non_constant_identifier_names
-  const NameList({super.key, required this.Credentials});
-  // ignore: non_constant_identifier_names
   final String Credentials;
+  const NameList({super.key, required this.Credentials});
   @override
   Widget build(BuildContext context) {
     return Padding(

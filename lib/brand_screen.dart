@@ -97,17 +97,23 @@ class BrandScreen extends StatelessWidget {
                     Container(
                       width: 71,
                       height: 37,
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(IconPath.sort),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            "Sort",
-                            style: AppTextStyle.s15_w5,
-                          )
-                        ],
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Color.fromRGBO(245, 246, 250, 1)),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(IconPath.sort),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              "Sort",
+                              style: AppTextStyle.s15_w5,
+                            )
+                          ],
+                        ),
                       ),
                     )
                   ],

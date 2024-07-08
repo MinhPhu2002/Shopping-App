@@ -3,6 +3,7 @@ class IconPath {
 
   static const String badge = 'assets/Icon/Badge.svg';
   static const String check = 'assets/Icon/Check.svg';
+  static const String edit = 'assets/Icon/Edit.svg';
   static const String home = 'assets/Icon/Home.svg';
   static const String location = 'assets/Icon/Location.svg';
   static const String lock = 'assets/Icon/Lock.svg';
