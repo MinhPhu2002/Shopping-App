@@ -47,14 +47,14 @@ class NewCardScreen extends StatelessWidget {
         child: Column(
           children: [
             SingleChildScrollView(
-              padding: EdgeInsets.only(left: 20, top: 25, right: 20),
+              padding: const EdgeInsets.only(left: 20, top: 25, right: 20),
               scrollDirection: Axis.horizontal,
               child: Container(
                 height: 50,
-                child: Row(
+                child: const Row(
                   children: [
                     ListCard(typeCard: ProductPath.typeCard1),
-                    SizedBox(
+                    const SizedBox(
                       width: 17,
                     ),
                     ListCard(typeCard: ProductPath.typeCard2),
@@ -86,7 +86,7 @@ class NewCardScreen extends StatelessWidget {
                       filedSize:
                           Size((MediaQuery.sizeOf(context).width - 55) / 2, 50),
                       filedName: "EXP"),
-                  SizedBox(
+                  const SizedBox(
                     width: 15,
                   ),
                   TextFieldWidget(
@@ -124,7 +124,7 @@ class ListCard extends StatelessWidget {
       height: 50,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Color.fromRGBO(245, 246, 250, 1)),
+          color: const Color.fromRGBO(245, 246, 250, 1)),
       child: Center(
         child: Image.asset(
           typeCard,

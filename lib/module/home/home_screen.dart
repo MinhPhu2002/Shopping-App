@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:testapp/module/home/bloc/products/products_cubit.dart';
+import 'package:testapp/module/home/bloc/products/products_state.dart';
 import 'package:testapp/module/product/brand_screen.dart';
 import 'package:testapp/module/cart/cart_screen.dart';
 import 'package:testapp/core/constaints/icon_path.dart';
@@ -153,36 +156,32 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(
                 height: 15,
               ),
-              GridView.count(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                mainAxisSpacing: 15,
-                crossAxisSpacing: 15,
-                crossAxisCount: 2,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                childAspectRatio: 160 / 257,
-                children: const [
-                  NewArraival(
-                    productImage: ImagePath.homeScreenProductImage1Illustrator,
-                    productName: "Nike Sportswear Club Fleece",
-                    productCost: "\$99",
-                  ),
-                  NewArraival(
-                    productImage: ImagePath.homeScreenProductImage2Illustrator,
-                    productName: "Trail Running Jacket Nike Windrunner",
-                    productCost: "\$80",
-                  ),
-                  NewArraival(
-                    productImage: ImagePath.homeScreenProductImage3Illustrator,
-                    productName: "Nike Sportswear Club Fleece",
-                    productCost: "\$100",
-                  ),
-                  NewArraival(
-                    productImage: ImagePath.homeScreenProductImage4Illustrator,
-                    productName: "",
-                    productCost: "",
-                  ),
-                ],
+              BlocBuilder<ProductsCubit, ProductsState>(
+                builder: (context, state) {
+                  if (state is ProductsLoadingInProgress) {
+                    return CircularProgressIndicator();
+                  }
+                  if (state is ProductsLoadingError) {
+                    return Text(state.errorMessage);
+                  }
+                  final data = (state as ProductsLoaded).products;
+                  return GridView.count(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      mainAxisSpacing: 15,
+                      crossAxisSpacing: 15,
+                      crossAxisCount: 2,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      childAspectRatio: 160 / 257,
+                      children: data.map(
+                        (item) {
+                          return NewArraival(
+                              productImage: item.imageUrl,
+                              productName: item.title,
+                              productCost: item.price.toString());
+                        },
+                      ).toList());
+                },
               )
             ],
           ),
@@ -543,7 +542,7 @@ class NewArraival extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   image: DecorationImage(
-                    image: AssetImage(productImage),
+                    image: NetworkImage(productImage),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -555,8 +554,9 @@ class NewArraival extends StatelessWidget {
                     onPressed: () {},
                     icon: Image.asset(
                       ImagePath.homeScreenHeartIconIllustrator,
-                      width: 20,
-                      height: 20,
+                      color: Colors.white,
+                      width: 25,
+                      height: 25,
                       fit: BoxFit.cover,
                     )),
               )
@@ -570,7 +570,7 @@ class NewArraival extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            productCost,
+            "\$" + productCost,
             style: AppTextStyle.s13_w6
                 .copyWith(color: const Color.fromRGBO(29, 30, 32, 1)),
           )
