@@ -10,7 +10,7 @@ class ProductsCubit extends Cubit<ProductsState> {
   Future<void> load() async {
     try {
       emit(ProductsLoadingInProgress());
-      final result = await repo.getProducts();
+      final result = await repo.getProducts(0, 10);
       emit(ProductsLoaded(products: result));
     } catch (e) {
       emit(ProductsLoadingError(errorMessage: e.toString()));

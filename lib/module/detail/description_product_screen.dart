@@ -1,11 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:readmore/readmore.dart';
+import 'package:testapp/common/model/product_model.dart';
 import 'package:testapp/module/cart/cart_screen.dart';
 import 'package:testapp/core/constaints/image_path.dart';
 import 'package:testapp/core/constaints/product_path.dart';
 import 'package:testapp/core/constaints/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
+import 'package:testapp/module/detail/bloc/product_details/product_details_cubit.dart';
+import 'package:testapp/module/detail/bloc/product_details/product_details_state.dart';
 import 'package:testapp/module/review/review_screen.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/comment.dart';
@@ -59,189 +65,218 @@ class DescriptionProductScreen extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Stack(
-              alignment: Alignment.topCenter,
-              children: [
-                const ColoredBox(color: Color.fromRGBO(245, 246, 250, 1)),
-                Padding(
-                  padding: const EdgeInsets.only(top: 31),
-                  child: Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      Image.asset(
-                        ImagePath.homeScreenProductImage1Illustrator,
-                        width: 310,
-                        fit: BoxFit.fill,
-                      ),
-                      SvgPicture.asset(IconPath.logo),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Container(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      body: BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
+        builder: (context, state) {
+          if (state is ProductDetailsLoadingInProgress) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (state is ProductDetailsLoadingError) {
+            return Center(child: Text(state.errorMessage));
+          }
+          final data = (state as ProductDetailsLoaded).productDetails;
+          return Body(
+            model: data,
+          );
+        },
+      ),
+    );
+  }
+}
+
+class Body extends StatelessWidget {
+  final ProductDetailsModel model;
+
+  const Body({super.key, required this.model});
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              ColoredBox(color: Color.fromRGBO(245, 246, 250, 1)),
+              Padding(
+                padding: EdgeInsets.only(top: 31),
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
                   children: [
-                    const SizedBox(height: 15),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            "Men's Printed Pullover Hoodie",
-                            style: AppTextStyle.s13_w4.copyWith(
-                                color: const Color.fromRGBO(143, 149, 158, 1)),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Text(
-                          "Price",
-                          style: AppTextStyle.s13_w4.copyWith(
-                              color: const Color.fromRGBO(143, 149, 158, 1)),
-                        )
-                      ],
+                    Image.network(
+                      model.imageUrl[0],
+                      fit: BoxFit.fitWidth,
+                      width: double.infinity,
                     ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Nike Club Fleece",
-                          style: AppTextStyle.s22_w6.copyWith(
-                              color: const Color.fromRGBO(29, 30, 32, 1)),
-                        ),
-                        Text(
-                          "\$99",
-                          style: AppTextStyle.s22_w6.copyWith(
-                              color: const Color.fromRGBO(29, 30, 32, 1)),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    const SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          ProductInformation(
-                              PathProductInformation: ProductPath.product11),
-                          ProductInformation(
-                              PathProductInformation: ProductPath.product12),
-                          ProductInformation(
-                              PathProductInformation: ProductPath.product13),
-                          ProductInformation(
-                              PathProductInformation: ProductPath.product14),
-                          ProductInformation(
-                              PathProductInformation: ProductPath.product12),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Size",
-                          style: AppTextStyle.s17_w6.copyWith(
-                              color: const Color.fromRGBO(29, 30, 32, 1)),
-                        ),
-                        Text(
-                          "Size Guide ",
-                          style: AppTextStyle.s15_w4.copyWith(
-                              color: const Color.fromRGBO(143, 149, 158, 1)),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    // ignore: prefer_const_constructors
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: const Row(
-                        children: [
-                          ProductSize(size: "S"),
-                          ProductSize(size: "M"),
-                          ProductSize(size: "L"),
-                          ProductSize(size: "Xl"),
-                          ProductSize(size: "2XL"),
-                          ProductSize(size: "3XL"),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    const Text(
-                      "Description",
-                      style: AppTextStyle.s17_w6,
-                    ),
-                    const SizedBox(height: 10),
-                    RichText(
-                      text: TextSpan(children: [
-                        TextSpan(
-                          text:
-                              "The Nike Throwback Pullover Hoodie is made from premium French terry fabric that blends a performance feel with ",
-                          style: AppTextStyle.s15_w4.copyWith(
-                            color: const Color.fromRGBO(143, 149, 158, 1),
-                          ),
-                        ),
-                        TextSpan(
-                          text: "Read More..",
-                          style:
-                              AppTextStyle.s15_w6.copyWith(color: Colors.black),
-                        )
-                      ]),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Review",
-                          style: AppTextStyle.s17_w6.copyWith(
-                              color: const Color.fromRGBO(29, 30, 32, 1)),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ReviewScreen(),
-                                  settings: const RouteSettings(name: "review"),
-                                ));
-                          },
-                          child: Text("View All",
-                              style: AppTextStyle.s13_w4.copyWith(
-                                color: const Color.fromRGBO(143, 149, 158, 1),
-                              )),
-                        )
-                      ],
-                    ),
+                    SvgPicture.asset(IconPath.logo),
                   ],
                 ),
               ),
+            ],
+          ),
+          Container(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 15),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Men's Printed Pullover Hoodie",
+                          style: AppTextStyle.s13_w4.copyWith(
+                              color: const Color.fromRGBO(143, 149, 158, 1)),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        "Price",
+                        style: AppTextStyle.s13_w4.copyWith(
+                            color: const Color.fromRGBO(143, 149, 158, 1)),
+                      )
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        model.title,
+                        style: AppTextStyle.s22_w6.copyWith(
+                            color: const Color.fromRGBO(29, 30, 32, 1)),
+                      ),
+                      Text(
+                        model.price,
+                        style: AppTextStyle.s22_w6.copyWith(
+                            color: const Color.fromRGBO(29, 30, 32, 1)),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: model.imageUrl.map(
+                        (url) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 9),
+                            child: Container(
+                              clipBehavior: Clip.antiAlias,
+                              width: 77,
+                              height: 77,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Image.network(
+                                url,
+                              ),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Size",
+                        style: AppTextStyle.s17_w6.copyWith(
+                            color: const Color.fromRGBO(29, 30, 32, 1)),
+                      ),
+                      Text(
+                        "Size Guide ",
+                        style: AppTextStyle.s15_w4.copyWith(
+                            color: const Color.fromRGBO(143, 149, 158, 1)),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  // ignore: prefer_const_constructors
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: const Row(
+                      children: [
+                        ProductSize(size: "S"),
+                        ProductSize(size: "M"),
+                        ProductSize(size: "L"),
+                        ProductSize(size: "Xl"),
+                        ProductSize(size: "2XL"),
+                        ProductSize(size: "3XL"),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'Description',
+                    style: AppTextStyle.s17_w6,
+                  ),
+                  const SizedBox(height: 10),
+                  ReadMoreText(
+                    model.description,
+                    textAlign: TextAlign.justify,
+                    trimMode: TrimMode.Line,
+                    trimLines: 2,
+                    style: AppTextStyle.s15_w4.copyWith(
+                      color: const Color.fromRGBO(143, 149, 158, 1),
+                    ),
+                    colorClickableText: Colors.black,
+                    trimCollapsedText: 'Read more',
+                    trimExpandedText: 'Show less',
+                    lessStyle:
+                        AppTextStyle.s15_w6.copyWith(color: Colors.black),
+                    moreStyle:
+                        AppTextStyle.s15_w6.copyWith(color: Colors.black),
+                  ),
+
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Review",
+                        style: AppTextStyle.s17_w6.copyWith(
+                            color: const Color.fromRGBO(29, 30, 32, 1)),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ReviewScreen(),
+                                settings: const RouteSettings(name: "review"),
+                              ));
+                        },
+                        child: Text("View All",
+                            style: AppTextStyle.s13_w4.copyWith(
+                              color: const Color.fromRGBO(143, 149, 158, 1),
+                            )),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
-            const Comment(
-                avatar: ProductPath.avatar2,
-                name: "Guy Hawkins",
-                time: '13 Sep, 2020',
-                ratingScore: 4.8,
-                comment:
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque malesuada eget vitae amet..."),
-          ],
-        ),
+          ),
+          const Comment(
+              avatar: ProductPath.avatar2,
+              name: "Guy Hawkins",
+              time: '13 Sep, 2020',
+              ratingScore: 4.8,
+              comment:
+                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque malesuada eget vitae amet..."),
+        ],
       ),
     );
   }

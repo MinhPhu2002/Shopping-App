@@ -4,19 +4,22 @@ import 'package:testapp/data/api_client.dart';
 import 'package:testapp/data/request_method.dart';
 
 class ProductsRepository {
-  Future<List<ProductModel>> getProducts() async {
+  Future<List<ProductModel>> getProducts(int offset, int limit) async {
     final List result = await apiClient.fetch(
-        url: ApiPath.getProducts, method: RequestMethod.get);
+        searchParam: {'limit': limit.toString(), 'offset': offset.toString()},
+        url: ApiPath.getProducts,
+        method: RequestMethod.get);
     return result.map((item) {
       final json = item as Map<String, dynamic>;
 
-      return ProductModel(
-        id: json['id'],
-        title: json['title'],
-        imageUrl: removeCharacter(json['images'][0]),
-        price: json['price'].toString(),
-      );
+      return ProductModel.formJson(json);
     }).toList();
+  }
+
+  Future<ProductDetailsModel> getProductDetails(int id) async {
+    final Map result = await apiClient.fetch(
+        url: ApiPath.getProductDetail + "$id", method: RequestMethod.get);
+    return ProductDetailsModel.formJson(Map.castFrom(result));
   }
 
   String removeCharacter(String text) {

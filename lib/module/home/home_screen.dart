@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:testapp/module/detail/bloc/product_details/product_details_cubit.dart';
 import 'package:testapp/module/home/bloc/products/products_cubit.dart';
 import 'package:testapp/module/home/bloc/products/products_state.dart';
 import 'package:testapp/module/product/brand_screen.dart';
@@ -159,10 +160,10 @@ class HomeScreen extends StatelessWidget {
               BlocBuilder<ProductsCubit, ProductsState>(
                 builder: (context, state) {
                   if (state is ProductsLoadingInProgress) {
-                    return CircularProgressIndicator();
+                    return Center(child: CircularProgressIndicator());
                   }
                   if (state is ProductsLoadingError) {
-                    return Text(state.errorMessage);
+                    return Center(child: Text(state.errorMessage));
                   }
                   final data = (state as ProductsLoaded).products;
                   return GridView.count(
@@ -176,9 +177,11 @@ class HomeScreen extends StatelessWidget {
                       children: data.map(
                         (item) {
                           return NewArraival(
-                              productImage: item.imageUrl,
-                              productName: item.title,
-                              productCost: item.price.toString());
+                            productImage: item.imageUrl,
+                            productName: item.title,
+                            productCost: item.price.toString(),
+                            id: item.id,
+                          );
                         },
                       ).toList());
                 },
@@ -509,6 +512,7 @@ class Brand extends StatelessWidget {
 }
 
 class NewArraival extends StatelessWidget {
+  final int id;
   final String productImage;
   final String productName;
   final String productCost;
@@ -517,7 +521,8 @@ class NewArraival extends StatelessWidget {
       {super.key,
       required this.productImage,
       required this.productName,
-      required this.productCost});
+      required this.productCost,
+      required this.id});
   @override
   Widget build(BuildContext context) {
     final imageSize =
@@ -525,10 +530,14 @@ class NewArraival extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const DescriptionProductScreen(),
-            ));
+          context,
+          MaterialPageRoute(
+              builder: (context) => BlocProvider(
+                    create: (context) => ProductDetailsCubit(id),
+                    child: DescriptionProductScreen(),
+                  ),
+              settings: RouteSettings(name: "description")),
+        );
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
