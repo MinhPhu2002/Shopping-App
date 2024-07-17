@@ -1,18 +1,18 @@
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:testapp/core/constaints/icon_path.dart';
+import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/widget/rating.dart';
 
-class Comment extends StatelessWidget {
+class CommentProduct extends StatelessWidget {
   final String avatar;
   final String name;
   final String time;
   final double ratingScore;
   final String comment;
 
-  const Comment(
+  const CommentProduct(
       {super.key,
       required this.avatar,
       required this.name,
@@ -27,6 +27,7 @@ class Comment extends StatelessWidget {
       child: Container(
         width: MediaQuery.sizeOf(context).width - 40,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [

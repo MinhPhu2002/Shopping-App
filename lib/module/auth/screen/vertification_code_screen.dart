@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:testapp/core/constaints/image_path.dart';
+import 'package:testapp/core/constants/image_path.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/auth/screen/new_password_screen.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/foot_page.dart';
 
-import '../../../core/constaints/icon_path.dart';
+import '../../../core/constants/icon_path.dart';
 
 class VertificationCodeScreen extends StatelessWidget {
   const VertificationCodeScreen({

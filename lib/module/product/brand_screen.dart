@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:testapp/module/cart/cart_screen.dart';
-import 'package:testapp/core/constaints/icon_path.dart';
-import 'package:testapp/core/constaints/image_path.dart';
+import 'package:testapp/core/constants/icon_path.dart';
+import 'package:testapp/core/constants/image_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/detail/description_product_screen.dart';
-import 'package:testapp/utilities/ui/mediaquery_extention.dart';
+import 'package:testapp/module/home/bloc/products/products_cubit.dart';
+import 'package:testapp/module/home/bloc/products/products_state.dart';
+import 'package:testapp/utils/ui/mediaquery_extention.dart';
 import 'package:testapp/widget/circle_icon.dart';
 
 class BrandScreen extends StatelessWidget {
@@ -121,52 +124,33 @@ class BrandScreen extends StatelessWidget {
                 const SizedBox(
                   height: 15,
                 ),
-                GridView.count(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  mainAxisSpacing: 15,
-                  crossAxisSpacing: 15,
-                  crossAxisCount: 2,
-                  childAspectRatio: 160 / 257,
-                  children: const [
-                    ListItem(
-                      productImage:
-                          ImagePath.homeScreenProductImage1Illustrator,
-                      productName: "Nike Sportswear Club Fleece",
-                      productCost: "\$99",
-                    ),
-                    ListItem(
-                      productImage:
-                          ImagePath.homeScreenProductImage2Illustrator,
-                      productName: "Trail Running Jacket Nike Windrunner",
-                      productCost: "\$80",
-                    ),
-                    ListItem(
-                      productImage:
-                          ImagePath.homeScreenProductImage3Illustrator,
-                      productName: "Nike Sportswear Club Fleece",
-                      productCost: "\$100",
-                    ),
-                    ListItem(
-                      productImage:
-                          ImagePath.homeScreenProductImage4Illustrator,
-                      productName: "Nike Sportswear Club Fleece",
-                      productCost: "\$100",
-                    ),
-                    ListItem(
-                      productImage:
-                          ImagePath.homeScreenProductImage1Illustrator,
-                      productName: "Nike Sportswear Club Fleece",
-                      productCost: "\$99",
-                    ),
-                    ListItem(
-                      productImage:
-                          ImagePath.homeScreenProductImage2Illustrator,
-                      productName: "Trail Running Jacket Nike Windrunner",
-                      productCost: "\$80",
-                    ),
-                  ],
-                )
+                BlocBuilder<ProductsCubit, ProductsState>(
+                    builder: (context, state) {
+                  if (state is ProductsLoadingInProgress) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  if (state is ProductsLoadingError) {
+                    return Center(child: Text(state.errorMessage));
+                  }
+                  final data = (state as ProductsLoaded).products;
+                  return GridView.count(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    mainAxisSpacing: 15,
+                    crossAxisSpacing: 15,
+                    crossAxisCount: 2,
+                    childAspectRatio: 160 / 257,
+                    children: data.map(
+                      (item) {
+                        return ListItem(
+                          productImage: item.imageUrl,
+                          productCost: item.price,
+                          productName: item.title,
+                        );
+                      },
+                    ).toList(),
+                  );
+                })
               ],
             ),
           ),
@@ -210,7 +194,7 @@ class ListItem extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   image: DecorationImage(
-                    image: AssetImage(productImage),
+                    image: NetworkImage(productImage),
                     fit: BoxFit.cover,
                   ),
                 ),

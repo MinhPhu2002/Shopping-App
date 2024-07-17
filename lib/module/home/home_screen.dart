@@ -4,17 +4,19 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:testapp/module/detail/bloc/product_details/product_details_cubit.dart';
+import 'package:testapp/module/home/bloc/brands/brands_cubit.dart';
+import 'package:testapp/module/home/bloc/brands/brands_state.dart';
 import 'package:testapp/module/home/bloc/products/products_cubit.dart';
 import 'package:testapp/module/home/bloc/products/products_state.dart';
 import 'package:testapp/module/product/brand_screen.dart';
 import 'package:testapp/module/cart/cart_screen.dart';
-import 'package:testapp/core/constaints/icon_path.dart';
-import 'package:testapp/core/constaints/image_path.dart';
-import 'package:testapp/core/constaints/product_path.dart';
+import 'package:testapp/core/constants/icon_path.dart';
+import 'package:testapp/core/constants/image_path.dart';
+import 'package:testapp/core/constants/product_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/detail/description_product_screen.dart';
 import 'package:testapp/module/auth/screen/start_screen.dart';
-import 'package:testapp/utilities/ui/mediaquery_extention.dart';
+import 'package:testapp/utils/ui/mediaquery_extention.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'dart:ui' show ImageFilter;
 
@@ -119,36 +121,31 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              const SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: Row(
-                    children: [
-                      Brand(
-                          iconBrand: ImagePath.homeScreenIconAdidasIllustrator,
-                          nameBrand: "Adidas"),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Brand(
-                          iconBrand: ImagePath.homeScreenIconNikeIllustrator,
-                          nameBrand: "Nike"),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Brand(
-                          iconBrand: ImagePath.homeScreenIconFilaIllustrator,
-                          nameBrand: "Fila"),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Brand(
-                          iconBrand: ImagePath.homeScreenIconFilaIllustrator,
-                          nameBrand: "Fila"),
-                    ],
-                  ),
-                ),
+              Padding(
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child: BlocBuilder<BrandsCubit, BrandsState>(
+                    builder: (context, state) {
+                  if (state is BrandsLoadingInProgress) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (state is BrandsLoadingError) {
+                    return Center(
+                      child: Text(state.errorMessage),
+                    );
+                  }
+                  final data = (state as BrandsLoaded).brands;
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: data.map((item) {
+                        return Brand(
+                            iconBrand: item.imageUrl, nameBrand: item.name);
+                      }).toList(),
+                    ),
+                  );
+                }),
               ),
               const SizedBox(
                 height: 20,
@@ -461,50 +458,54 @@ class Brand extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
+    return Padding(
+      padding: const EdgeInsets.only(right: 10),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => BrandScreen(),
-            ));
-      },
-      child: Ink(
-        decoration: BoxDecoration(
-          color: const Color.fromRGBO(245, 246, 250, 1),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        height: 50,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(
-              width: 10,
-            ),
-            Ink(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
+              builder: (context) => BlocProvider(
+                create: (context) => ProductsCubit(),
+                child: BrandScreen(),
               ),
-              child: Image.asset(
-                iconBrand,
-                width: 25,
-                height: 25,
+              settings: RouteSettings(name: "brand"),
+            ),
+          );
+        },
+        child: Ink(
+          decoration: BoxDecoration(
+            color: const Color.fromRGBO(245, 246, 250, 1),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          height: 50,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(
+                width: 10,
               ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Text(
-              nameBrand,
-              style: AppTextStyle.s15_w5,
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-          ],
+              Ink(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                  image: DecorationImage(image: NetworkImage(iconBrand)),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Text(
+                nameBrand,
+                style: AppTextStyle.s15_w5,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+            ],
+          ),
         ),
       ),
     );

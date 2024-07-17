@@ -7,7 +7,7 @@ import 'package:testapp/widget/bottom_action_button.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/foot_page.dart';
 
-import '../../../core/constaints/icon_path.dart';
+import '../../../core/constants/icon_path.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({

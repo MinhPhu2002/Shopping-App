@@ -6,12 +6,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:readmore/readmore.dart';
 import 'package:testapp/common/model/product_model.dart';
 import 'package:testapp/module/cart/cart_screen.dart';
-import 'package:testapp/core/constaints/image_path.dart';
-import 'package:testapp/core/constaints/product_path.dart';
-import 'package:testapp/core/constaints/icon_path.dart';
+import 'package:testapp/core/constants/image_path.dart';
+import 'package:testapp/core/constants/product_path.dart';
+import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/detail/bloc/product_details/product_details_cubit.dart';
 import 'package:testapp/module/detail/bloc/product_details/product_details_state.dart';
+import 'package:testapp/module/review/bloc/comment_cubit.dart';
 import 'package:testapp/module/review/review_screen.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/comment.dart';
@@ -125,7 +126,7 @@ class Body extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          "Men's Printed Pullover Hoodie",
+                          model.title,
                           style: AppTextStyle.s13_w4.copyWith(
                               color: const Color.fromRGBO(143, 149, 158, 1)),
                         ),
@@ -145,10 +146,14 @@ class Body extends StatelessWidget {
                     textBaseline: TextBaseline.alphabetic,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        model.title,
-                        style: AppTextStyle.s22_w6.copyWith(
-                            color: const Color.fromRGBO(29, 30, 32, 1)),
+                      Expanded(
+                        child: Text(
+                          model.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyle.s22_w6.copyWith(
+                              color: const Color.fromRGBO(29, 30, 32, 1)),
+                        ),
                       ),
                       Text(
                         model.price,
@@ -223,7 +228,7 @@ class Body extends StatelessWidget {
                   const SizedBox(height: 10),
                   ReadMoreText(
                     model.description,
-                    textAlign: TextAlign.justify,
+                    textAlign: TextAlign.left,
                     trimMode: TrimMode.Line,
                     trimLines: 2,
                     style: AppTextStyle.s15_w4.copyWith(
@@ -254,7 +259,10 @@ class Body extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ReviewScreen(),
+                                builder: (context) => BlocProvider(
+                                  create: (context) => CommentCubit(),
+                                  child: ReviewScreen(),
+                                ),
                                 settings: const RouteSettings(name: "review"),
                               ));
                         },
@@ -269,7 +277,7 @@ class Body extends StatelessWidget {
               ),
             ),
           ),
-          const Comment(
+          const CommentProduct(
               avatar: ProductPath.avatar2,
               name: "Guy Hawkins",
               time: '13 Sep, 2020',

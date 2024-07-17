@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testapp/core/constaints/image_path.dart';
+import 'package:testapp/core/constants/image_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
+import 'package:testapp/module/home/bloc/brands/brands_cubit.dart';
 import 'package:testapp/module/home/bloc/products/products_cubit.dart';
 import 'package:testapp/module/home/home_screen.dart';
 
@@ -98,8 +99,15 @@ class RecommentScreen extends StatelessWidget {
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => BlocProvider(
-                                      create: (context) => ProductsCubit(),
+                                builder: (context) => MultiBlocProvider(
+                                      providers: [
+                                        BlocProvider(
+                                          create: (context) => ProductsCubit(),
+                                        ),
+                                        BlocProvider(
+                                          create: (context) => BrandsCubit(),
+                                        ),
+                                      ],
                                       child: HomeScreen(),
                                     ),
                                 settings: const RouteSettings(name: "Home")),

@@ -4,9 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:testapp/module/cart/address_creen.dart';
 import 'package:testapp/module/cart/order_confirmed_screen.dart';
 
-import 'package:testapp/core/constaints/icon_path.dart';
-import 'package:testapp/core/constaints/image_path.dart';
-import 'package:testapp/core/constaints/product_path.dart';
+import 'package:testapp/core/constants/icon_path.dart';
+import 'package:testapp/core/constants/image_path.dart';
+import 'package:testapp/core/constants/product_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/cart/payment_screen.dart';
 import 'package:testapp/widget/circle_icon.dart';
