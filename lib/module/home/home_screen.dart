@@ -8,6 +8,7 @@ import 'package:testapp/module/home/bloc/brands/brands_cubit.dart';
 import 'package:testapp/module/home/bloc/brands/brands_state.dart';
 import 'package:testapp/module/home/bloc/products/products_cubit.dart';
 import 'package:testapp/module/home/bloc/products/products_state.dart';
+import 'package:testapp/module/product/bloc/brand_details_cubit.dart';
 import 'package:testapp/module/product/brand_screen.dart';
 import 'package:testapp/module/cart/cart_screen.dart';
 import 'package:testapp/core/constants/icon_path.dart';
@@ -141,7 +142,10 @@ class HomeScreen extends StatelessWidget {
                     child: Row(
                       children: data.map((item) {
                         return Brand(
-                            iconBrand: item.imageUrl, nameBrand: item.name);
+                          iconBrand: item.imageUrl,
+                          nameBrand: item.name,
+                          id: item.id,
+                        );
                       }).toList(),
                     ),
                   );
@@ -453,8 +457,13 @@ class VoiceIcon extends StatelessWidget {
 class Brand extends StatelessWidget {
   final String iconBrand;
   final String nameBrand;
+  final int id;
 
-  const Brand({super.key, required this.iconBrand, required this.nameBrand});
+  const Brand(
+      {super.key,
+      required this.iconBrand,
+      required this.nameBrand,
+      required this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -466,7 +475,7 @@ class Brand extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => BlocProvider(
-                create: (context) => ProductsCubit(),
+                create: (context) => BrandDetailsCubit(id),
                 child: BrandScreen(),
               ),
               settings: RouteSettings(name: "brand"),

@@ -93,25 +93,14 @@ class Body extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              ColoredBox(color: Color.fromRGBO(245, 246, 250, 1)),
-              Padding(
-                padding: EdgeInsets.only(top: 31),
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    Image.network(
-                      model.imageUrl[0],
-                      fit: BoxFit.fitWidth,
-                      width: double.infinity,
-                    ),
-                    SvgPicture.asset(IconPath.logo),
-                  ],
-                ),
-              ),
-            ],
+          ColoredBox(color: Color.fromRGBO(245, 246, 250, 1)),
+          Padding(
+            padding: EdgeInsets.only(top: 31),
+            child: Image.network(
+              model.imageUrl[0],
+              fit: BoxFit.fitWidth,
+              width: double.infinity,
+            ),
           ),
           Container(
             child: Padding(
@@ -156,7 +145,7 @@ class Body extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        model.price,
+                        '\$' + model.price,
                         style: AppTextStyle.s22_w6.copyWith(
                             color: const Color.fromRGBO(29, 30, 32, 1)),
                       )

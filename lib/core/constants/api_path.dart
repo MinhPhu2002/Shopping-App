@@ -5,4 +5,5 @@ class ApiPath {
   static const String getComment = "https://dummyjson.com/comments";
   static const String getBrands = '/v1/categories';
   static const String refreshToken = '/api/v1/auth/refresh-token';
+  static const String getBrandDetails = '/v1/categories/';
 }

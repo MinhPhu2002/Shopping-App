@@ -7,9 +7,12 @@ import 'package:testapp/module/cart/cart_screen.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/constants/image_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
+import 'package:testapp/module/detail/bloc/product_details/product_details_cubit.dart';
 import 'package:testapp/module/detail/description_product_screen.dart';
 import 'package:testapp/module/home/bloc/products/products_cubit.dart';
 import 'package:testapp/module/home/bloc/products/products_state.dart';
+import 'package:testapp/module/product/bloc/brand_details_cubit.dart';
+import 'package:testapp/module/product/bloc/brand_details_state.dart';
 import 'package:testapp/utils/ui/mediaquery_extention.dart';
 import 'package:testapp/widget/circle_icon.dart';
 
@@ -124,15 +127,15 @@ class BrandScreen extends StatelessWidget {
                 const SizedBox(
                   height: 15,
                 ),
-                BlocBuilder<ProductsCubit, ProductsState>(
+                BlocBuilder<BrandDetailsCubit, BrandDetailsState>(
                     builder: (context, state) {
-                  if (state is ProductsLoadingInProgress) {
+                  if (state is BrandDetailsLoadingInProgress) {
                     return Center(child: CircularProgressIndicator());
                   }
-                  if (state is ProductsLoadingError) {
+                  if (state is BrandDetailsLoadingError) {
                     return Center(child: Text(state.errorMessage));
                   }
-                  final data = (state as ProductsLoaded).products;
+                  final data = (state as BrandDetailsLoaded).brandDetails;
                   return GridView.count(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -143,9 +146,10 @@ class BrandScreen extends StatelessWidget {
                     children: data.map(
                       (item) {
                         return ListItem(
+                          id: item.id,
                           productImage: item.imageUrl,
                           productCost: item.price,
-                          productName: item.title,
+                          productName: item.name,
                         );
                       },
                     ).toList(),
@@ -164,12 +168,14 @@ class ListItem extends StatelessWidget {
   final String productImage;
   final String productName;
   final String productCost;
+  final int id;
 
   const ListItem(
       {super.key,
       required this.productImage,
       required this.productName,
-      required this.productCost});
+      required this.productCost,
+      required this.id});
   @override
   Widget build(BuildContext context) {
     final imageSize =
@@ -179,7 +185,10 @@ class ListItem extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => DescriptionProductScreen(),
+              builder: (context) => BlocProvider(
+                create: (context) => ProductDetailsCubit(id),
+                child: DescriptionProductScreen(),
+              ),
             ));
       },
       child: Column(
@@ -206,6 +215,7 @@ class ListItem extends StatelessWidget {
                     onPressed: () {},
                     icon: Image.asset(
                       ImagePath.homeScreenHeartIconIllustrator,
+                      color: Colors.white,
                       width: 20,
                       height: 20,
                       fit: BoxFit.cover,
@@ -221,7 +231,7 @@ class ListItem extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            productCost,
+            '\$' + productCost,
             style: AppTextStyle.s13_w6
                 .copyWith(color: const Color.fromRGBO(29, 30, 32, 1)),
           )
