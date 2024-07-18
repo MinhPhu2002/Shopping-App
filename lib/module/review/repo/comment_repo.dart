@@ -13,8 +13,7 @@ class CommentRepository {
       RequestMethod.get,
       searchParams: {'limit': limit.toString(), 'skip': skip.toString()},
     );
-    print(limit);
-    print(skip);
+
     print('limit : $limit skip:$skip');
     final List comment = result.json["comments"];
     return comment.map((json) {
