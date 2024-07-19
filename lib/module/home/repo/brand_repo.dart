@@ -19,7 +19,7 @@ class BrandRepository {
     }).toList();
   }
 
-  Future<List<BrandDetailsModel>> getBrandDetails(int id,
+  Future<BrandDetailsResponse> getBrandDetails(int id,
       {required int limit, required int offset}) async {
     final RequestResponse result = await apiClient.fetch(
         ApiPath.getBrandDetails + "/$id/products", RequestMethod.get,
@@ -28,10 +28,20 @@ class BrandRepository {
           'offset': offset.toString(),
         });
     print('limit : $limit offset :$offset');
-    return result.jsonArray.map((json) {
-      return BrandDetailsModel.formJson(json);
-    }).toList();
+    return BrandDetailsResponse(
+        brandDetailsModel: result.jsonArray.map((json) {
+          return BrandDetailsModel.formJson(json);
+        }).toList(),
+        totalItemCount: 100);
   }
 
   final ApiClient apiClient = ApiClient();
+}
+
+class BrandDetailsResponse {
+  final List<BrandDetailsModel> brandDetailsModel;
+  final int totalItemCount;
+
+  BrandDetailsResponse(
+      {required this.brandDetailsModel, required this.totalItemCount});
 }

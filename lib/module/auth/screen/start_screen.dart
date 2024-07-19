@@ -5,7 +5,6 @@ import 'package:testapp/module/auth/screen/login_screen.dart';
 import 'package:testapp/module/auth/screen/signup_screen.dart';
 import 'package:testapp/widget/bottom_action_button.dart';
 import 'package:testapp/widget/circle_icon.dart';
-import 'package:testapp/widget/foot_page.dart';
 
 import '../../../core/constants/icon_path.dart';
 
@@ -16,8 +15,6 @@ class StartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double scaleWidth = MediaQuery.sizeOf(context).width / 375;
-    final double scaleHeight = MediaQuery.sizeOf(context).height / 812;
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:testapp/module/review/add_review_screen.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/constants/product_path.dart';
@@ -8,7 +7,6 @@ import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/review/bloc/comment_cubit.dart';
 import 'package:testapp/module/review/bloc/comment_state.dart';
 import 'package:testapp/widget/circle_icon.dart';
-import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:testapp/widget/comment.dart';
 import 'package:testapp/widget/rating.dart';
 

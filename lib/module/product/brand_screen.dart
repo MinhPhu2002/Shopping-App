@@ -9,21 +9,25 @@ import 'package:testapp/core/constants/image_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/detail/bloc/product_details/product_details_cubit.dart';
 import 'package:testapp/module/detail/description_product_screen.dart';
-import 'package:testapp/module/home/bloc/products/products_cubit.dart';
-import 'package:testapp/module/home/bloc/products/products_state.dart';
-import 'package:testapp/module/product/bloc/brand_details_cubit.dart';
-import 'package:testapp/module/product/bloc/brand_details_state.dart';
+import 'package:testapp/module/product/bloc/brand_details/brand_details_cubit.dart';
+import 'package:testapp/module/product/bloc/brand_details/brand_details_state.dart';
 import 'package:testapp/utils/ui/mediaquery_extention.dart';
 import 'package:testapp/widget/circle_icon.dart';
 
 class BrandScreen extends StatefulWidget {
+  final String brandUrl;
+
+  const BrandScreen({super.key, required this.brandUrl});
   @override
-  State<BrandScreen> createState() => _BrandScreenState();
+  State<BrandScreen> createState() => _BrandScreenState(brandUrl: brandUrl);
 }
 
 class _BrandScreenState extends State<BrandScreen> {
   late final BrandDetailsCubit brandDetailsCubit;
   late ScrollController controller;
+  final String brandUrl;
+
+  _BrandScreenState({required this.brandUrl});
   @override
   void initState() {
     super.initState();
@@ -75,11 +79,14 @@ class _BrandScreenState extends State<BrandScreen> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Color.fromRGBO(245, 246, 250, 1)),
-          child: Center(
-            child: Image.asset(
-              ImagePath.homeScreenIconNikeIllustrator,
-              width: 48,
-              height: 25,
+          child: Ink(
+            width: 48,
+            height: 25,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                image: NetworkImage(brandUrl),
+              ),
             ),
           ),
         ),
@@ -104,102 +111,101 @@ class _BrandScreenState extends State<BrandScreen> {
           )
         ],
       ),
-      body: SizedBox(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: BlocBuilder<BrandDetailsCubit, BrandDetailsState>(
+          builder: (context, state) {
+        if (state.isLoading && state.brandDetails == null) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (state.errorMessage != null && state.brandDetails == null) {
+          return Center(child: Text(state.errorMessage!));
+        }
+        final data = state.brandDetails!;
+        int count = state.totalItemCount!;
+
+        return SizedBox(
+          child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "365 Items",
-                        style: AppTextStyle.s17_w5,
-                      ),
-                      Text(
-                        "Available in stock",
-                        style: AppTextStyle.s15_w4
-                            .copyWith(color: Color.fromRGBO(143, 149, 158, 1)),
-                      )
-                    ],
-                  ),
-                  Container(
-                    width: 71,
-                    height: 37,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Color.fromRGBO(245, 246, 250, 1)),
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SvgPicture.asset(IconPath.sort),
-                          SizedBox(
-                            width: 5,
+                          Text(
+                            "$count Items",
+                            style: AppTextStyle.s17_w5,
                           ),
                           Text(
-                            "Sort",
-                            style: AppTextStyle.s15_w5,
+                            "Available in stock",
+                            style: AppTextStyle.s15_w4.copyWith(
+                                color: Color.fromRGBO(143, 149, 158, 1)),
                           )
                         ],
                       ),
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Expanded(
-                child: BlocBuilder<BrandDetailsCubit, BrandDetailsState>(
-                    builder: (context, state) {
-                  if (state.isLoading && state.brandDetails == null) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  if (state.errorMessage != null &&
-                      state.brandDetails == null) {
-                    return Center(child: Text(state.errorMessage!));
-                  }
-                  final data = state.brandDetails!;
-
-                  return GridView.builder(
-                    controller: controller,
-                    itemCount: data.length + 1,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      mainAxisSpacing: 15,
-                      crossAxisSpacing: 15,
-                      crossAxisCount: 2,
-                      childAspectRatio: 160 / 257,
-                    ),
-                    itemBuilder: (BuildContext context, int index) {
-                      if (index == data.length) {
-                        if (state.errorMessage != null) {
-                          return Text(state.errorMessage!);
+                      Container(
+                        width: 71,
+                        height: 37,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Color.fromRGBO(245, 246, 250, 1)),
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(IconPath.sort),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                "Sort",
+                                style: AppTextStyle.s15_w5,
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Expanded(
+                    child: GridView.builder(
+                      controller: controller,
+                      itemCount: data.length + 1,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        mainAxisSpacing: 15,
+                        crossAxisSpacing: 15,
+                        crossAxisCount: 2,
+                        childAspectRatio: 160 / 257,
+                      ),
+                      itemBuilder: (BuildContext context, int index) {
+                        if (index == data.length) {
+                          if (state.errorMessage != null) {
+                            return Text(state.errorMessage!);
+                          }
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
                         }
-                        return Center(
-                          child: CircularProgressIndicator(),
+                        var item = data[index];
+                        return ListItem(
+                          id: item.id,
+                          productImage: item.imageUrl,
+                          productCost: item.price,
+                          productName: item.name,
                         );
-                      }
-                      var item = data[index];
-                      return ListItem(
-                        id: item.id,
-                        productImage: item.imageUrl,
-                        productCost: item.price,
-                        productName: item.name,
-                      );
-                    },
-                  );
-                }),
-              )
-            ],
-          ),
-        ),
-      ),
+                      },
+                    ),
+                  ),
+                ],
+              )),
+        );
+      }),
     );
   }
 }

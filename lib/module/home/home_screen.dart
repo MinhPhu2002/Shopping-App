@@ -8,7 +8,7 @@ import 'package:testapp/module/home/bloc/brands/brands_cubit.dart';
 import 'package:testapp/module/home/bloc/brands/brands_state.dart';
 import 'package:testapp/module/home/bloc/products/products_cubit.dart';
 import 'package:testapp/module/home/bloc/products/products_state.dart';
-import 'package:testapp/module/product/bloc/brand_details_cubit.dart';
+import 'package:testapp/module/product/bloc/brand_details/brand_details_cubit.dart';
 import 'package:testapp/module/product/brand_screen.dart';
 import 'package:testapp/module/cart/cart_screen.dart';
 import 'package:testapp/core/constants/icon_path.dart';
@@ -476,7 +476,9 @@ class Brand extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => BlocProvider(
                 create: (context) => BrandDetailsCubit(id),
-                child: BrandScreen(),
+                child: BrandScreen(
+                  brandUrl: iconBrand,
+                ),
               ),
               settings: RouteSettings(name: "brand"),
             ),

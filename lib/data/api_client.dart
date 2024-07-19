@@ -12,7 +12,6 @@ import '../core/constants/api_path.dart';
 import '../core/constants/app_constants.dart';
 import '../core/error_handling/exceptions.dart';
 import '../utils/helpers/system_utils.dart';
-import 'interceptors/token_interceptor.dart';
 import 'models/request_method.dart';
 import 'models/request_response.dart';
 import 'models/status_code.dart';

@@ -6,8 +6,10 @@ class BrandDetailsState {
   final bool isLoading;
 
   BrandDetailsState({
+    this.totalItemCount,
     this.brandDetails,
     this.errorMessage,
     required this.isLoading,
   });
+  final int? totalItemCount;
 }

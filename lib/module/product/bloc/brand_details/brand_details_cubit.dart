@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testapp/data/api_client.dart';
 import 'package:testapp/module/home/repo/brand_repo.dart';
-import 'package:testapp/module/product/bloc/brand_details_state.dart';
+import 'package:testapp/module/product/bloc/brand_details/brand_details_state.dart';
 
 class BrandDetailsCubit extends Cubit<BrandDetailsState> {
   final int id;
@@ -14,7 +17,10 @@ class BrandDetailsCubit extends Cubit<BrandDetailsState> {
     try {
       emit(BrandDetailsState(isLoading: true));
       final result = await repo.getBrandDetails(id, limit: 6, offset: offset);
-      emit(BrandDetailsState(isLoading: false, brandDetails: result));
+      emit(BrandDetailsState(
+          isLoading: false,
+          brandDetails: result.brandDetailsModel,
+          totalItemCount: result.totalItemCount));
     } catch (e) {
       emit(BrandDetailsState(isLoading: false, errorMessage: e.toString()));
     }
@@ -23,16 +29,23 @@ class BrandDetailsCubit extends Cubit<BrandDetailsState> {
   Future<void> loadMore() async {
     offset = offset + 6;
     try {
-      emit(
-          BrandDetailsState(isLoading: true, brandDetails: state.brandDetails));
+      emit(BrandDetailsState(
+          isLoading: true,
+          brandDetails: state.brandDetails,
+          totalItemCount: state.totalItemCount));
       final result = await repo.getBrandDetails(id, limit: 10, offset: offset);
       emit(BrandDetailsState(
-          isLoading: false, brandDetails: [...?state.brandDetails, ...result]));
+          totalItemCount: result.totalItemCount,
+          isLoading: false,
+          brandDetails: [...?state.brandDetails, ...result.brandDetailsModel]));
     } catch (e) {
       emit(BrandDetailsState(
           isLoading: false,
           errorMessage: e.toString(),
-          brandDetails: state.brandDetails));
+          brandDetails: state.brandDetails,
+          totalItemCount: state.totalItemCount));
     }
   }
+
+  final ApiClient apiClient = ApiClient();
 }

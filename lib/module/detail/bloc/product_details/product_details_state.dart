@@ -1,5 +1,4 @@
 import 'package:testapp/common/model/product_model.dart';
-import 'package:testapp/module/home/bloc/products/products_state.dart';
 
 abstract class ProductDetailsState {}
 
