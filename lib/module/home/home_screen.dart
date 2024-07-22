@@ -477,7 +477,7 @@ class Brand extends StatelessWidget {
               builder: (context) => BlocProvider(
                 create: (context) => BrandDetailsCubit(id),
                 child: BrandScreen(
-                  brandUrl: iconBrand,
+                  nameBrand: nameBrand,
                 ),
               ),
               settings: RouteSettings(name: "brand"),
@@ -546,7 +546,9 @@ class NewArraival extends StatelessWidget {
           MaterialPageRoute(
               builder: (context) => BlocProvider(
                     create: (context) => ProductDetailsCubit(id),
-                    child: DescriptionProductScreen(),
+                    child: DescriptionProductScreen(
+                      postId: id,
+                    ),
                   ),
               settings: RouteSettings(name: "description")),
         );

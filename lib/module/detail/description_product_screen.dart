@@ -16,7 +16,8 @@ import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/comment.dart';
 
 class DescriptionProductScreen extends StatelessWidget {
-  const DescriptionProductScreen({super.key});
+  const DescriptionProductScreen({super.key, required this.postId});
+  final int postId;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +76,7 @@ class DescriptionProductScreen extends StatelessWidget {
           final data = (state as ProductDetailsLoaded).productDetails;
           return Body(
             model: data,
+            postId: postId,
           );
         },
       ),
@@ -83,9 +85,10 @@ class DescriptionProductScreen extends StatelessWidget {
 }
 
 class Body extends StatelessWidget {
+  final int postId;
   final ProductDetailsModel model;
 
-  const Body({super.key, required this.model});
+  const Body({super.key, required this.model, required this.postId});
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -248,7 +251,9 @@ class Body extends StatelessWidget {
                               MaterialPageRoute(
                                 builder: (context) => BlocProvider(
                                   create: (context) => CommentCubit(),
-                                  child: ReviewScreen(),
+                                  child: ReviewScreen(
+                                    postId: postId,
+                                  ),
                                 ),
                                 settings: const RouteSettings(name: "review"),
                               ));

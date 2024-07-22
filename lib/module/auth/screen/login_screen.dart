@@ -1,19 +1,39 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
+import 'package:testapp/module/auth/bloc/login_cubit.dart';
+import 'package:testapp/module/auth/bloc/login_state.dart';
 
 import 'package:testapp/module/auth/recomment_screen.dart';
+import 'package:testapp/module/detail/description_product_screen.dart';
+import 'package:testapp/module/home/home_screen.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/foot_page.dart';
 import 'package:testapp/widget/switch_widget.dart';
 
 import 'forgot_password_screen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({
     super.key,
   });
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _userNameController = TextEditingController();
+
+  final TextEditingController _passwordController = TextEditingController();
+  @override
+  void dispose() {
+    _userNameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,35 +82,70 @@ class LoginScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Spacer(),
-                  const NameList(Credentials: "Username"),
+                  Crendentials(
+                    credentials: "Username",
+                    obscureText: false,
+                    data: _userNameController,
+                  ),
                   SizedBox(
                     height: 20 * MediaQuery.sizeOf(context).height / 812,
                   ),
-                  const NameList(Credentials: "Password"),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: 30 * MediaQuery.sizeOf(context).height / 812,
-                            right: 20),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ForgotPasswordScreen(),
-                                ));
-                          },
-                          child: Text(
-                            "Forgot password?",
-                            style: AppTextStyle.s15_w4.copyWith(
-                                color: Color.fromRGBO(234, 67, 53, 1)),
+                  Crendentials(
+                    credentials: "Password",
+                    obscureText: true,
+                    data: _passwordController,
+                  ),
+                  BlocListener<LoginCubit, LoginState>(
+                    listener: (context, state) {
+                      if (state is LoginLoadingInProgress) {
+                        showDialog(
+                          context: context,
+                          builder: (context) =>
+                              Center(child: CircularProgressIndicator()),
+                        );
+                      } else if (state is LoginSuccess) {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomeScreen(),
+                            ));
+                      } else if (state is LoginLoadingError) {
+                        Navigator.pop(context);
+                        showDialog(
+                          context: context,
+                          builder: (context) => Center(
+                              child: Container(
+                                  color: Colors.yellow,
+                                  child: Text(state.errorMessage))),
+                        );
+                      }
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: 30 * MediaQuery.sizeOf(context).height / 812,
+                              right: 20),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ForgotPasswordScreen(),
+                                  ));
+                            },
+                            child: Text(
+                              "Forgot password?",
+                              style: AppTextStyle.s15_w4.copyWith(
+                                  color: Color.fromRGBO(234, 67, 53, 1)),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   Padding(
                       padding: EdgeInsets.only(
@@ -122,12 +177,15 @@ class LoginScreen extends StatelessWidget {
       ),
       bottomNavigationBar: InkWell(
         onTap: () {
+          // context.read<LoginCubit>().login(
+          //       _userNameController.text,
+          //       _passwordController.text,
+          //     );
           Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => RecommentScreen(),
-            ),
-          );
+              context,
+              MaterialPageRoute(
+                builder: (context) => RecommentScreen(),
+              ));
         },
         child: const FootPage(
           textfootpage: 'Login',
@@ -137,11 +195,17 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class NameList extends StatelessWidget {
+class Crendentials extends StatelessWidget {
   // ignore: non_constant_identifier_names
-  const NameList({super.key, required this.Credentials});
+  const Crendentials(
+      {super.key,
+      required this.credentials,
+      required this.obscureText,
+      required this.data});
   // ignore: non_constant_identifier_names
-  final String Credentials;
+  final String credentials;
+  final bool obscureText;
+  final TextEditingController data;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -152,10 +216,12 @@ class NameList extends StatelessWidget {
         children: [
           const SizedBox(height: 8),
           TextField(
+            controller: data,
             decoration: InputDecoration(
               border: const UnderlineInputBorder(),
-              labelText: Credentials,
+              labelText: credentials,
             ),
+            obscureText: obscureText,
           ),
         ],
       ),

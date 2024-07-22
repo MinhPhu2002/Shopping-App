@@ -15,19 +15,19 @@ import 'package:testapp/utils/ui/mediaquery_extention.dart';
 import 'package:testapp/widget/circle_icon.dart';
 
 class BrandScreen extends StatefulWidget {
-  final String brandUrl;
+  final String nameBrand;
 
-  const BrandScreen({super.key, required this.brandUrl});
+  const BrandScreen({super.key, required this.nameBrand});
   @override
-  State<BrandScreen> createState() => _BrandScreenState(brandUrl: brandUrl);
+  State<BrandScreen> createState() => _BrandScreenState(nameBrand: nameBrand);
 }
 
 class _BrandScreenState extends State<BrandScreen> {
   late final BrandDetailsCubit brandDetailsCubit;
   late ScrollController controller;
-  final String brandUrl;
+  final String nameBrand;
 
-  _BrandScreenState({required this.brandUrl});
+  _BrandScreenState({required this.nameBrand});
   @override
   void initState() {
     super.initState();
@@ -73,22 +73,24 @@ class _BrandScreenState extends State<BrandScreen> {
           ),
         ),
         centerTitle: true,
-        title: Container(
-          width: 68,
-          height: 45,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Color.fromRGBO(245, 246, 250, 1)),
-          child: Ink(
-            width: 48,
-            height: 25,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              image: DecorationImage(
-                image: NetworkImage(brandUrl),
-              ),
-            ),
-          ),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Ink(
+                height: 45,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color.fromRGBO(245, 246, 250, 1)),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(
+                      nameBrand,
+                      style: AppTextStyle.s17_w6,
+                    ),
+                  ),
+                )),
+          ],
         ),
         actions: [
           IconButton(
@@ -233,7 +235,9 @@ class ListItem extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => BlocProvider(
                 create: (context) => ProductDetailsCubit(id),
-                child: DescriptionProductScreen(),
+                child: DescriptionProductScreen(
+                  postId: id,
+                ),
               ),
             ));
       },

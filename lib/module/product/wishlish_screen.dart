@@ -191,11 +191,11 @@ class ListItem extends StatelessWidget {
         context.getResponSizeBasOnWidth(designWidth: 160, designHeight: 203);
     return InkWell(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DescriptionProductScreen(),
-            ));
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => DescriptionProductScreen(postId: id,),
+        //     ));
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

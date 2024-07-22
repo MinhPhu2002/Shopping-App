@@ -16,3 +16,16 @@ class CommentModel {
     required this.user,
   });
 }
+
+class AddCommentModel {
+  final String body;
+  final int postId;
+  final int userId;
+
+  AddCommentModel(
+      {required this.body, required this.postId, required this.userId});
+  factory AddCommentModel.formJson(Map<String, dynamic> json) {
+    return AddCommentModel(
+        body: json['body'], postId: json['postId'], userId: json['user']['id']);
+  }
+}

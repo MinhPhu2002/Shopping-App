@@ -1,0 +1,19 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testapp/common/model/login_model.dart';
+import 'package:testapp/module/auth/bloc/login_state.dart';
+import 'package:testapp/module/auth/repo/login_repo.dart';
+
+class LoginCubit extends Cubit<LoginState> {
+  LoginCubit() : super(LoginInitialState());
+  final LoginRepository repo = LoginRepository();
+  Future<void> login(String email, String password) async {
+    try {
+      emit(LoginInitialState());
+      emit(LoginLoadingInProgress());
+      final result = await repo.login(email: email, password: password);
+      emit(LoginSuccess(loginModel: result));
+    } catch (e) {
+      emit(LoginLoadingError(errorMessage: e.toString()));
+    }
+  }
+}

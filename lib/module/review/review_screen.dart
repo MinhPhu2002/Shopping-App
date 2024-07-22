@@ -4,6 +4,7 @@ import 'package:testapp/module/review/add_review_screen.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/constants/product_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
+import 'package:testapp/module/review/bloc/add_comment_cubit.dart';
 import 'package:testapp/module/review/bloc/comment_cubit.dart';
 import 'package:testapp/module/review/bloc/comment_state.dart';
 import 'package:testapp/widget/circle_icon.dart';
@@ -11,13 +12,19 @@ import 'package:testapp/widget/comment.dart';
 import 'package:testapp/widget/rating.dart';
 
 class ReviewScreen extends StatefulWidget {
+  final int postId;
+
+  const ReviewScreen({super.key, required this.postId});
   @override
-  State<ReviewScreen> createState() => _ReviewScreenState();
+  State<ReviewScreen> createState() => _ReviewScreenState(postId: postId);
 }
 
 class _ReviewScreenState extends State<ReviewScreen> {
+  final int postId;
   late final CommentCubit commentCubit;
   late ScrollController controller;
+
+  _ReviewScreenState({required this.postId});
   @override
   void initState() {
     super.initState();
@@ -77,7 +84,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
           child: Column(
             children: [
-              NumberReviews(),
+              NumberReviews(
+                postId: postId,
+              ),
               const SizedBox(height: 10),
               Expanded(
                 child: BlocBuilder<CommentCubit, CommentState>(
@@ -124,6 +133,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
 }
 
 class NumberReviews extends StatelessWidget {
+  final int postId;
+
+  const NumberReviews({super.key, required this.postId});
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -148,7 +160,12 @@ class NumberReviews extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AddReviewScreen(),
+                  builder: (context) => BlocProvider(
+                    create: (context) => AddCommentCubit(),
+                    child: AddReviewScreen(
+                      postId: postId,
+                    ),
+                  ),
                 ));
           },
           child: Image.asset(

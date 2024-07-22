@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
+import 'package:testapp/module/auth/bloc/login_cubit.dart';
 import 'package:testapp/module/auth/screen/login_screen.dart';
 import 'package:testapp/widget/bottom_action_button.dart';
 import 'package:testapp/widget/circle_icon.dart';
@@ -87,7 +89,10 @@ class SignupScreen extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => LoginScreen(),
+                    builder: (context) => BlocProvider(
+                      create: (context) => LoginCubit(),
+                      child: LoginScreen(),
+                    ),
                     settings: RouteSettings(name: "loginScreen"),
                   ));
             }));
