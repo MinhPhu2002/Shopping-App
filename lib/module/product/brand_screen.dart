@@ -119,6 +119,7 @@ class _BrandScreenState extends State<BrandScreen> {
           return Center(child: CircularProgressIndicator());
         }
         if (state.errorMessage != null && state.brandDetails == null) {
+          print(state.errorMessage);
           return Center(child: Text(state.errorMessage!));
         }
         final data = state.brandDetails!;
@@ -265,7 +266,7 @@ class ListItem extends StatelessWidget {
                     onPressed: () {},
                     icon: Image.asset(
                       ImagePath.homeScreenHeartIconIllustrator,
-                      color: Colors.white,
+                      color: Color.fromARGB(255, 212, 190, 197),
                       width: 20,
                       height: 20,
                       fit: BoxFit.cover,

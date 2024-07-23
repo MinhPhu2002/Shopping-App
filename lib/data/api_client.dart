@@ -123,6 +123,7 @@ class ApiClient {
   Future<RequestResponse> fetch(
     final String url,
     final RequestMethod method, {
+    final String? encodeData,
     final Map<String, dynamic>? data,
     final Map<String, dynamic>? rawData,
     final Future<Map<String, dynamic>> Function()? asyncDataGetter,
@@ -181,7 +182,8 @@ class ApiClient {
 
         response = await _dio.request(
           url,
-          data: rawData ??
+          data: encodeData ??
+              rawData ??
               await asyncRawDataGetter?.call() ??
               (method == RequestMethod.post && effectiveData != null
                   ? FormData.fromMap(effectiveData)

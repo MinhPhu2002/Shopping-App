@@ -11,7 +11,8 @@ class ProductsRepository {
       RequestMethod.get,
       searchParams: {'limit': limit.toString(), 'offset': offset.toString()},
     );
-    return result.jsonArray.map((json) {
+    final List products = result.json['products'];
+    return products.map((json) {
       return ProductModel.formJson(json);
     }).toList();
   }

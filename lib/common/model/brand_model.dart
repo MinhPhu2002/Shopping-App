@@ -1,17 +1,17 @@
 class BrandModel {
-  final int id;
+  final String slug;
   final String name;
   final String imageUrl;
   factory BrandModel.formJson(Map<String, dynamic> json) {
     return BrandModel(
-      id: json['id'],
+      slug: json['slug'],
       name: json['name'],
-      imageUrl: json['image'],
+      imageUrl: json['url'],
     );
   }
 
   BrandModel({
-    required this.id,
+    required this.slug,
     required this.name,
     required this.imageUrl,
   });

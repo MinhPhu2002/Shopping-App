@@ -3,7 +3,8 @@ import 'package:testapp/module/review/bloc/comment_state.dart';
 import 'package:testapp/module/review/repo/comment_repo.dart';
 
 class CommentCubit extends Cubit<CommentState> {
-  CommentCubit() : super(CommentState(isLoading: true)) {
+  final int id;
+  CommentCubit(this.id) : super(CommentState(isLoading: true)) {
     load();
   }
   final CommentRepository repo = CommentRepository();
@@ -11,7 +12,7 @@ class CommentCubit extends Cubit<CommentState> {
   Future<void> load() async {
     try {
       emit(CommentState(isLoading: true));
-      final result = await repo.getComment(limit: 10, skip: skip);
+      final result = await repo.getComment(id, limit: 10, skip: skip);
 
       emit(CommentState(isLoading: false, comment: result));
     } catch (e) {
@@ -23,7 +24,7 @@ class CommentCubit extends Cubit<CommentState> {
     skip = skip + 10;
     try {
       emit(CommentState(comment: state.comment, isLoading: true));
-      final result = await repo.getComment(limit: 10, skip: skip);
+      final result = await repo.getComment(id, limit: 10, skip: skip);
 
       emit(CommentState(
           isLoading: false, comment: [...?state.comment, ...result]));

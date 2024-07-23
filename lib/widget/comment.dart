@@ -8,7 +8,7 @@ class CommentProduct extends StatelessWidget {
   final String avatar;
   final String name;
   final String time;
-  final double ratingScore;
+  final int ratingScore;
   final String comment;
 
   const CommentProduct(
@@ -70,7 +70,9 @@ class CommentProduct extends StatelessWidget {
                       ratingScore.toString() + " rating",
                       style: AppTextStyle.s15_w5,
                     ),
-                    rating(),
+                    rating(
+                      ratingscore: ratingScore,
+                    ),
                   ],
                 )
               ],

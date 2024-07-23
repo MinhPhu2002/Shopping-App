@@ -33,7 +33,7 @@ class DescriptionProductScreen extends StatelessWidget {
           child: InkWell(
             child: CircleIcon(
                 iconname: IconPath.back,
-                colorCircle: Colors.white,
+                colorCircle: Color.fromRGBO(245, 246, 250, 1),
                 sizeIcon: const Size(25, 25),
                 sizeCircle: const Size(45, 45),
                 colorBorder: Colors.transparent),
@@ -54,7 +54,7 @@ class DescriptionProductScreen extends StatelessWidget {
             },
             icon: CircleIcon(
                 iconname: IconPath.bag,
-                colorCircle: Colors.white,
+                colorCircle: Color.fromRGBO(245, 246, 250, 1),
                 sizeIcon: const Size(25, 25),
                 sizeCircle: const Size(45, 45),
                 colorBorder: Colors.transparent),
@@ -250,7 +250,7 @@ class Body extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => BlocProvider(
-                                  create: (context) => CommentCubit(),
+                                  create: (context) => CommentCubit(postId),
                                   child: ReviewScreen(
                                     postId: postId,
                                   ),
@@ -273,7 +273,7 @@ class Body extends StatelessWidget {
               avatar: ProductPath.avatar2,
               name: "Guy Hawkins",
               time: '13 Sep, 2020',
-              ratingScore: 4.8,
+              ratingScore: 4,
               comment:
                   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque malesuada eget vitae amet..."),
         ],

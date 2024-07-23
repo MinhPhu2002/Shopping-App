@@ -8,6 +8,9 @@ import 'package:testapp/module/auth/bloc/login_state.dart';
 
 import 'package:testapp/module/auth/recomment_screen.dart';
 import 'package:testapp/module/detail/description_product_screen.dart';
+import 'package:testapp/module/home/bloc/brands/brands_cubit.dart';
+import 'package:testapp/module/home/bloc/products/products_cubit.dart';
+import 'package:testapp/module/home/bloc/user/user_cubit.dart';
 import 'package:testapp/module/home/home_screen.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/foot_page.dart';
@@ -105,11 +108,26 @@ class _LoginScreenState extends State<LoginScreen> {
                         );
                       } else if (state is LoginSuccess) {
                         Navigator.pop(context);
-                        Navigator.push(
+                        Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => HomeScreen(),
-                            ));
+                              builder: (context) => MultiBlocProvider(
+                                providers: [
+                                  BlocProvider(
+                                    create: (context) => UserCubit(),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => ProductsCubit(),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => BrandsCubit(),
+                                  ),
+                                ],
+                                child: HomeScreen(),
+                              ),
+                            ), (route) {
+                          return false;
+                        });
                       } else if (state is LoginLoadingError) {
                         Navigator.pop(context);
                         showDialog(
@@ -177,15 +195,15 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       bottomNavigationBar: InkWell(
         onTap: () {
-          // context.read<LoginCubit>().login(
-          //       _userNameController.text,
-          //       _passwordController.text,
-          //     );
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => RecommentScreen(),
-              ));
+          context.read<LoginCubit>().login(
+                _userNameController.text,
+                _passwordController.text,
+              );
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => RecommentScreen(),
+          //     ));
         },
         child: const FootPage(
           textfootpage: 'Login',

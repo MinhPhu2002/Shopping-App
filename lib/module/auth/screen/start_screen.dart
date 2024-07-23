@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
+import 'package:testapp/module/auth/bloc/login_cubit.dart';
 import 'package:testapp/module/auth/screen/login_screen.dart';
 import 'package:testapp/module/auth/screen/signup_screen.dart';
 import 'package:testapp/widget/bottom_action_button.dart';
@@ -90,7 +92,10 @@ class StartScreen extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => LoginScreen(),
+                    builder: (context) => BlocProvider(
+                      create: (context) => LoginCubit(),
+                      child: LoginScreen(),
+                    ),
                   ));
             },
             child: Text.rich(TextSpan(children: [

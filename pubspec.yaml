@@ -41,7 +41,7 @@ dependencies:
   flutter_bloc: ^8.1.6
   readmore: ^3.0.0
   sp_util: ^2.0.3
-  flutter_secure_storage: ^9.2.0
+  flutter_secure_storage: ^9.2.2
   connectivity_plus: ^6.0.3
 dev_dependencies:
   flutter_test:

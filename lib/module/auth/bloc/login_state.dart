@@ -1,16 +1,12 @@
-import 'package:testapp/common/model/login_model.dart';
-
 class LoginState {}
 
 class LoginInitialState extends LoginState {}
 
 class LoginLoadingInProgress extends LoginState {}
 
-class LoginSuccess extends LoginState {
-  final LoginModel loginModel;
+class LoginSuccess extends LoginState {}
 
-  LoginSuccess({required this.loginModel});
-}
+class LoginFailed extends LoginState {}
 
 class LoginLoadingError extends LoginState {
   final String errorMessage;

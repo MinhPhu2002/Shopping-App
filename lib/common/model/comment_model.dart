@@ -1,19 +1,22 @@
 class CommentModel {
-  final int id;
+  final int rating;
   final String comment;
   final String user;
+  final String date;
   factory CommentModel.formJson(Map<String, dynamic> json) {
     return CommentModel(
-      id: json['id'],
-      comment: json['body'],
-      user: json['user']['fullName'],
+      rating: json['rating'],
+      comment: json['comment'],
+      user: json['reviewerName'],
+      date: json['date'],
     );
   }
 
   CommentModel({
-    required this.id,
+    required this.rating,
     required this.comment,
     required this.user,
+    required this.date,
   });
 }
 

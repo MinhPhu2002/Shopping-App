@@ -1,21 +1,27 @@
-import 'package:testapp/common/model/login_model.dart';
+import 'dart:convert';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:testapp/core/constants/api_path.dart';
+import 'package:testapp/data/secure_storage_service.dart';
 import 'package:testapp/data/api_client.dart';
 import 'package:testapp/data/models/request_method.dart';
 import 'package:testapp/data/models/request_response.dart';
+import 'package:testapp/data/services/auth_service.dart';
 
 class LoginRepository {
-  Future<LoginModel> login(
-      {required String email, required String password}) async {
-    final RequestResponse result = await apiClient.fetch(
-      ApiPath.login,
-      RequestMethod.post,
-      rawData: {
-        'email': email,
-        'password': password,
-      },
-    );
-    return LoginModel.fromJson(result.json);
+  Future<bool> login({required String email, required String password}) async {
+    final RequestResponse result =
+        await apiClient.fetch(ApiPath.login, RequestMethod.post,
+            encodeData: jsonEncode({
+              'username': email,
+              'password': password,
+            }));
+    final String token = result.json['token'];
+    final String refreshToken = result.json['token'];
+    AuthService.instance
+        .saveToken(accessToken: token, refreshToken: refreshToken);
+
+    return result.hasError == false;
   }
 
   ApiClient apiClient = ApiClient();

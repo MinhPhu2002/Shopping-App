@@ -117,8 +117,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
                           return CommentProduct(
                               avatar: ProductPath.avatar2,
                               name: item.user,
-                              time: '13 Sep, 2020',
-                              ratingScore: 4,
+                              time: item.date,
+                              ratingScore: item.rating,
                               comment: item.comment);
                         });
                   },
@@ -149,7 +149,9 @@ class NumberReviews extends StatelessWidget {
               children: [
                 const Text("4.8", style: AppTextStyle.s13_w4),
                 const SizedBox(width: 1),
-                rating(),
+                rating(
+                  ratingscore: 4,
+                ),
               ],
             )
           ],
