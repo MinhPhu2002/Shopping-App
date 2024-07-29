@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:testapp/data/services/auth_service.dart';
+import 'package:testapp/module/cart/bloc/cart_cubit.dart';
 import 'package:testapp/module/detail/bloc/product_details/product_details_cubit.dart';
 import 'package:testapp/module/home/bloc/brands/brands_cubit.dart';
 import 'package:testapp/module/home/bloc/brands/brands_state.dart';
@@ -12,7 +14,7 @@ import 'package:testapp/module/home/bloc/user/user_cubit.dart';
 import 'package:testapp/module/home/bloc/user/user_state.dart';
 import 'package:testapp/module/product/bloc/brand_details/brand_details_cubit.dart';
 import 'package:testapp/module/product/brand_screen.dart';
-import 'package:testapp/module/cart/cart_screen.dart';
+import 'package:testapp/module/cart/screen/cart_screen.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/constants/image_path.dart';
 import 'package:testapp/core/constants/product_path.dart';
@@ -53,7 +55,10 @@ class HomeScreen extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CartScreen(),
+                      builder: (context) => BlocProvider(
+                        create: (context) => CartCubit(),
+                        child: CartScreen(),
+                      ),
                     ));
               },
               icon: CircleIcon(
@@ -270,9 +275,14 @@ class HomeDrawer extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: Center(
-                    child: Image.asset(
-                      avatar,
-                      fit: BoxFit.contain,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        image: DecorationImage(
+                          image: NetworkImage(avatar),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -357,6 +367,7 @@ class HomeDrawer extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 80),
               child: InkWell(
                 onTap: () {
+                  AuthService.instance.invalid();
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(

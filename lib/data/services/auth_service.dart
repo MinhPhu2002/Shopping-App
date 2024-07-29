@@ -16,6 +16,8 @@ const String _accessTokenKey = 'access-token';
 const String _refreshTokenKey = 'refresh-token';
 const String _tokenExpiresTimeKey = 'expires_in';
 const String _isUserBlockedKey = 'is_user_blocked';
+const String _userInfoKey = 'userInfoKey';
+const String _userIdKey = 'userIdKey';
 
 /// Store all keys will be eliminated
 const _keysToEliminate = [
@@ -35,6 +37,7 @@ final class AuthService {
     final instance = _instance ??= AuthService._();
 
     await instance._loadToken();
+    await instance._loadUserInfo();
 
     return instance;
   }
@@ -42,8 +45,12 @@ final class AuthService {
   AuthService._() {
     AppAuthenticationBinding.initInstance();
     _secureStorage = SecureStorage();
+    SpUtil.getInstance();
     setIsUserBloceked(false);
   }
+  Map<String, dynamic>? _currentUserInfo;
+  Map<String, dynamic>? get currentUserInfo => _currentUserInfo;
+  int? get userId => SpUtil.getInt(_userIdKey, defValue: null);
 
   String? _accessToken;
   String? get accessToken => _accessToken;
@@ -71,6 +78,10 @@ final class AuthService {
     _refreshToken = await _secureStorage.read(_refreshTokenKey);
   }
 
+  Future<void> _loadUserInfo() async {
+    _currentUserInfo = Map.castFrom(SpUtil.getObject(_userInfoKey) ?? {});
+  }
+
   Future<void> saveToken({
     required String accessToken,
     required String refreshToken,
@@ -82,6 +93,15 @@ final class AuthService {
     if (tokenExpiresTime != null) await saveExpiresTime(tokenExpiresTime);
 
     log('Access Token đã được lưu vào là: $_accessToken', name: 'AuthService');
+  }
+
+  void saveUserInfo(Map<String, dynamic> data) {
+    _currentUserInfo = data;
+    SpUtil.putObject(_userInfoKey, data);
+  }
+
+  void saveUserId(int id) {
+    SpUtil.putInt(_userIdKey, id);
   }
 
   static Future<void> setIsUserBloceked(bool isBlock) async {
@@ -217,7 +237,11 @@ final class AuthService {
     _isRefreshTokenInvalid = false;
   }
 
-  void clearLoginInfo() {}
+  void clearLoginInfo() {
+    _currentUserInfo = null;
+    SpUtil.remove(_userInfoKey);
+    SpUtil.remove(_userIdKey);
+  }
 
   Future invalid() async {
     await clearToken();

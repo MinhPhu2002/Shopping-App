@@ -1,14 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:testapp/module/cart/address_creen.dart';
-import 'package:testapp/module/cart/order_confirmed_screen.dart';
+import 'package:testapp/module/cart/bloc/cart_cubit.dart';
+import 'package:testapp/module/cart/bloc/cart_state.dart';
+import 'package:testapp/module/cart/screen/address_creen.dart';
+import 'package:testapp/module/cart/screen/order_confirmed_screen.dart';
 
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/constants/image_path.dart';
 import 'package:testapp/core/constants/product_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
-import 'package:testapp/module/cart/payment_screen.dart';
+import 'package:testapp/module/cart/screen/payment_screen.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/foot_page.dart';
 
@@ -45,79 +48,82 @@ class CartScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              child: const Column(
-                children: [
-                  CartProduct(
-                      PathImage: ImagePath.homeScreenProductImage1Illustrator,
-                      Name: "Men's Tie-Dye T-Shirt Nike Sportswear",
-                      Cost: "\$99"),
-                  CartProduct(
-                      PathImage: ProductPath.image8,
-                      Name: "Men's Tie-Dye T-Shirt Nike Sportswear",
-                      Cost: "\$45"),
-                  CartProduct(
-                      PathImage: ImagePath.homeScreenProductImage2Illustrator,
-                      Name: "Men's Tie-Dye T-Shirt Nike Sportswear",
-                      Cost: "\$45"),
-                ],
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddressCreen(),
-                    ));
-              },
-              child: const TransactionDetails(
-                orderDetails: "Delivery Address",
-                contentDetails: "43, Electronics City Phase 1, Electronic City",
-                imagePath: IconPath.location,
-                bonus: '',
-                iconSize: Size(20, 20),
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const PaymentScreen(),
-                    ));
-              },
-              child: const TransactionDetails(
-                orderDetails: "Payment Method",
-                contentDetails: "Visa Classic",
-                imagePath: IconPath.visa,
-                bonus: '**** 7690',
-                iconSize: Size(30, 30),
-              ),
-            ),
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      "OrderIn",
-                      style: AppTextStyle.s17_w5.copyWith(color: Colors.black),
-                    ),
+        child: BlocBuilder<CartCubit, CartState>(
+          builder: (context, state) {
+            if (state is CartLoadingInProgress) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (state is CartLoadingError) {
+              return Text(state.errorMessage);
+            }
+            final data = (state as CartLoaded).cart;
+            return Column(
+              children: [
+                Column(
+                    children: data.products.map((item) {
+                  return CartProduct(
+                      PathImage: item.thumbnail,
+                      Name: item.title,
+                      Cost: item.price);
+                }).toList()),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddressCreen(),
+                        ));
+                  },
+                  child: const TransactionDetails(
+                    orderDetails: "Delivery Address",
+                    contentDetails:
+                        "43, Electronics City Phase 1, Electronic City",
+                    imagePath: IconPath.location,
+                    bonus: '',
+                    iconSize: Size(20, 20),
                   ),
-                  const TotalPayment(nameitem: "Subtotal", costitem: "\$110"),
-                  const TotalPayment(nameitem: "Delivery", costitem: "\$10"),
-                  const TotalPayment(nameitem: "Total", costitem: "\$120"),
-                  const SizedBox(
-                    height: 24,
-                  )
-                ],
-              ),
-            )
-          ],
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PaymentScreen(),
+                        ));
+                  },
+                  child: const TransactionDetails(
+                    orderDetails: "Payment Method",
+                    contentDetails: "Visa Classic",
+                    imagePath: IconPath.visa,
+                    bonus: '**** 7690',
+                    iconSize: Size(30, 30),
+                  ),
+                ),
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                          "OrderIn",
+                          style:
+                              AppTextStyle.s17_w5.copyWith(color: Colors.black),
+                        ),
+                      ),
+                      TotalPayment(nameitem: "Subtotal", costitem: data.total),
+                      TotalPayment(nameitem: "Delivery", costitem: 10),
+                      TotalPayment(
+                          nameitem: "Total", costitem: data.total + 10),
+                      SizedBox(
+                        height: 24,
+                      )
+                    ],
+                  ),
+                )
+              ],
+            );
+          },
         ),
       ),
       bottomNavigationBar: InkWell(
@@ -175,9 +181,14 @@ class CartProduct extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: const Color.fromRGBO(240, 240, 240, 1)),
-              child: Image.asset(
-                PathImage,
-                fit: BoxFit.contain,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  image: DecorationImage(
+                    image: NetworkImage(PathImage),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             ),
             const SizedBox(
@@ -199,7 +210,7 @@ class CartProduct extends StatelessWidget {
                   ),
                   const Spacer(),
                   Text(
-                    "$Cost (+\$4.00 Tax)",
+                    "\$$Cost (+\$4.00 Tax)",
                     style: AppTextStyle.s11_w5.copyWith(
                       color: const Color.fromRGBO(143, 149, 158, 1),
                     ),
@@ -331,7 +342,7 @@ class TransactionDetails extends StatelessWidget {
 
 class TotalPayment extends StatelessWidget {
   final String nameitem;
-  final String costitem;
+  final double costitem;
 
   const TotalPayment(
       {super.key, required this.nameitem, required this.costitem});
@@ -346,7 +357,7 @@ class TotalPayment extends StatelessWidget {
           Text(nameitem,
               style: AppTextStyle.s15_w4
                   .copyWith(color: const Color.fromRGBO(143, 149, 158, 1))),
-          Text(costitem,
+          Text('\$' + costitem.toString(),
               style: AppTextStyle.s15_w4.copyWith(color: Colors.black))
         ],
       ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:testapp/module/cart/cart_screen.dart';
+import 'package:testapp/module/cart/screen/cart_screen.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/constants/image_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';

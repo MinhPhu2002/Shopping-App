@@ -9,4 +9,5 @@ class ApiPath {
   static const String login = '/auth/login';
   static const String addComment = '/comments/add';
   static const String getUser = '/auth/me';
+  static const String getCart = '/carts/user';
 }

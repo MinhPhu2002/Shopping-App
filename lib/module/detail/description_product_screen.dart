@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:readmore/readmore.dart';
 import 'package:testapp/common/model/product_model.dart';
-import 'package:testapp/module/cart/cart_screen.dart';
+import 'package:testapp/module/cart/screen/cart_screen.dart';
 import 'package:testapp/core/constants/product_path.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';

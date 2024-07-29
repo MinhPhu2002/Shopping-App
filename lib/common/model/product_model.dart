@@ -31,13 +31,15 @@ class ProductDetailsModel {
   final List<String> imageUrl;
   final String price;
   final String description;
+  final String thumbnail;
 
   ProductDetailsModel(
       {required this.id,
       required this.title,
       required this.imageUrl,
       required this.price,
-      required this.description});
+      required this.description,
+      required this.thumbnail});
   factory ProductDetailsModel.formJson(Map<String, dynamic> json) {
     return ProductDetailsModel(
       id: json['id'],
@@ -45,6 +47,27 @@ class ProductDetailsModel {
       imageUrl: List.castFrom(json['images']),
       price: json['price'].toString(),
       description: json['description'],
+      thumbnail: json['thumbnail'],
     );
   }
+}
+
+class ProductCartModel {
+  final int id;
+  final String title;
+  final String thumbnail;
+  final String price;
+  factory ProductCartModel.formJson(Map<String, dynamic> json) {
+    return ProductCartModel(
+        id: json['id'],
+        title: json['title'],
+        thumbnail: json['thumbnail'],
+        price: json['price'].toString());
+  }
+  ProductCartModel({
+    required this.id,
+    required this.title,
+    required this.thumbnail,
+    required this.price,
+  });
 }

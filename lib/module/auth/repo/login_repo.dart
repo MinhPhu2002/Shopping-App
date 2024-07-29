@@ -18,8 +18,10 @@ class LoginRepository {
             }));
     final String token = result.json['token'];
     final String refreshToken = result.json['token'];
+
     AuthService.instance
         .saveToken(accessToken: token, refreshToken: refreshToken);
+    AuthService.instance.saveUserId(result.json['id']);
 
     return result.hasError == false;
   }

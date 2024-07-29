@@ -11,6 +11,7 @@ import 'package:testapp/module/detail/description_product_screen.dart';
 import 'package:testapp/module/home/bloc/brands/brands_cubit.dart';
 import 'package:testapp/module/home/bloc/products/products_cubit.dart';
 import 'package:testapp/module/home/bloc/user/user_cubit.dart';
+import 'package:testapp/module/home/bloc/user/user_state.dart';
 import 'package:testapp/module/home/home_screen.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/foot_page.dart';
