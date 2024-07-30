@@ -7,7 +7,7 @@ import 'package:testapp/module/auth/bloc/login_cubit.dart';
 import 'package:testapp/module/auth/bloc/login_state.dart';
 
 import 'package:testapp/module/auth/recomment_screen.dart';
-import 'package:testapp/module/detail/description_product_screen.dart';
+import 'package:testapp/module/cart/screen/detail/description_product_screen.dart';
 import 'package:testapp/module/home/bloc/brands/brands_cubit.dart';
 import 'package:testapp/module/home/bloc/products/products_cubit.dart';
 import 'package:testapp/module/home/bloc/user/user_cubit.dart';

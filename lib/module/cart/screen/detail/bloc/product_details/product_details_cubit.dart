@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testapp/module/detail/bloc/product_details/product_details_state.dart';
+import 'package:testapp/module/cart/screen/detail/bloc/product_details/product_details_state.dart';
 import 'package:testapp/module/home/repo/product_repo.dart';
 
 class ProductDetailsCubit extends Cubit<ProductDetailsState> {
