@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/auth/bloc/login_cubit.dart';
@@ -14,7 +15,6 @@ class StartScreen extends StatelessWidget {
   const StartScreen({
     super.key,
   });
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

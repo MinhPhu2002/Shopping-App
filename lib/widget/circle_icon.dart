@@ -17,7 +17,7 @@ class CircleIcon extends StatelessWidget {
       required this.colorBorder});
   @override
   Widget build(BuildContext context) {
-    return Ink(
+    return Container(
       width: sizeCircle.width,
       height: sizeCircle.height,
       child: Center(

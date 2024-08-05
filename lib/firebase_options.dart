@@ -59,5 +59,4 @@ class DefaultFirebaseOptions {
     projectId: 'shopping-firstapp',
     storageBucket: 'shopping-firstapp.appspot.com',
   );
-
 }

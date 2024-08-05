@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:testapp/module/cart/bloc/cart_cubit.dart';
 import 'package:testapp/module/cart/bloc/cart_state.dart';
@@ -12,10 +13,25 @@ import 'package:testapp/core/constants/image_path.dart';
 import 'package:testapp/core/constants/product_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/cart/screen/payment_screen.dart';
+import 'package:testapp/module/service/local_notification_controller.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/foot_page.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  @override
+  void initState() {
+    super.initState();
+    LocalNotificationController().initialize();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,6 +144,8 @@ class CartScreen extends StatelessWidget {
       ),
       bottomNavigationBar: InkWell(
         onTap: () {
+          LocalNotificationController()
+              .showNotification(text: 'Oder', title: 'Oder Success');
           Navigator.push(
               context,
               MaterialPageRoute(
