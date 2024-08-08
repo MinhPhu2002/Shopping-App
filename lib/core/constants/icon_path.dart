@@ -19,11 +19,13 @@ class IconPath {
   static const String bag = 'assets/Icon/bag.svg';
   static const String clock = 'assets/Icon/clock.svg';
   static const String delete = 'assets/Icon/delete.svg';
+  static const String filler = 'assets/Icon/filler.svg';
   static const String heart = 'assets/Icon/heart.svg';
   static const String logo = 'assets/Icon/logo.svg';
   static const String map = 'assets/Icon/map.svg';
   static const String menu = 'assets/Icon/menu.svg';
   static const String menu2 = 'assets/Icon/menu2.svg';
+  static const String notcheck = 'assets/Icon/notcheck.svg';
   static const String point = 'assets/Icon/point.svg';
   static const String sort = 'assets/Icon/sort.svg';
   static const String sun = 'assets/Icon/sun.svg';

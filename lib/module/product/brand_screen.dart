@@ -26,7 +26,7 @@ class _BrandScreenState extends State<BrandScreen> {
   late final BrandDetailsCubit brandDetailsCubit;
   late ScrollController controller;
   final String nameBrand;
-
+  String? _selectValue;
   _BrandScreenState({required this.nameBrand});
   @override
   void initState() {
@@ -132,7 +132,6 @@ class _BrandScreenState extends State<BrandScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,25 +147,47 @@ class _BrandScreenState extends State<BrandScreen> {
                           )
                         ],
                       ),
-                      Container(
-                        width: 71,
-                        height: 37,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Color.fromRGBO(245, 246, 250, 1)),
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(IconPath.sort),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                "Sort",
-                                style: AppTextStyle.s15_w5,
-                              )
-                            ],
+                      Spacer(),
+                      InkWell(
+                        onTap: () {},
+                        child: Ink(
+                          width: 37,
+                          height: 37,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Color.fromRGBO(245, 246, 250, 1)),
+                          child: Center(
+                            child: SvgPicture.asset(IconPath.filler),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          showBottomSheetSort();
+                        },
+                        child: Ink(
+                          width: 71,
+                          height: 37,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Color.fromRGBO(245, 246, 250, 1)),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(IconPath.sort),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  "Sort",
+                                  style: AppTextStyle.s15_w5,
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       )
@@ -209,6 +230,122 @@ class _BrandScreenState extends State<BrandScreen> {
               )),
         );
       }),
+    );
+  }
+
+  void showBottomSheetSort() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(builder: (context, setState) {
+          return Container(
+            width: MediaQuery.sizeOf(context).width,
+            height: 350,
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(20)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'Sort',
+                    style: AppTextStyle.s17_w5.copyWith(color: Colors.black),
+                  ),
+                  SizedBox(height: 32),
+                  Container(
+                    width: MediaQuery.sizeOf(context).width,
+                    height: 48,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color.fromRGBO(245, 246, 250, 1)),
+                    child: sortSelect('Giá từ thấp đến cao', setState),
+                  ),
+                  SizedBox(height: 8),
+                  Container(
+                    width: MediaQuery.sizeOf(context).width,
+                    height: 48,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color.fromRGBO(245, 246, 250, 1)),
+                    child: sortSelect('Giá từ cao đến thấp', setState),
+                  ),
+                  SizedBox(height: 8),
+                  Container(
+                    width: MediaQuery.sizeOf(context).width,
+                    height: 48,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color.fromRGBO(245, 246, 250, 1)),
+                    child: sortSelect('Theo tên sản phẩm (A-Z)', setState),
+                  ),
+                  Spacer(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 46,
+                        width: (MediaQuery.sizeOf(context).width - 70) / 2,
+                        decoration: BoxDecoration(
+                            color: const Color.fromRGBO(245, 246, 250, 1),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Center(
+                          child: Text(
+                            "Cancel",
+                            style: AppTextStyle.s17_w5.copyWith(
+                                color: Color.fromRGBO(143, 149, 158, 1)),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Container(
+                        height: 46,
+                        width: (MediaQuery.sizeOf(context).width - 70) / 2,
+                        decoration: BoxDecoration(
+                            color: const Color.fromRGBO(151, 117, 250, 1),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Center(
+                          child: Text(
+                            "Confirm",
+                            style: AppTextStyle.s17_w5.copyWith(
+                                color: Color.fromRGBO(255, 255, 255, 1)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+      },
+    );
+  }
+
+  Widget sortSelect(String title, StateSetter setState) {
+    return ListTile(
+      onTap: () {
+        setState(() {
+          _selectValue = title;
+        });
+      },
+      title: Row(
+        children: [
+          Text(title),
+          const Spacer(),
+          SvgPicture.asset(
+              _selectValue == title ? IconPath.check : IconPath.notcheck),
+        ],
+      ),
     );
   }
 }

@@ -28,6 +28,8 @@ import 'dart:ui' show ImageFilter;
 import 'package:testapp/module/product/wishlish_screen.dart';
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,10 +75,7 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       drawerScrimColor: const Color.fromRGBO(29, 30, 32, 0.2),
-      drawer: const DrawerHomePage(
-        name: "Hemendra",
-        avatar: ProductPath.avatar3,
-      ),
+      drawer: const DrawerHomePage(),
       body: SizedBox(
         child: SingleChildScrollView(
           child: Column(
@@ -130,11 +129,11 @@ class HomeScreen extends StatelessWidget {
                 height: 20,
               ),
               Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
+                padding: const EdgeInsets.only(left: 20, right: 20),
                 child: BlocBuilder<BrandsCubit, BrandsState>(
                     builder: (context, state) {
                   if (state is BrandsLoadingInProgress) {
-                    return Center(
+                    return const Center(
                       child: CircularProgressIndicator(),
                     );
                   }
@@ -168,7 +167,7 @@ class HomeScreen extends StatelessWidget {
               BlocBuilder<ProductsCubit, ProductsState>(
                 builder: (context, state) {
                   if (state is ProductsLoadingInProgress) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   }
                   if (state is ProductsLoadingError) {
                     return Center(child: Text(state.errorMessage));
@@ -204,10 +203,8 @@ class HomeScreen extends StatelessWidget {
 }
 
 class DrawerHomePage extends StatelessWidget {
-  final String name;
-  final String avatar;
+  const DrawerHomePage({super.key});
 
-  const DrawerHomePage({super.key, required this.name, required this.avatar});
   @override
   Widget build(BuildContext context) {
     return BackdropFilter(
@@ -218,7 +215,7 @@ class DrawerHomePage extends StatelessWidget {
       child: BlocBuilder<UserCubit, UserState>(
         builder: (context, state) {
           if (state is UserLoadingInProgress) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (state is UserLoadingError) {
             return Text(state.errorMessage);
@@ -348,7 +345,7 @@ class HomeDrawer extends StatelessWidget {
                         builder: (context) => CartScreen(),
                       ));
                 },
-                child: ListMenu(icon: IconPath.bag, name: "Order")),
+                child: const ListMenu(icon: IconPath.bag, name: "Order")),
             const ListMenu(icon: IconPath.wallet, name: "My Cards"),
             InkWell(
                 onTap: () {
@@ -412,7 +409,6 @@ class ListMenu extends StatelessWidget {
   const ListMenu({super.key, required this.icon, required this.name});
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       width: 215,
       padding: const EdgeInsets.only(top: 5),
@@ -443,7 +439,6 @@ class Search extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Ink(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -520,7 +515,7 @@ class Brand extends StatelessWidget {
                   nameBrand: nameBrand,
                 ),
               ),
-              settings: RouteSettings(name: "brand"),
+              settings: const RouteSettings(name: "brand"),
             ),
           );
         },
@@ -590,7 +585,7 @@ class NewArraival extends StatelessWidget {
                       postId: id,
                     ),
                   ),
-              settings: RouteSettings(name: "description")),
+              settings: const RouteSettings(name: "description")),
         );
       },
       child: Column(
@@ -617,7 +612,7 @@ class NewArraival extends StatelessWidget {
                     onPressed: () {},
                     icon: Image.asset(
                       ImagePath.homeScreenHeartIconIllustrator,
-                      color: Color.fromARGB(255, 212, 190, 197),
+                      color: const Color.fromARGB(255, 212, 190, 197),
                       width: 25,
                       height: 25,
                       fit: BoxFit.cover,
