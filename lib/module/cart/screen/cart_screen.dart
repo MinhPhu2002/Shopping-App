@@ -9,8 +9,6 @@ import 'package:testapp/module/cart/screen/address_creen.dart';
 import 'package:testapp/module/cart/screen/order_confirmed_screen.dart';
 
 import 'package:testapp/core/constants/icon_path.dart';
-import 'package:testapp/core/constants/image_path.dart';
-import 'package:testapp/core/constants/product_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/cart/screen/payment_screen.dart';
 import 'package:testapp/module/service/local_notification_controller.dart';

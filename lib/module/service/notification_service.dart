@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:testapp/module/service/local_notification_controller.dart';
 
@@ -15,7 +14,8 @@ class NotificationService {
       print('Received a message while in the foreground!');
       final notification = message.notification;
       if (notification != null) {
-        print('Message also contained a notification: ${message.notification}');
+        print(
+            'Message also contained a notification: ${message.notification!.toMap()}');
         LocalNotificationController().showNotification(
             title: notification.title.toString(),
             text: notification.body.toString());

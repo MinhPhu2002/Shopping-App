@@ -1,17 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/auth/bloc/login_cubit.dart';
 import 'package:testapp/module/auth/bloc/login_state.dart';
-
-import 'package:testapp/module/auth/recomment_screen.dart';
-import 'package:testapp/module/detail/description_product_screen.dart';
 import 'package:testapp/module/home/bloc/brands/brands_cubit.dart';
 import 'package:testapp/module/home/bloc/products/products_cubit.dart';
 import 'package:testapp/module/home/bloc/user/user_cubit.dart';
-import 'package:testapp/module/home/bloc/user/user_state.dart';
 import 'package:testapp/module/home/home_screen.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/foot_page.dart';
@@ -52,9 +47,9 @@ class _LoginScreenState extends State<LoginScreen> {
           child: InkWell(
             child: CircleIcon(
                 iconname: IconPath.back,
-                colorCircle: Color.fromRGBO(245, 246, 250, 1),
-                sizeIcon: Size(25, 25),
-                sizeCircle: Size(45, 45),
+                colorCircle: const Color.fromRGBO(245, 246, 250, 1),
+                sizeIcon: const Size(25, 25),
+                sizeCircle: const Size(45, 45),
                 colorBorder: Colors.transparent),
             onTap: () {
               Navigator.pop(context);
@@ -66,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           Column(
             children: [
-              Text(
+              const Text(
                 "Welcome",
                 style: AppTextStyle.s28_w6,
                 textAlign: TextAlign.center,
@@ -74,19 +69,19 @@ class _LoginScreenState extends State<LoginScreen> {
               Text(
                 "Please enter your data to continue",
                 style: AppTextStyle.s15_w4
-                    .copyWith(color: Color.fromRGBO(143, 149, 158, 1)),
+                    .copyWith(color: const Color.fromRGBO(143, 149, 158, 1)),
                 textAlign: TextAlign.end,
               )
             ],
           ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(left: 4, right: 4),
+              padding: const EdgeInsets.only(left: 4, right: 4),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Spacer(),
-                  Crendentials(
+                  const Spacer(),
+                  Credential(
                     credentials: "Username",
                     obscureText: false,
                     data: _userNameController,
@@ -94,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(
                     height: 20 * MediaQuery.sizeOf(context).height / 812,
                   ),
-                  Crendentials(
+                  Credential(
                     credentials: "Password",
                     obscureText: true,
                     data: _passwordController,
@@ -104,15 +99,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (state is LoginLoadingInProgress) {
                         showDialog(
                           context: context,
-                          builder: (context) =>
-                              Center(child: CircularProgressIndicator()),
+                          builder: (context) => const Center(
+                              child: const CircularProgressIndicator()),
                         );
                       } else if (state is LoginSuccess) {
                         Navigator.pop(context);
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                              settings: RouteSettings(name: 'Home'),
+                              settings: const RouteSettings(name: 'Home'),
                               builder: (context) => MultiBlocProvider(
                                 providers: [
                                   BlocProvider(
@@ -160,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Text(
                               "Forgot password?",
                               style: AppTextStyle.s15_w4.copyWith(
-                                  color: Color.fromRGBO(234, 67, 53, 1)),
+                                  color: const Color.fromRGBO(234, 67, 53, 1)),
                             ),
                           ),
                         ),
@@ -172,10 +167,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           top: 40 * MediaQuery.sizeOf(context).height / 812,
                           left: 20,
                           right: 20),
-                      child: SwitchWidget(nameSwitch: "Remember me")),
-                  Spacer(),
+                      child: const SwitchWidget(nameSwitch: "Remember me")),
+                  const Spacer(),
                   Padding(
-                    padding: EdgeInsets.only(left: 25, right: 25, bottom: 20),
+                    padding:
+                        const EdgeInsets.only(left: 25, right: 25, bottom: 20),
                     child: Text.rich(
                         textAlign: TextAlign.center,
                         TextSpan(children: [
@@ -183,8 +179,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               text:
                                   "By connecting your account confirm that you agree with our ",
                               style: AppTextStyle.s13_w4.copyWith(
-                                  color: Color.fromRGBO(143, 149, 158, 1))),
-                          TextSpan(
+                                  color:
+                                      const Color.fromRGBO(143, 149, 158, 1))),
+                          const TextSpan(
                               text: "Term and Condition",
                               style: AppTextStyle.s13_w5)
                         ])),
@@ -215,9 +212,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-class Crendentials extends StatelessWidget {
+class Credential extends StatelessWidget {
   // ignore: non_constant_identifier_names
-  const Crendentials(
+  const Credential(
       {super.key,
       required this.credentials,
       required this.obscureText,

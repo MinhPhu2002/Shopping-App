@@ -6,7 +6,6 @@ import 'package:testapp/module/cart/screen/cart_screen.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/constants/image_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
-import 'package:testapp/module/detail/description_product_screen.dart';
 import 'package:testapp/utils/ui/mediaquery_extention.dart';
 import 'package:testapp/widget/circle_icon.dart';
 

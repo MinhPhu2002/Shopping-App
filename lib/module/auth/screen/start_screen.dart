@@ -1,20 +1,51 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/auth/bloc/login_cubit.dart';
 import 'package:testapp/module/auth/screen/login_screen.dart';
 import 'package:testapp/module/auth/screen/signup_screen.dart';
+import 'package:testapp/module/home/bloc/brands/brands_cubit.dart';
+import 'package:testapp/module/home/bloc/products/products_cubit.dart';
+import 'package:testapp/module/home/bloc/user/user_cubit.dart';
+import 'package:testapp/module/home/home_screen.dart';
 import 'package:testapp/widget/bottom_action_button.dart';
 import 'package:testapp/widget/circle_icon.dart';
 
 import '../../../core/constants/icon_path.dart';
 
-class StartScreen extends StatelessWidget {
+class StartScreen extends StatefulWidget {
   const StartScreen({
     super.key,
   });
+
+  @override
+  State<StartScreen> createState() => _StartScreenState();
+}
+
+class _StartScreenState extends State<StartScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  Future<User?> _signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleAuthen =
+          await googleUser!.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuthen.accessToken,
+        idToken: googleAuthen.idToken,
+      );
+      final UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
+      return userCredential.user;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,22 +58,20 @@ class StartScreen extends StatelessWidget {
           child: InkWell(
             child: CircleIcon(
                 iconname: IconPath.back,
-                colorCircle: Color.fromRGBO(245, 246, 250, 1),
-                sizeIcon: Size(25, 25),
-                sizeCircle: Size(45, 45),
+                colorCircle: const Color.fromRGBO(245, 246, 250, 1),
+                sizeIcon: const Size(25, 25),
+                sizeCircle: const Size(45, 45),
                 colorBorder: Colors.transparent),
-            onTap: () {
-              Navigator.pop(context);
-            },
+            onTap: () {},
           ),
         ),
       ),
-      body: const Padding(
-          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-          child: const Column(
+      body: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+          child: Column(
               // crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
@@ -53,30 +82,60 @@ class StartScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: Align(
-                    alignment: Alignment(0, 185 / 559),
+                    alignment: const Alignment(0, 185 / 559),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        InkWellExample(
+                        const InkWellExample(
                           nameIcon: FontAwesomeIcons.facebook,
                           backGroundColor: Color.fromRGBO(66, 103, 178, 1),
                           label: 'Facebook',
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
-                        InkWellExample(
+                        const InkWellExample(
                           backGroundColor: Color.fromRGBO(29, 161, 242, 1),
                           label: 'Twitter',
                           nameIcon: FontAwesomeIcons.twitter,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
-                        InkWellExample(
-                          nameIcon: FontAwesomeIcons.google,
-                          backGroundColor: Color.fromRGBO(234, 67, 53, 1),
-                          label: 'Google',
+                        InkWell(
+                          onTap: () async {
+                            User? user = await _signInWithGoogle();
+                            if (user != null) {
+                              print(
+                                  'Signed in with Google: ${user.displayName}');
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    settings: const RouteSettings(name: 'Home'),
+                                    builder: (context) => MultiBlocProvider(
+                                      providers: [
+                                        BlocProvider(
+                                          create: (context) => UserCubit(),
+                                        ),
+                                        BlocProvider(
+                                          create: (context) => ProductsCubit(),
+                                        ),
+                                        BlocProvider(
+                                          create: (context) => BrandsCubit(),
+                                        ),
+                                      ],
+                                      child: HomeScreen(),
+                                    ),
+                                  ), (route) {
+                                return false;
+                              });
+                            }
+                          },
+                          child: const InkWellExample(
+                            nameIcon: FontAwesomeIcons.google,
+                            backGroundColor: Color.fromRGBO(234, 67, 53, 1),
+                            label: 'Google',
+                          ),
                         ),
                       ],
                     ),
@@ -94,7 +153,7 @@ class StartScreen extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => BlocProvider(
                       create: (context) => LoginCubit(),
-                      child: LoginScreen(),
+                      child: const LoginScreen(),
                     ),
                   ));
             },
@@ -103,7 +162,7 @@ class StartScreen extends StatelessWidget {
                   text: "Already have an account? ",
                   style: AppTextStyle.s15_w4
                       .copyWith(color: const Color.fromRGBO(143, 149, 158, 1))),
-              TextSpan(
+              const TextSpan(
                 text: "Signin",
                 style: AppTextStyle.s15_w5,
               )
@@ -118,7 +177,7 @@ class StartScreen extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SignupScreen(),
+                      builder: (context) => const SignupScreen(),
                     ));
               })
         ],
@@ -140,33 +199,30 @@ class InkWellExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      child: Ink(
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        decoration: BoxDecoration(
-          color: backGroundColor,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(10),
+    return Ink(
+      padding: const EdgeInsets.symmetric(vertical: 14),
+      decoration: BoxDecoration(
+        color: backGroundColor,
+        borderRadius: const BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            nameIcon,
+            size: 16,
+            color: Colors.white,
           ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              nameIcon,
-              size: 16,
-              color: Colors.white,
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Text(
-              label,
-              style: AppTextStyle.s17_w6.copyWith(color: Colors.white),
-            ),
-          ],
-        ),
+          const SizedBox(
+            width: 10,
+          ),
+          Text(
+            label,
+            style: AppTextStyle.s17_w6.copyWith(color: Colors.white),
+          ),
+        ],
       ),
     );
   }
