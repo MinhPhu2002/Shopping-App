@@ -1,5 +1,5 @@
 class ApiPath {
-  static const String baseUrl = 'https://dummyjson.com';
+  static const String baseUrl = 'https://dummyjson-sm8j.onrender.com';
   static const String getProducts = '/products';
   static const String getProductDetail = "/products/";
   static const String getComment = "/comments/post";

@@ -18,12 +18,17 @@ class BrandRepository {
   }
 
   Future<BrandDetailsResponse> getBrandDetails(String slug,
-      {required int limit, required int offset}) async {
+      {required int limit,
+      required int skip,
+      required String? sortBy,
+      required String? order}) async {
     final RequestResponse result = await apiClient.fetch(
         ApiPath.getBrandDetails + "$slug", RequestMethod.get,
         searchParams: {
           'limit': limit.toString(),
-          'offset': offset.toString(),
+          'skip': skip.toString(),
+          if (sortBy != null) 'sortBy': sortBy,
+          if (order != null) 'order': order,
         });
     final int totalItemCount = result.json['total'];
     final List products = result.json['products'];

@@ -10,6 +10,8 @@ class BrandDetailsState {
     this.brandDetails,
     this.errorMessage,
     required this.isLoading,
+    required this.hasMoreItem,
   });
   final int? totalItemCount;
+  final bool hasMoreItem;
 }
