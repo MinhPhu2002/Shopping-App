@@ -27,7 +27,8 @@ class BrandDetailsCubit extends Cubit<BrandDetailsState> {
           limit: 6,
           skip: skip,
           sortBy: productsFilterModel.sortBy,
-          order: productsFilterModel.order);
+          order: productsFilterModel.order,
+          price: productsFilterModel.priceName);
       emit(BrandDetailsState(
           isLoading: false,
           brandDetails: result.brandDetailsModel,
@@ -55,7 +56,8 @@ class BrandDetailsCubit extends Cubit<BrandDetailsState> {
           limit: 6,
           skip: skip,
           sortBy: productsFilterModel.sortBy,
-          order: productsFilterModel.order);
+          order: productsFilterModel.order,
+          price: productsFilterModel.priceName);
 
       emit(BrandDetailsState(
           totalItemCount: result.totalItemCount,
@@ -74,14 +76,15 @@ class BrandDetailsCubit extends Cubit<BrandDetailsState> {
   }
 
   Future<void> sort(SortProductBy? sortBy) async {
-    productsFilterModel = productsFilterModel.copyWith(sortProductBy: sortBy);
+    productsFilterModel = productsFilterModel.sort(sortProductBy: sortBy);
     skip = 0;
     return load();
   }
 
   Future<void> filter({String? priceFrom, String? priceTo}) async {
     productsFilterModel =
-        productsFilterModel.copyWith(priceFrom: priceFrom, priceTo: priceTo);
+        productsFilterModel.filter(priceFrom: priceFrom, priceTo: priceTo);
+    // print(productsFilterModel.priceName);
     skip = 0;
     return load();
   }

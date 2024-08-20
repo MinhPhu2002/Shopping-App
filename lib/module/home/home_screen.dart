@@ -212,19 +212,23 @@ class DrawerHomePage extends StatelessWidget {
         sigmaX: 5,
         sigmaY: 5,
       ),
-      child: BlocBuilder<UserCubit, UserState>(
-        builder: (context, state) {
-          if (state is UserLoadingInProgress) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state is UserLoadingError) {
-            return Text(state.errorMessage);
-          }
-          final data = (state as UserLoaded).user;
+      child: BlocProvider(
+        create: (context) => UserCubit(),
+        child: BlocBuilder<UserCubit, UserState>(
+          builder: (context, state) {
+            if (state is UserLoadingInProgress) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (state is UserLoadingError) {
+              // return Text(state.errorMessage);
+              return HomeDrawer(avatar: '', name: '');
+            }
+            final data = (state as UserLoaded).user;
 
-          return HomeDrawer(
-              avatar: data.avatar, name: data.firstName + data.lastName);
-        },
+            return HomeDrawer(
+                avatar: data.avatar, name: data.firstName + data.lastName);
+          },
+        ),
       ),
     );
   }

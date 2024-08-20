@@ -13,9 +13,10 @@ class LoginRepository {
             encodeData: jsonEncode({
               'username': email,
               'password': password,
+              'expiresInMins': 1,
             }));
     final String token = result.json['token'];
-    final String refreshToken = result.json['token'];
+    final String refreshToken = result.json['refreshToken'];
 
     AuthService.instance
         .saveToken(accessToken: token, refreshToken: refreshToken);

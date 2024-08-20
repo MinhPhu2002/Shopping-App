@@ -21,7 +21,8 @@ class BrandRepository {
       {required int limit,
       required int skip,
       required String? sortBy,
-      required String? order}) async {
+      required String? order,
+      required String? price}) async {
     final RequestResponse result = await apiClient.fetch(
         ApiPath.getBrandDetails + "$slug", RequestMethod.get,
         searchParams: {
@@ -29,6 +30,7 @@ class BrandRepository {
           'skip': skip.toString(),
           if (sortBy != null) 'sortBy': sortBy,
           if (order != null) 'order': order,
+          if (price != null) 'price': price,
         });
     final int totalItemCount = result.json['total'];
     final List products = result.json['products'];

@@ -12,6 +12,7 @@ import 'package:testapp/module/detail/bloc/product_details/product_details_cubit
 import 'package:testapp/module/detail/description_product_screen.dart';
 import 'package:testapp/module/product/bloc/brand_details/brand_details_cubit.dart';
 import 'package:testapp/module/product/bloc/brand_details/brand_details_state.dart';
+import 'package:testapp/module/product/filter_bottom_sheet.dart';
 import 'package:testapp/module/product/sort_bottom_sheet.dart';
 import 'package:testapp/utils/ui/mediaquery_extention.dart';
 import 'package:testapp/widget/circle_icon.dart';
@@ -29,7 +30,8 @@ class _BrandScreenState extends State<BrandScreen> {
   late ScrollController controller;
   final String nameBrand;
   SortProductBy? sortBy;
-
+  String? _priceFrom;
+  String? _priceTo;
   _BrandScreenState({required this.nameBrand});
 
   @override
@@ -43,6 +45,7 @@ class _BrandScreenState extends State<BrandScreen> {
   @override
   void dispose() {
     controller.removeListener(_scrollListener);
+
     super.dispose();
   }
 
@@ -257,168 +260,28 @@ class _BrandScreenState extends State<BrandScreen> {
     // if (result != null) sortBy = result;
   }
 
-  void showBotomSheetFilter() {
-    showModalBottomSheet(
+  void showBotomSheetFilter() async {
+    final result = await showModalBottomSheet(
         context: context,
         builder: (context) {
-          return Container(
-              width: MediaQuery.sizeOf(context).width,
-              height: 325,
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(20)),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 28,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Filter',
-                          style:
-                              AppTextStyle.s17_w5.copyWith(color: Colors.black),
-                        ),
-                        Container(
-                          width: 61,
-                          height: 37,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Color.fromRGBO(0, 255, 234, 1)),
-                          child: Center(
-                            child: Text(
-                              'Reset',
-                              style: AppTextStyle.s15_w5
-                                  .copyWith(color: Colors.black),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 40),
-                    Text(
-                      'Price Range',
-                      style: AppTextStyle.s17_w5.copyWith(color: Colors.black),
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: 160,
-                          height: 50,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Color.fromRGBO(245, 246, 250, 1)),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: "\$",
-                              fillColor: Color.fromRGBO(142, 142, 142, 1),
-                              border: const OutlineInputBorder(
-                                  borderSide: BorderSide.none),
-                              hintStyle: const TextStyle(
-                                  fontSize: 17,
-                                  color: Color.fromRGBO(143, 149, 158, 1)),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 160,
-                          height: 50,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Color.fromRGBO(245, 246, 250, 1)),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: "\$",
-                              fillColor: Color.fromRGBO(245, 246, 250, 1),
-                              border: const OutlineInputBorder(
-                                  borderSide: BorderSide.none),
-                              hintStyle: const TextStyle(
-                                  fontSize: 17,
-                                  color: Color.fromRGBO(143, 149, 158, 1)),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 14,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          'From \$ to \$',
-                          style: AppTextStyle.s11_w5.copyWith(
-                              color: Color.fromRGBO(143, 149, 158, 1)),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        CircleIcon(
-                          iconname: IconPath.delete,
-                          colorCircle: Colors.white,
-                          sizeIcon: Size(15, 15),
-                          sizeCircle: Size(25, 25),
-                          colorBorder: Color.fromRGBO(222, 222, 222, 1),
-                        ),
-                      ],
-                    ),
-                    Spacer(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            height: 46,
-                            width: (MediaQuery.sizeOf(context).width - 70) / 2,
-                            decoration: BoxDecoration(
-                                color: const Color.fromRGBO(245, 246, 250, 1),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Center(
-                              child: Text(
-                                "Cancel",
-                                style: AppTextStyle.s17_w5.copyWith(
-                                    color: Color.fromRGBO(143, 149, 158, 1)),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        InkWell(
-                          onTap: () {},
-                          child: Container(
-                            height: 46,
-                            width: (MediaQuery.sizeOf(context).width - 70) / 2,
-                            decoration: BoxDecoration(
-                                color: const Color.fromRGBO(151, 117, 250, 1),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Center(
-                              child: Text(
-                                "Confirms",
-                                style: AppTextStyle.s17_w5.copyWith(
-                                    color: Color.fromRGBO(255, 255, 255, 1)),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                  ],
-                ),
-              ));
+          return Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: SingleChildScrollView(
+              child: FilterBottomSheet(
+                priceFrom: _priceFrom,
+                priceTo: _priceTo,
+                onchange: (priceFrom, priceTo) {
+                  setState(() {
+                    _priceFrom = priceFrom;
+                    _priceTo = priceTo;
+                  });
+                  brandDetailsCubit.filter(
+                      priceFrom: priceFrom, priceTo: priceTo);
+                },
+              ),
+            ),
+          );
         });
   }
 }
