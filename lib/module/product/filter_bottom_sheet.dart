@@ -107,6 +107,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         borderRadius: BorderRadius.circular(10),
                         color: Color.fromRGBO(245, 246, 250, 1)),
                     child: TextField(
+                      keyboardType: TextInputType.number,
                       controller: priceFromController,
                       decoration: InputDecoration(
                         hintText: "From",
@@ -126,6 +127,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         borderRadius: BorderRadius.circular(10),
                         color: Color.fromRGBO(245, 246, 250, 1)),
                     child: TextField(
+                      keyboardType: TextInputType.number,
                       controller: priceToController,
                       decoration: InputDecoration(
                         hintText: "To",

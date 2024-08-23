@@ -7,6 +7,7 @@ import 'dart:io';
 // import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:testapp/data/interceptors/token_interceptor.dart';
 
 import '../core/constants/api_path.dart';
 import '../core/constants/app_constants.dart';
@@ -79,7 +80,7 @@ class ApiClient {
           ..interceptors.addAll([
             // LogInterceptor(),
 
-            // TokenInterceptor(),
+            TokenInterceptor(),
           ]);
 
   static String buildBearerAuthorizationHeaderValue(String token) {

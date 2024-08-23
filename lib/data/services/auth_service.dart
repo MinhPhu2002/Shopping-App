@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -62,7 +63,6 @@ final class AuthService {
   /// It's a specific date time, not a period of time
   int? _tokenExpiresTime;
 
-  @visibleForTesting
   String? get refreshToken => _refreshToken;
 
   bool _isRefreshTokenInvalid = false;
@@ -164,22 +164,21 @@ final class AuthService {
     try {
       _refreshTokenCompleter = Completer();
 
-      final res = await ApiClient().fetch(
-        ApiPath.refreshToken,
-        RequestMethod.post,
-        rawData: {
-          'refresh-token': _refreshToken,
-        },
-      );
+      final res =
+          await ApiClient().fetch(ApiPath.refreshToken, RequestMethod.post,
+              encodeData: jsonEncode({
+                'refreshToken': AuthService.instance.refreshToken,
+                'expiresInMins': 1,
+              }));
 
       if (res.hasError || !res.hasData) {
         notifyAuthenticationFailed();
-        throw res.error!.messages;
+        // throw res.error!.messages;
       }
 
-      saveAccessToken(res.data.lookup('access_token'));
-      saveExpiresTime(res.data.lookup('expires_in'));
-      saveRefreshToken(res.data.lookup('refresh_token'));
+      saveAccessToken(res.json.lookup('token'));
+
+      saveRefreshToken(res.json.lookup('refreshToken'));
       _isRefreshTokenInvalid = false;
     } catch (e) {
       _isRefreshTokenInvalid = true;

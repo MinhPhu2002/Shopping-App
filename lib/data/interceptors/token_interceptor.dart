@@ -174,7 +174,6 @@ class TokenInterceptor extends InterceptorsWrapper {
 
     if (statusCode == StatusCode.unauthorized) {
       AppAuthenticationBinding.instance!.notifyRefershTokenExpired();
-      return;
     }
 
     if (statusCode == StatusCode.unauthorized &&

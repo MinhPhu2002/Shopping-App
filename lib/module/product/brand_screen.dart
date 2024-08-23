@@ -206,18 +206,11 @@ class _BrandScreenState extends State<BrandScreen> {
                     height: 15,
                   ),
                   Expanded(
-                    child: GridView.builder(
+                    child: ListView.builder(
                       controller: controller,
-                      itemCount: data.length + 1,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        mainAxisSpacing: 15,
-                        crossAxisSpacing: 15,
-                        crossAxisCount: 2,
-                        childAspectRatio: 160 / 257,
-                      ),
+                      itemCount: (data.length / 2).ceil() + 1,
                       itemBuilder: (BuildContext context, int index) {
-                        if (index == data.length) {
+                        if (index == (data.length / 2).ceil()) {
                           if (state.errorMessage != null) {
                             return Text(state.errorMessage!);
                           }
@@ -228,12 +221,44 @@ class _BrandScreenState extends State<BrandScreen> {
                             child: CircularProgressIndicator(),
                           );
                         }
-                        var item = data[index];
-                        return ListItem(
-                          id: item.id,
-                          productImage: item.imageUrl,
-                          productCost: item.price,
-                          productName: item.name,
+
+                        int firstIndex = index * 2;
+                        int secondIndex = firstIndex + 1;
+
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 15.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: SizedBox(
+                                  width: 160,
+                                  height: 258,
+                                  child: ListItem(
+                                    id: data[firstIndex].id,
+                                    productImage: data[firstIndex].imageUrl,
+                                    productCost: data[firstIndex].price,
+                                    productName: data[firstIndex].name,
+                                  ),
+                                ),
+                              ),
+                              if (secondIndex < data.length)
+                                SizedBox(width: 15), // Khoảng cách giữa 2 item
+                              if (secondIndex < data.length)
+                                Expanded(
+                                  child: SizedBox(
+                                    width: 160,
+                                    height: 258,
+                                    child: ListItem(
+                                      id: data[secondIndex].id,
+                                      productImage: data[secondIndex].imageUrl,
+                                      productCost: data[secondIndex].price,
+                                      productName: data[secondIndex].name,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
                         );
                       },
                     ),
