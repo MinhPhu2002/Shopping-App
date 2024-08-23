@@ -7,6 +7,7 @@ import 'dart:io';
 // import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:testapp/data/interceptors/test_interceptor.dart';
 import 'package:testapp/data/interceptors/token_interceptor.dart';
 
 import '../core/constants/api_path.dart';
@@ -79,7 +80,7 @@ class ApiClient {
       : _dio = Dio(_baseOptions)
           ..interceptors.addAll([
             // LogInterceptor(),
-
+            TestInterceptor(),
             TokenInterceptor(),
           ]);
 

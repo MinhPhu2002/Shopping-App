@@ -217,8 +217,11 @@ class _BrandScreenState extends State<BrandScreen> {
                           if (state.hasMoreItem == false) {
                             return SizedBox();
                           }
-                          return Center(
-                            child: CircularProgressIndicator(),
+                          return SizedBox(
+                            height: 60,
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
                           );
                         }
 
@@ -287,25 +290,19 @@ class _BrandScreenState extends State<BrandScreen> {
 
   void showBotomSheetFilter() async {
     final result = await showModalBottomSheet(
+        isScrollControlled: true,
         context: context,
         builder: (context) {
-          return Padding(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: SingleChildScrollView(
-              child: FilterBottomSheet(
-                priceFrom: _priceFrom,
-                priceTo: _priceTo,
-                onchange: (priceFrom, priceTo) {
-                  setState(() {
-                    _priceFrom = priceFrom;
-                    _priceTo = priceTo;
-                  });
-                  brandDetailsCubit.filter(
-                      priceFrom: priceFrom, priceTo: priceTo);
-                },
-              ),
-            ),
+          return FilterBottomSheet(
+            priceFrom: _priceFrom,
+            priceTo: _priceTo,
+            onchange: (priceFrom, priceTo) {
+              setState(() {
+                _priceFrom = priceFrom;
+                _priceTo = priceTo;
+              });
+              brandDetailsCubit.filter(priceFrom: priceFrom, priceTo: priceTo);
+            },
           );
         });
   }

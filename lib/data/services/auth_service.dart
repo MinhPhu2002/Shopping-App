@@ -171,9 +171,9 @@ final class AuthService {
                 'expiresInMins': 1,
               }));
 
-      if (res.hasError || !res.hasData) {
+      if (res.hasError) {
         notifyAuthenticationFailed();
-        // throw res.error!.messages;
+        throw res.error!.messages;
       }
 
       saveAccessToken(res.json.lookup('token'));
