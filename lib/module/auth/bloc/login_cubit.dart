@@ -19,4 +19,18 @@ class LoginCubit extends Cubit<LoginState> {
       emit(LoginLoadingError(errorMessage: e.toString()));
     }
   }
+
+  Future<void> loginWithGoogle() async {
+    try {
+      emit(LoginInitialState());
+      emit(LoginLoadingInProgress());
+      final result = await repo.googleSignIn;
+      if (result == true) {
+        emit(LoginSuccess());
+      } else
+        emit(LoginFailed());
+    } catch (e) {
+      emit(LoginLoadingError(errorMessage: e.toString()));
+    }
+  }
 }

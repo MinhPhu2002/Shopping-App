@@ -3,18 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:testapp/core/values/sort_product_by.dart';
 import 'package:testapp/module/cart/screen/cart_screen.dart';
 import 'package:testapp/core/constants/icon_path.dart';
-import 'package:testapp/core/constants/image_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
-import 'package:testapp/module/detail/bloc/product_details/product_details_cubit.dart';
-import 'package:testapp/module/detail/description_product_screen.dart';
+import 'package:testapp/widget/list_products.dart';
 import 'package:testapp/module/product/bloc/brand_details/brand_details_cubit.dart';
 import 'package:testapp/module/product/bloc/brand_details/brand_details_state.dart';
-import 'package:testapp/module/product/filter_bottom_sheet.dart';
-import 'package:testapp/module/product/sort_bottom_sheet.dart';
-import 'package:testapp/utils/ui/mediaquery_extention.dart';
+import 'package:testapp/module/product/widget/filter_bottom_sheet.dart';
+import 'package:testapp/module/product/widget/sort_bottom_sheet.dart';
 import 'package:testapp/widget/circle_icon.dart';
 
 class BrandScreen extends StatefulWidget {
@@ -103,11 +101,7 @@ class _BrandScreenState extends State<BrandScreen> {
           IconButton(
               padding: EdgeInsets.zero,
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CartScreen(),
-                    ));
+                context.pushNamed('cart');
               },
               icon: CircleIcon(
                   iconname: IconPath.bag,
@@ -237,7 +231,7 @@ class _BrandScreenState extends State<BrandScreen> {
                                 child: SizedBox(
                                   width: 160,
                                   height: 258,
-                                  child: ListItem(
+                                  child: ListProducts(
                                     id: data[firstIndex].id,
                                     productImage: data[firstIndex].imageUrl,
                                     productCost: data[firstIndex].price,
@@ -252,7 +246,7 @@ class _BrandScreenState extends State<BrandScreen> {
                                   child: SizedBox(
                                     width: 160,
                                     height: 258,
-                                    child: ListItem(
+                                    child: ListProducts(
                                       id: data[secondIndex].id,
                                       productImage: data[secondIndex].imageUrl,
                                       productCost: data[secondIndex].price,
@@ -293,96 +287,22 @@ class _BrandScreenState extends State<BrandScreen> {
         isScrollControlled: true,
         context: context,
         builder: (context) {
-          return FilterBottomSheet(
-            priceFrom: _priceFrom,
-            priceTo: _priceTo,
-            onchange: (priceFrom, priceTo) {
-              setState(() {
-                _priceFrom = priceFrom;
-                _priceTo = priceTo;
-              });
-              brandDetailsCubit.filter(priceFrom: priceFrom, priceTo: priceTo);
-            },
+          return Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: FilterBottomSheet(
+              priceFrom: _priceFrom,
+              priceTo: _priceTo,
+              onchange: (priceFrom, priceTo) {
+                setState(() {
+                  _priceFrom = priceFrom;
+                  _priceTo = priceTo;
+                });
+                brandDetailsCubit.filter(
+                    priceFrom: priceFrom, priceTo: priceTo);
+              },
+            ),
           );
         });
-  }
-}
-
-class ListItem extends StatelessWidget {
-  final String productImage;
-  final String productName;
-  final String productCost;
-  final int id;
-
-  const ListItem(
-      {super.key,
-      required this.productImage,
-      required this.productName,
-      required this.productCost,
-      required this.id});
-  @override
-  Widget build(BuildContext context) {
-    final imageSize =
-        context.getResponSizeBasOnWidth(designWidth: 160, designHeight: 203);
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BlocProvider(
-                create: (context) => ProductDetailsCubit(id),
-                child: DescriptionProductScreen(
-                  postId: id,
-                ),
-              ),
-            ));
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Stack(
-            children: [
-              Container(
-                width: imageSize.width,
-                height: imageSize.height,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                    image: NetworkImage(productImage),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 5,
-                right: 6,
-                child: IconButton(
-                    onPressed: () {},
-                    icon: Image.asset(
-                      ImagePath.homeScreenHeartIconIllustrator,
-                      color: Color.fromARGB(255, 212, 190, 197),
-                      width: 20,
-                      height: 20,
-                      fit: BoxFit.cover,
-                    )),
-              )
-            ],
-          ),
-          const SizedBox(height: 5),
-          Text(
-            overflow: TextOverflow.ellipsis,
-            productName,
-            style: AppTextStyle.s11_w5,
-          ),
-          const SizedBox(height: 5),
-          Text(
-            '\$' + productCost,
-            style: AppTextStyle.s13_w6
-                .copyWith(color: const Color.fromRGBO(29, 30, 32, 1)),
-          )
-        ],
-      ),
-    );
   }
 }

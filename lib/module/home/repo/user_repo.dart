@@ -1,6 +1,5 @@
-import 'dart:convert';
+// ignore_for_file: constant_pattern_never_matches_value_type
 
-import 'package:dio/dio.dart';
 import 'package:testapp/common/model/user_model.dart';
 import 'package:testapp/core/constants/api_path.dart';
 import 'package:testapp/data/api_client.dart';
@@ -10,8 +9,11 @@ import 'package:testapp/data/services/auth_service.dart';
 
 class UserRepository {
   Future<UserModel> getUser() async {
+    final String path =
+        AuthService.instance.ensureConfiguration(ApiPath.getUser);
+
     RequestResponse result = await apiClient.fetch(
-      ApiPath.getUser,
+      path,
       RequestMethod.get,
       token: AuthService.instance.accessToken,
     );

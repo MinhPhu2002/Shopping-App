@@ -1,10 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/data/services/auth_service.dart';
 import 'package:testapp/module/service/notification_service.dart';
-import 'module/auth/screen/start_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:testapp/routes/routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +26,8 @@ class InkWellExampleApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: router,
       theme: ThemeData(
           fontFamily: AppTextStyle.fontFamily,
           textTheme: TextTheme(
@@ -34,7 +35,7 @@ class InkWellExampleApp extends StatelessWidget {
             titleSmall: TextStyle(fontFamily: AppTextStyle.fontFamily),
             titleLarge: TextStyle(fontFamily: AppTextStyle.fontFamily),
           )),
-      home: StartScreen(),
+
       // home: HomeScreen(),
     );
   }

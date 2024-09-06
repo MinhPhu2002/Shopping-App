@@ -9,7 +9,24 @@ class ProductsRepository {
     final RequestResponse result = await apiClient.fetch(
       ApiPath.getProducts,
       RequestMethod.get,
-      searchParams: {'limit': limit.toString(), 'offset': offset.toString()},
+      searchParams: {
+        'limit': limit.toString(),
+        'offset': offset.toString(),
+      },
+    );
+    final List products = result.json['products'];
+    return products.map((json) {
+      return ProductModel.formJson(json);
+    }).toList();
+  }
+
+  Future<List<ProductModel>> searchProduct({required String? search}) async {
+    final RequestResponse result = await apiClient.fetch(
+      ApiPath.search,
+      RequestMethod.get,
+      searchParams: {
+        if (search != null) 'q': search,
+      },
     );
     final List products = result.json['products'];
     return products.map((json) {

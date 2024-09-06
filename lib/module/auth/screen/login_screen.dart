@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/auth/bloc/login_cubit.dart';
@@ -103,28 +104,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: const CircularProgressIndicator()),
                         );
                       } else if (state is LoginSuccess) {
-                        Navigator.pop(context);
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              settings: const RouteSettings(name: 'Home'),
-                              builder: (context) => MultiBlocProvider(
-                                providers: [
-                                  BlocProvider(
-                                    create: (context) => UserCubit(),
-                                  ),
-                                  BlocProvider(
-                                    create: (context) => ProductsCubit(),
-                                  ),
-                                  BlocProvider(
-                                    create: (context) => BrandsCubit(),
-                                  ),
-                                ],
-                                child: HomeScreen(),
-                              ),
-                            ), (route) {
-                          return false;
-                        });
+                        context.pop();
+                        context.goNamed('home');
                       } else if (state is LoginLoadingError) {
                         Navigator.pop(context);
                         showDialog(
@@ -145,12 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               right: 20),
                           child: InkWell(
                             onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ForgotPasswordScreen(),
-                                  ));
+                              context.pushNamed('forgotPassword');
                             },
                             child: Text(
                               "Forgot password?",

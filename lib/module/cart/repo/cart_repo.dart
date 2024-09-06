@@ -7,7 +7,7 @@ import 'package:testapp/data/services/auth_service.dart';
 
 class CartRepository {
   Future<CartModel> getCart() async {
-    int? id = AuthService.instance.userId;
+    String? id = AuthService.instance.userId;
     final RequestResponse result = await apiClient.fetch(
       ApiPath.getCart + '/$id',
       RequestMethod.get,

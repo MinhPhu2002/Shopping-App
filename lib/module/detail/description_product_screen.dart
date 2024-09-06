@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:readmore/readmore.dart';
 import 'package:testapp/common/model/product_model.dart';
 import 'package:testapp/module/cart/screen/cart_screen.dart';
@@ -45,12 +46,7 @@ class DescriptionProductScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CartScreen(),
-                ),
-              );
+              context.pushNamed('cart');
             },
             icon: CircleIcon(
                 iconname: IconPath.bag,
@@ -97,10 +93,13 @@ class Body extends StatelessWidget {
           ColoredBox(color: Color.fromRGBO(245, 246, 250, 1)),
           Padding(
             padding: EdgeInsets.only(top: 31),
-            child: Image.network(
-              model.imageUrl[0],
-              fit: BoxFit.fitWidth,
-              width: double.infinity,
+            child: Container(
+              height: 347,
+              child: Image.network(
+                model.imageUrl[0],
+                fit: BoxFit.fitHeight,
+                width: double.infinity,
+              ),
             ),
           ),
           Container(
@@ -246,17 +245,7 @@ class Body extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => BlocProvider(
-                                  create: (context) => CommentCubit(postId),
-                                  child: ReviewScreen(
-                                    postId: postId,
-                                  ),
-                                ),
-                                settings: const RouteSettings(name: "review"),
-                              ));
+                          context.pushNamed('review', extra: {'id': postId});
                         },
                         child: Text("View All",
                             style: AppTextStyle.s13_w4.copyWith(

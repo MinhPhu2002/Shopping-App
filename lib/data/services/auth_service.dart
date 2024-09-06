@@ -19,6 +19,7 @@ const String _tokenExpiresTimeKey = 'expires_in';
 const String _isUserBlockedKey = 'is_user_blocked';
 const String _userInfoKey = 'userInfoKey';
 const String _userIdKey = 'userIdKey';
+const String _loginTypeKey = 'loginType';
 
 /// Store all keys will be eliminated
 const _keysToEliminate = [
@@ -27,6 +28,11 @@ const _keysToEliminate = [
   _tokenExpiresTimeKey,
   _isUserBlockedKey,
 ];
+
+enum loginTypeList {
+  systemAccount,
+  googleAccount,
+}
 
 final class AuthService {
   late final SecureStorage _secureStorage;
@@ -39,7 +45,7 @@ final class AuthService {
 
     await instance._loadToken();
     await instance._loadUserInfo();
-
+    instance._loadLoginType();
     return instance;
   }
 
@@ -51,7 +57,7 @@ final class AuthService {
   }
   Map<String, dynamic>? _currentUserInfo;
   Map<String, dynamic>? get currentUserInfo => _currentUserInfo;
-  int? get userId => SpUtil.getInt(_userIdKey, defValue: null);
+  String? get userId => SpUtil.getString(_userIdKey, defValue: null);
 
   String? _accessToken;
   String? get accessToken => _accessToken;
@@ -66,8 +72,26 @@ final class AuthService {
   String? get refreshToken => _refreshToken;
 
   bool _isRefreshTokenInvalid = false;
-
   Completer? _refreshTokenCompleter;
+  loginTypeList? _loginType;
+
+  loginTypeList? get loginType => _loginType;
+  void _loadLoginType() {
+    String? loginType = SpUtil.getString(_loginTypeKey);
+    if (loginType == null) {
+      _loginType = null;
+      return;
+    }
+    try {
+      _loginType = loginTypeList.values.firstWhere(
+        (element) {
+          return element.name == loginType;
+        },
+      );
+    } on StateError {
+      _loginType = null;
+    }
+  }
 
   Future<void> _loadToken() async {
     _accessToken = await _secureStorage.read(_accessTokenKey);
@@ -100,8 +124,13 @@ final class AuthService {
     SpUtil.putObject(_userInfoKey, data);
   }
 
-  void saveUserId(int id) {
-    SpUtil.putInt(_userIdKey, id);
+  void saveUserId(String id) {
+    SpUtil.putString(_userIdKey, id);
+  }
+
+  void saveLoginType(loginTypeList data) {
+    _loginType = data;
+    SpUtil.putString(_loginTypeKey, data.name);
   }
 
   static Future<void> setIsUserBloceked(bool isBlock) async {
@@ -164,12 +193,13 @@ final class AuthService {
     try {
       _refreshTokenCompleter = Completer();
 
-      final res =
-          await ApiClient().fetch(ApiPath.refreshToken, RequestMethod.post,
-              encodeData: jsonEncode({
-                'refreshToken': AuthService.instance.refreshToken,
-                'expiresInMins': 1,
-              }));
+      final String path = ensureConfiguration(ApiPath.refreshToken);
+
+      final res = await ApiClient().fetch(path, RequestMethod.post,
+          encodeData: jsonEncode({
+            'refreshToken': AuthService.instance.refreshToken,
+            'expiresInMins': 1,
+          }));
 
       if (res.hasError) {
         notifyAuthenticationFailed();
@@ -236,10 +266,19 @@ final class AuthService {
     _isRefreshTokenInvalid = false;
   }
 
+  String ensureConfiguration(String url) {
+    if (loginType == loginTypeList.googleAccount) {
+      url += ApiPath.registeredId;
+    }
+    return url;
+  }
+
   void clearLoginInfo() {
     _currentUserInfo = null;
     SpUtil.remove(_userInfoKey);
     SpUtil.remove(_userIdKey);
+    _loginType = null;
+    SpUtil.remove(_loginTypeKey);
   }
 
   Future invalid() async {

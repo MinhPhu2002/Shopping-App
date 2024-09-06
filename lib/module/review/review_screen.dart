@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:testapp/module/review/add_review_screen.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/constants/product_path.dart';
@@ -159,16 +160,7 @@ class NumberReviews extends StatelessWidget {
         const Spacer(),
         InkWell(
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BlocProvider(
-                    create: (context) => AddCommentCubit(),
-                    child: AddReviewScreen(
-                      postId: postId,
-                    ),
-                  ),
-                ));
+            context.pushNamed('addreview', extra: postId);
           },
           child: Image.asset(
             ProductPath.addReview,

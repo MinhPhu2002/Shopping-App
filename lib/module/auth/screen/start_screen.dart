@@ -1,16 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:go_router/go_router.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
-import 'package:testapp/module/auth/bloc/login_cubit.dart';
-import 'package:testapp/module/auth/screen/login_screen.dart';
-import 'package:testapp/module/auth/screen/signup_screen.dart';
-import 'package:testapp/module/home/bloc/brands/brands_cubit.dart';
-import 'package:testapp/module/home/bloc/products/products_cubit.dart';
-import 'package:testapp/module/home/bloc/user/user_cubit.dart';
-import 'package:testapp/module/home/home_screen.dart';
+import 'package:testapp/module/auth/repo/login_repo.dart';
 import 'package:testapp/widget/bottom_action_button.dart';
 import 'package:testapp/widget/circle_icon.dart';
 
@@ -26,26 +18,6 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-  Future<User?> _signInWithGoogle() async {
-    try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      final GoogleSignInAuthentication googleAuthen =
-          await googleUser!.authentication;
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuthen.accessToken,
-        idToken: googleAuthen.idToken,
-      );
-      final UserCredential userCredential =
-          await _auth.signInWithCredential(credential);
-      return userCredential.user;
-    } catch (e) {
-      print(e);
-      return null;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,31 +76,11 @@ class _StartScreenState extends State<StartScreen> {
                         ),
                         InkWell(
                           onTap: () async {
-                            User? user = await _signInWithGoogle();
-                            if (user != null) {
-                              print(
-                                  'Signed in with Google: ${user.displayName}');
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    settings: const RouteSettings(name: 'Home'),
-                                    builder: (context) => MultiBlocProvider(
-                                      providers: [
-                                        BlocProvider(
-                                          create: (context) => UserCubit(),
-                                        ),
-                                        BlocProvider(
-                                          create: (context) => ProductsCubit(),
-                                        ),
-                                        BlocProvider(
-                                          create: (context) => BrandsCubit(),
-                                        ),
-                                      ],
-                                      child: HomeScreen(),
-                                    ),
-                                  ), (route) {
-                                return false;
-                              });
+                            var user =
+                                await LoginRepository().signInWithGoogle();
+                            if (user == true) {
+                              print('Signed in with Google ');
+                              context.pushNamed('home');
                             }
                           },
                           child: const InkWellExample(
@@ -147,16 +99,7 @@ class _StartScreenState extends State<StartScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           InkWell(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider(
-                      create: (context) => LoginCubit(),
-                      child: const LoginScreen(),
-                    ),
-                  ));
-            },
+            onTap: () => context.pushNamed('login'),
             child: Text.rich(TextSpan(children: [
               TextSpan(
                   text: "Already have an account? ",
@@ -174,11 +117,8 @@ class _StartScreenState extends State<StartScreen> {
           BottomActionButton(
               textfootpage: 'Create an Account',
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SignupScreen(),
-                    ));
+                // context.goNamed('signup');
+                context.pushNamed('signup');
               })
         ],
       ),

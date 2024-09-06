@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/auth/bloc/login_cubit.dart';
@@ -25,7 +26,8 @@ class SignupScreen extends StatelessWidget {
           backgroundColor: Colors.transparent,
           leading: InkResponse(
             onTap: () {
-              Navigator.pop(context);
+              context.pop();
+              // context.pushNamed('/');
             },
             borderRadius: BorderRadius.circular(50),
             highlightShape: BoxShape.rectangle,
@@ -86,15 +88,7 @@ class SignupScreen extends StatelessWidget {
         bottomNavigationBar: BottomActionButton(
             textfootpage: "Sign Up",
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider(
-                      create: (context) => LoginCubit(),
-                      child: LoginScreen(),
-                    ),
-                    settings: RouteSettings(name: "loginScreen"),
-                  ));
+              context.pushNamed('login');
             }));
   }
 }

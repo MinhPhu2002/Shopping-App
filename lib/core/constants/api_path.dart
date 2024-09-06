@@ -9,5 +9,10 @@ class ApiPath {
   static const String login = '/auth/login';
   static const String addComment = '/comments/add';
   static const String getUser = '/auth/me';
+
   static const String getCart = '/carts/user';
+  static const String search = '/products/search/';
+  static const String loginGoogle =
+      '/auth/login-social/minh-phu-ob3ee-45ccc0b07c';
+  static const String registeredId = '/minh-phu-ob3ee-45ccc0b07c';
 }

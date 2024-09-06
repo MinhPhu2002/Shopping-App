@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/widget/circle_icon.dart';
@@ -54,7 +55,6 @@ class NewPasswordScreen extends StatelessWidget {
                   padding: EdgeInsets.only(
                       top: 186 * MediaQuery.sizeOf(context).height / 812),
                   child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       NameList(Credentials: "Password"),
                       SizedBox(
@@ -82,7 +82,7 @@ class NewPasswordScreen extends StatelessWidget {
       ),
       bottomNavigationBar: InkWell(
         onTap: () {
-          Navigator.popUntil(context, ModalRoute.withName("loginScreen"));
+          context.goNamed('login');
         },
         child: const FootPage(
           textfootpage: 'Reset Password',

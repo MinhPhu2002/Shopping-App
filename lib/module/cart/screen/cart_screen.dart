@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:testapp/module/cart/bloc/cart_cubit.dart';
 import 'package:testapp/module/cart/bloc/cart_state.dart';
 import 'package:testapp/module/cart/screen/address_creen.dart';
@@ -49,7 +50,7 @@ class _CartScreenState extends State<CartScreen> {
               colorBorder: Colors.transparent,
             ),
             onTap: () {
-              Navigator.pop(context);
+              context.pop();
             },
           ),
         ),
@@ -82,11 +83,7 @@ class _CartScreenState extends State<CartScreen> {
                 }).toList()),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AddressCreen(),
-                        ));
+                    context.pushNamed('address');
                   },
                   child: const TransactionDetails(
                     orderDetails: "Delivery Address",
@@ -144,11 +141,7 @@ class _CartScreenState extends State<CartScreen> {
         onTap: () {
           LocalNotificationController()
               .showNotification(text: 'Oder', title: 'Oder Success');
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const OrderConfirmedScreen(),
-              ));
+          context.pushNamed('orderConfirmed');
         },
         child: const FootPage(
           textfootpage: 'Checkout',
