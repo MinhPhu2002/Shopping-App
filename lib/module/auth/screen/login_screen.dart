@@ -5,15 +5,9 @@ import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/auth/bloc/login_cubit.dart';
 import 'package:testapp/module/auth/bloc/login_state.dart';
-import 'package:testapp/module/home/bloc/brands/brands_cubit.dart';
-import 'package:testapp/module/home/bloc/products/products_cubit.dart';
-import 'package:testapp/module/home/bloc/user/user_cubit.dart';
-import 'package:testapp/module/home/home_screen.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/foot_page.dart';
 import 'package:testapp/widget/switch_widget.dart';
-
-import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({

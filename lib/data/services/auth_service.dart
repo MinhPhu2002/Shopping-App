@@ -267,9 +267,8 @@ final class AuthService {
   }
 
   String ensureConfiguration(String url) {
-    if (loginType == loginTypeList.googleAccount) {
-      url += ApiPath.registeredId;
-    }
+    url += ApiPath.registeredId;
+
     return url;
   }
 

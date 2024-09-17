@@ -99,7 +99,7 @@ class _CartScreenState extends State<CartScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const PaymentScreen(),
+                          builder: (context) => PaymentScreen(),
                         ));
                   },
                   child: const TransactionDetails(

@@ -15,4 +15,9 @@ class ApiPath {
   static const String loginGoogle =
       '/auth/login-social/minh-phu-ob3ee-45ccc0b07c';
   static const String registeredId = '/minh-phu-ob3ee-45ccc0b07c';
+  static const String register = '/auth/register//minh-phu-ob3ee-45ccc0b07c';
+  static const String checkUsernameExist =
+      '/auth/check-username-exist/minh-phu-ob3ee-45ccc0b07c';
+  static const String checkEmailExist =
+      '/auth/check-email-exist/minh-phu-ob3ee-45ccc0b07c';
 }

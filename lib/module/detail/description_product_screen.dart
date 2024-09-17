@@ -1,18 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:readmore/readmore.dart';
 import 'package:testapp/common/model/product_model.dart';
-import 'package:testapp/module/cart/screen/cart_screen.dart';
-import 'package:testapp/core/constants/product_path.dart';
 import 'package:testapp/core/constants/icon_path.dart';
+import 'package:testapp/core/constants/product_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/detail/bloc/product_details/product_details_cubit.dart';
 import 'package:testapp/module/detail/bloc/product_details/product_details_state.dart';
-import 'package:testapp/module/review/bloc/comment_cubit.dart';
-import 'package:testapp/module/review/review_screen.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/comment.dart';
 

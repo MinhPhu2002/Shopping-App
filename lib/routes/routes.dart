@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:testapp/module/auth/bloc/login_cubit.dart';
+import 'package:testapp/module/auth/bloc/register_cubit.dart';
 import 'package:testapp/module/auth/screen/forgot_password_screen.dart';
 import 'package:testapp/module/auth/screen/login_screen.dart';
 import 'package:testapp/module/auth/screen/new_password_screen.dart';
@@ -48,7 +49,10 @@ final router = GoRouter(
     GoRoute(
       name: 'signup',
       path: '/signup',
-      builder: (context, state) => const SignupScreen(),
+      builder: (context, state) => BlocProvider(
+        create: (context) => RegisterCubit(),
+        child: const SignupScreen(),
+      ),
     ),
     GoRoute(
       name: 'vertification',
@@ -98,7 +102,7 @@ final router = GoRouter(
     GoRoute(
       name: 'payment',
       path: '/payment',
-      builder: (context, state) => const PaymentScreen(),
+      builder: (context, state) => PaymentScreen(),
     ),
     GoRoute(
       name: 'description',

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/data/services/auth_service.dart';
@@ -180,12 +181,7 @@ class HomeDrawer extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   AuthService.instance.invalid();
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const StartScreen()),
-                    (Route<dynamic> route) => false,
-                  );
+                  context.goNamed('/');
                 },
                 child: Container(
                   width: 215,

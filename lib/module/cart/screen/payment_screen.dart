@@ -1,20 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/constants/product_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
-import 'package:testapp/module/cart/screen/new_card_screen.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/foot_page.dart';
 import 'package:testapp/widget/switch_widget.dart';
 import 'package:testapp/widget/text_field_widget.dart';
 
-/// This Dart class named AddressCreen extends StatelessWidget.
 class PaymentScreen extends StatelessWidget {
-  const PaymentScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

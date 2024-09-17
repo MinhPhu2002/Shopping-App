@@ -11,8 +11,9 @@ import 'package:testapp/data/services/auth_service.dart';
 
 class LoginRepository {
   Future<bool> login({required String email, required String password}) async {
+    final String path = AuthService.instance.ensureConfiguration(ApiPath.login);
     final RequestResponse result =
-        await apiClient.fetch(ApiPath.login, RequestMethod.post,
+        await apiClient.fetch(path, RequestMethod.post,
             encodeData: jsonEncode({
               'username': email,
               'password': password,

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:testapp/module/review/add_review_screen.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/constants/product_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
-import 'package:testapp/module/review/bloc/add_comment_cubit.dart';
 import 'package:testapp/module/review/bloc/comment_cubit.dart';
 import 'package:testapp/module/review/bloc/comment_state.dart';
 import 'package:testapp/widget/circle_icon.dart';
@@ -17,15 +15,13 @@ class ReviewScreen extends StatefulWidget {
 
   const ReviewScreen({super.key, required this.postId});
   @override
-  State<ReviewScreen> createState() => _ReviewScreenState(postId: postId);
+  State<ReviewScreen> createState() => _ReviewScreenState();
 }
 
 class _ReviewScreenState extends State<ReviewScreen> {
-  final int postId;
   late final CommentCubit commentCubit;
   late ScrollController controller;
 
-  _ReviewScreenState({required this.postId});
   @override
   void initState() {
     super.initState();
@@ -86,7 +82,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
           child: Column(
             children: [
               NumberReviews(
-                postId: postId,
+                postId: widget.postId,
               ),
               const SizedBox(height: 10),
               Expanded(

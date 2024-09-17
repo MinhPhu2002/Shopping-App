@@ -1,36 +1,30 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:testapp/core/values/sort_product_by.dart';
-import 'package:testapp/module/cart/screen/cart_screen.dart';
+import 'package:testapp/common/model/filter_request_model.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
-import 'package:testapp/widget/list_products.dart';
+import 'package:testapp/core/values/sort_product_by.dart';
 import 'package:testapp/module/product/bloc/brand_details/brand_details_cubit.dart';
 import 'package:testapp/module/product/bloc/brand_details/brand_details_state.dart';
 import 'package:testapp/module/product/widget/filter_bottom_sheet.dart';
 import 'package:testapp/module/product/widget/sort_bottom_sheet.dart';
 import 'package:testapp/widget/circle_icon.dart';
+import 'package:testapp/widget/list_products.dart';
 
 class BrandScreen extends StatefulWidget {
   final String nameBrand;
 
   const BrandScreen({super.key, required this.nameBrand});
   @override
-  State<BrandScreen> createState() => _BrandScreenState(nameBrand: nameBrand);
+  State<BrandScreen> createState() => _BrandScreenState();
 }
 
 class _BrandScreenState extends State<BrandScreen> {
   late final BrandDetailsCubit brandDetailsCubit;
   late ScrollController controller;
-  final String nameBrand;
-  SortProductBy? sortBy;
-  String? _priceFrom;
-  String? _priceTo;
-  _BrandScreenState({required this.nameBrand});
+  FilterRequestModel filter = FilterRequestModel();
 
   @override
   void initState() {
@@ -90,7 +84,7 @@ class _BrandScreenState extends State<BrandScreen> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                      nameBrand,
+                      widget.nameBrand,
                       style: AppTextStyle.s17_w6,
                     ),
                   ),
@@ -273,10 +267,10 @@ class _BrandScreenState extends State<BrandScreen> {
         builder: (context) {
           return SortBottomSheet(
             onChange: (value) {
-              sortBy = value;
-              brandDetailsCubit.sort(sortBy);
+              filter.sortBy = value;
+              brandDetailsCubit.sort(filter.sortBy);
             },
-            selectedValue: sortBy,
+            selectedValue: filter.sortBy,
           );
         });
     // if (result != null) sortBy = result;
@@ -291,12 +285,12 @@ class _BrandScreenState extends State<BrandScreen> {
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: FilterBottomSheet(
-              priceFrom: _priceFrom,
-              priceTo: _priceTo,
+              priceFrom: filter.priceFrom,
+              priceTo: filter.priceTo,
               onchange: (priceFrom, priceTo) {
                 setState(() {
-                  _priceFrom = priceFrom;
-                  _priceTo = priceTo;
+                  filter.priceFrom = priceFrom;
+                  filter.priceTo = priceTo;
                 });
                 brandDetailsCubit.filter(
                     priceFrom: priceFrom, priceTo: priceTo);

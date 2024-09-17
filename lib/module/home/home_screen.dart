@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:testapp/module/cart/bloc/cart_cubit.dart';
+import 'package:testapp/core/constants/icon_path.dart';
+import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/home/bloc/brands/brands_cubit.dart';
 import 'package:testapp/module/home/bloc/brands/brands_state.dart';
 import 'package:testapp/module/home/bloc/products/products_cubit.dart';
@@ -12,14 +11,11 @@ import 'package:testapp/module/home/bloc/products/products_state.dart';
 import 'package:testapp/module/home/widget/brand.dart';
 import 'package:testapp/module/home/widget/drawer_home_page.dart';
 import 'package:testapp/module/home/widget/foot_home_page.dart';
-import 'package:testapp/widget/list_products.dart';
 import 'package:testapp/module/home/widget/search.dart';
 import 'package:testapp/module/home/widget/view_catalog.dart';
 import 'package:testapp/module/home/widget/voice_icon.dart';
-import 'package:testapp/module/cart/screen/cart_screen.dart';
-import 'package:testapp/core/constants/icon_path.dart';
-import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/widget/circle_icon.dart';
+import 'package:testapp/widget/list_products.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
