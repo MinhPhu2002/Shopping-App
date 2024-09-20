@@ -13,8 +13,9 @@ class LoginCubit extends Cubit<LoginState> {
       final result = await repo.login(email: email, password: password);
       if (result == true) {
         emit(LoginSuccess());
-      } else
+      } else {
         emit(LoginFailed());
+      }
     } catch (e) {
       emit(LoginLoadingError(errorMessage: e.toString()));
     }
@@ -27,8 +28,9 @@ class LoginCubit extends Cubit<LoginState> {
       final result = await repo.googleSignIn;
       if (result == true) {
         emit(LoginSuccess());
-      } else
+      } else {
         emit(LoginFailed());
+      }
     } catch (e) {
       emit(LoginLoadingError(errorMessage: e.toString()));
     }

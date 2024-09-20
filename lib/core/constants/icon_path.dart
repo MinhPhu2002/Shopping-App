@@ -15,6 +15,7 @@ class IconPath {
   static const String arrowRight = 'assets/Icon/arrow-right.svg';
   static const String arrowDown = 'assets/Icon/arrow_down.svg';
   static const String arrowUp = 'assets/Icon/arrow_up.svg';
+  static const String avatarDefault = 'assets/Icon/avatar-default.svg';
   static const String back = 'assets/Icon/back.svg';
   static const String bag = 'assets/Icon/bag.svg';
   static const String clock = 'assets/Icon/clock.svg';

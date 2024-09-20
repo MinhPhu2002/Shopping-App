@@ -1,7 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:testapp/core/app_authentication.dart';
 import 'package:testapp/module/auth/bloc/login_cubit.dart';
+import 'package:testapp/module/auth/bloc/password_cubit.dart';
 import 'package:testapp/module/auth/bloc/register_cubit.dart';
+import 'package:testapp/module/auth/bloc/vertify_cubit.dart';
 import 'package:testapp/module/auth/screen/forgot_password_screen.dart';
 import 'package:testapp/module/auth/screen/login_screen.dart';
 import 'package:testapp/module/auth/screen/new_password_screen.dart';
@@ -57,7 +61,58 @@ final router = GoRouter(
     GoRoute(
       name: 'vertification',
       path: '/vertification',
-      builder: (context, state) => const VertificationCodeScreen(),
+      builder: (context, state) {
+        final param = state.uri.queryParameters as Map<String, dynamic>;
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => LoginCubit(),
+            ),
+            BlocProvider(
+              create: (context) => VertifyCubit(),
+            ),
+            BlocProvider(
+              create: (context) => PasswordCubit(),
+            )
+          ],
+          child: VertificationCodeScreen(
+            username: param['username'] as String,
+            onResentOtp: AppAuthenticationBinding
+                .instance!.notifyUserRequestAccessVerification,
+            onVerifySuccess: () {
+              context.goNamed('home');
+            },
+          ),
+        );
+      },
+    ),
+    GoRoute(
+      name: 'vertifyForgotPassword',
+      path: '/vertifyForgotPassword',
+      builder: (context, state) {
+        final param = state.uri.queryParameters as Map<String, dynamic>;
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => LoginCubit(),
+            ),
+            BlocProvider(
+              create: (context) => VertifyCubit(),
+            ),
+            BlocProvider(
+              create: (context) => PasswordCubit(),
+            )
+          ],
+          child: VertificationCodeScreen(
+            username: param['username'] as String,
+            onResentOtp: AppAuthenticationBinding
+                .instance!.notifyResetPasswordRequestAccessVertification,
+            onVerifySuccess: () {
+              context.pushNamed('newPassword');
+            },
+          ),
+        );
+      },
     ),
     GoRoute(
       name: 'forgotPassword',

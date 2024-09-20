@@ -1,22 +1,30 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:testapp/core/app_authentication.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/constants/image_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
-import 'package:testapp/module/auth/screen/vertification_code_screen.dart';
+import 'package:testapp/module/auth/bloc/password_cubit.dart';
+import 'package:testapp/module/auth/bloc/password_state.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/foot_page.dart';
 
-class ForgotPasswordScreen extends StatelessWidget {
+class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({
     super.key,
   });
 
   @override
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+}
+
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
+    implements AppAuthenticationBindingObserver {
+  TextEditingController usernameController = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return (Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
@@ -62,10 +70,30 @@ class ForgotPasswordScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      NameList(Credentials: "Email Address"),
+                      NameList(
+                        Credentials: "Email Address",
+                        controller: usernameController,
+                      ),
                     ],
                   ),
                 ),
+                BlocListener<PasswordCubit, PasswordState>(
+                  listener: (context, state) {
+                    if (state is PasswordLoadingInProgress) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const Center(
+                            child: const CircularProgressIndicator()),
+                      );
+                    } else if (state is ForgotPassWordSuccess) {
+                      context.pop();
+                      context.pushNamed('vertifyForgotPassword', extra: {
+                        'username': usernameController.text,
+                      });
+                    }
+                  },
+                  child: SizedBox(),
+                )
               ],
             ),
           ),
@@ -85,7 +113,9 @@ class ForgotPasswordScreen extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              context.pushNamed('vertification');
+              context
+                  .read<PasswordCubit>()
+                  .forgotpassword(username: usernameController.text);
             },
             child: const FootPage(
               textfootpage: 'Confirm Mail',
@@ -95,11 +125,41 @@ class ForgotPasswordScreen extends StatelessWidget {
       ),
     ));
   }
+
+  @override
+  void didAuthenticated() {}
+
+  @override
+  void didAuthenticationFailed() {}
+
+  @override
+  void didChangeAccessToken() {}
+
+  @override
+  void didLock() {}
+
+  @override
+  void didRefershTokenExpired() {}
+
+  @override
+  void didUnauthenticated() {}
+
+  @override
+  void didUserRequestAccessVerification() {}
+
+  @override
+  void didResetPasswordRequestAccessVertification() {
+    context
+        .read<PasswordCubit>()
+        .forgotpassword(username: usernameController.text);
+  }
 }
 
 class NameList extends StatelessWidget {
   final String Credentials;
-  const NameList({super.key, required this.Credentials});
+  final TextEditingController controller;
+  const NameList(
+      {super.key, required this.Credentials, required this.controller});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -110,6 +170,7 @@ class NameList extends StatelessWidget {
         children: [
           const SizedBox(height: 8),
           TextField(
+            controller: controller,
             decoration: InputDecoration(
               border: const UnderlineInputBorder(),
               labelText: Credentials,

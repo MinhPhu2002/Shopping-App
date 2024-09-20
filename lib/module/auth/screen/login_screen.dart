@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:testapp/core/app_authentication.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/auth/bloc/login_cubit.dart';
@@ -18,12 +19,20 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen>
+    implements AppAuthenticationBindingObserver {
   final TextEditingController _userNameController = TextEditingController();
 
   final TextEditingController _passwordController = TextEditingController();
   @override
+  void initState() {
+    AppAuthenticationBinding.instance?.addObserver(this);
+    super.initState();
+  }
+
+  @override
   void dispose() {
+    AppAuthenticationBinding.instance?.removeObserver(this);
     _userNameController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -31,7 +40,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return (Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
@@ -99,7 +107,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         );
                       } else if (state is LoginSuccess) {
                         context.pop();
-                        context.goNamed('home');
+                        context.pushNamed('vertification', queryParameters: {
+                          'username': _userNameController.text,
+                        });
                       } else if (state is LoginLoadingError) {
                         Navigator.pop(context);
                         showDialog(
@@ -180,16 +190,43 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     ));
   }
+
+  @override
+  void didAuthenticated() {}
+
+  @override
+  void didAuthenticationFailed() {}
+
+  @override
+  void didChangeAccessToken() {}
+
+  @override
+  void didLock() {}
+
+  @override
+  void didRefershTokenExpired() {}
+
+  @override
+  void didUnauthenticated() {}
+
+  @override
+  void didUserRequestAccessVerification() {
+    context.read<LoginCubit>().login(
+          _userNameController.text,
+          _passwordController.text,
+        );
+  }
+
+  @override
+  void didResetPasswordRequestAccessVertification() {}
 }
 
 class Credential extends StatelessWidget {
-  // ignore: non_constant_identifier_names
   const Credential(
       {super.key,
       required this.credentials,
       required this.obscureText,
       required this.data});
-  // ignore: non_constant_identifier_names
   final String credentials;
   final bool obscureText;
   final TextEditingController data;

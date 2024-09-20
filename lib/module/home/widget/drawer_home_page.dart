@@ -8,7 +8,6 @@ import 'package:go_router/go_router.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/data/services/auth_service.dart';
-import 'package:testapp/module/auth/screen/start_screen.dart';
 import 'package:testapp/module/cart/screen/cart_screen.dart';
 import 'package:testapp/module/home/bloc/user/user_cubit.dart';
 import 'package:testapp/module/home/bloc/user/user_state.dart';
@@ -34,8 +33,11 @@ class DrawerHomePage extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
             if (state is UserLoadingError) {
-              return HomeDrawer(avatar: '', name: '');
+              return Center(
+                child: Text(state.errorMessage),
+              );
             }
+
             final data = (state as UserLoaded).user;
 
             return HomeDrawer(avatar: data.avatar, name: data.name);
@@ -81,24 +83,34 @@ class HomeDrawer extends StatelessWidget {
             ),
             Row(
               children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        image: DecorationImage(
-                          image: NetworkImage(avatar),
-                          fit: BoxFit.cover,
+                if (avatar.isNotEmpty)
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          image: DecorationImage(
+                            image: NetworkImage(avatar),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
+                if (avatar.isEmpty)
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                    child: SvgPicture.asset(IconPath.avatarDefault),
+                  ),
                 const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

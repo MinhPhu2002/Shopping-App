@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:testapp/core/constants/image_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
-import 'package:testapp/module/detail/bloc/product_details/product_details_cubit.dart';
-import 'package:testapp/module/detail/description_product_screen.dart';
 import 'package:testapp/utils/ui/mediaquery_extention.dart';
 
 class ListProducts extends StatelessWidget {

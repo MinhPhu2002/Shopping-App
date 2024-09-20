@@ -52,6 +52,18 @@ class AppAuthenticationBinding {
       observer.didRefershTokenExpired();
     }
   }
+
+  void notifyUserRequestAccessVerification() {
+    for (final AppAuthenticationBindingObserver obserber in _observers) {
+      obserber.didUserRequestAccessVerification();
+    }
+  }
+
+  void notifyResetPasswordRequestAccessVertification() {
+    for (final AppAuthenticationBindingObserver obserber in _observers) {
+      obserber.didResetPasswordRequestAccessVertification();
+    }
+  }
 }
 
 abstract class AppAuthenticationBindingObserver {
@@ -66,4 +78,6 @@ abstract class AppAuthenticationBindingObserver {
   void didLock() {}
 
   void didRefershTokenExpired() {}
+  void didUserRequestAccessVerification() {}
+  void didResetPasswordRequestAccessVertification() {}
 }

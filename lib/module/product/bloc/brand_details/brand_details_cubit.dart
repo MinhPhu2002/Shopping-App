@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testapp/common/model/products_filter_model.dart';
 import 'package:testapp/core/values/sort_product_by.dart';
-import 'package:testapp/data/api_client.dart';
 import 'package:testapp/module/home/repo/brand_repo.dart';
 import 'package:testapp/module/product/bloc/brand_details/brand_details_state.dart';
 

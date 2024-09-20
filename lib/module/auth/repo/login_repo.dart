@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:testapp/core/constants/api_path.dart';
@@ -11,23 +10,18 @@ import 'package:testapp/data/services/auth_service.dart';
 
 class LoginRepository {
   Future<bool> login({required String email, required String password}) async {
-    final String path = AuthService.instance.ensureConfiguration(ApiPath.login);
+    final String path =
+        AuthService.instance.ensureConfiguration(ApiPath.loginOnFirebase);
     final RequestResponse result =
         await apiClient.fetch(path, RequestMethod.post,
             encodeData: jsonEncode({
               'username': email,
               'password': password,
               'expiresInMins': 1,
+              'verification': '4 digit OTP',
             }));
-    final String token = result.json['token'];
-    final String refreshToken = result.json['refreshToken'];
-
-    AuthService.instance
-        .saveToken(accessToken: token, refreshToken: refreshToken);
-    AuthService.instance.saveUserId(result.json['id'].toString());
-    AuthService.instance.saveLoginType(loginTypeList.systemAccount);
-
-    return result.hasError == false;
+    if (result.json['result'] == true) return true;
+    return false;
   }
 
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -50,7 +44,7 @@ class LoginRepository {
             'expiresInMins': 1,
             'token': await userCredential.user!.getIdToken()
           }));
-      final String token = result.json['accessToken'];
+      final String token = result.json['token'];
 
       final String refreshToken = result.json['refreshToken'];
 

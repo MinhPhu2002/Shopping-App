@@ -1,19 +1,68 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:testapp/core/constants/image_path.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:testapp/core/constants/image_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
-import 'package:testapp/module/auth/screen/new_password_screen.dart';
+import 'package:testapp/module/auth/bloc/vertify_cubit.dart';
+import 'package:testapp/module/auth/bloc/vertify_state.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/foot_page.dart';
 
 import '../../../core/constants/icon_path.dart';
 
-class VertificationCodeScreen extends StatelessWidget {
+class VertificationCodeScreen extends StatefulWidget {
   const VertificationCodeScreen({
     super.key,
+    required this.username,
+    required this.onResentOtp,
   });
+  final String username;
+  final VoidCallback onResentOtp;
+  @override
+  State<VertificationCodeScreen> createState() =>
+      _VertificationCodeScreenState();
+}
+
+class _VertificationCodeScreenState extends State<VertificationCodeScreen> {
+  final TextEditingController otpController = TextEditingController();
+  int startTimer = 30;
+  Timer? timer;
+  void countTimer() {
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (startTimer > 0) {
+          startTimer--;
+        } else {
+          timer.cancel();
+        }
+      });
+    });
+  }
+
+  String formatTimer(int timer) {
+    int minutes = timer ~/ 60;
+    int seconds = timer % 60;
+    String minutesStr = minutes.toString().padLeft(2, '0');
+    String secondsStr = seconds.toString().padLeft(2, '0');
+    return '$minutesStr:$secondsStr';
+  }
+
+  @override
+  void initState() {
+    countTimer();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    otpController.dispose();
+    timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +112,34 @@ class VertificationCodeScreen extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 60, left: 5, right: 5),
-                child: OtpInput(),
+                child: OtpInput(
+                  otp: otpController,
+                ),
               ),
+              BlocListener<VertifyCubit, VertifyState>(
+                listener: (context, state) {
+                  if (state is VertifyLoadingInProgress) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => const Center(
+                          child: const CircularProgressIndicator()),
+                    );
+                  } else if (state is VertifySuccess) {
+                    context.pop();
+                    context.pushNamed('home');
+                  } else if (state is VertifyLoadingError) {
+                    Navigator.pop(context);
+                    showDialog(
+                      context: context,
+                      builder: (context) => Center(
+                          child: Container(
+                              color: Colors.yellow,
+                              child: Text(state.errorMessage))),
+                    );
+                  }
+                },
+                child: SizedBox(),
+              )
             ],
           ),
         ),
@@ -74,23 +149,30 @@ class VertificationCodeScreen extends StatelessWidget {
         children: [
           Padding(
               padding: const EdgeInsets.only(left: 36, right: 36, bottom: 25),
-              child: Text.rich(TextSpan(children: [
-                const TextSpan(
-                  text: "00:20",
-                  style: AppTextStyle.s13_w5,
-                ),
-                TextSpan(
-                    text: " resend confirmation code.",
-                    style: AppTextStyle.s13_w4.copyWith(
-                        color: const Color.fromRGBO(143, 149, 158, 1))),
-              ]))),
+              child: InkWell(
+                onTap: () {
+                  if (startTimer == 0) {
+                    startTimer = 30;
+                    countTimer();
+                    widget.onResentOtp();
+                  }
+                },
+                child: Text.rich(TextSpan(children: [
+                  if (startTimer > 0)
+                    TextSpan(
+                      text: formatTimer(startTimer),
+                      style: AppTextStyle.s13_w5,
+                    ),
+                  TextSpan(
+                      text: " resend confirmation code.",
+                      style: AppTextStyle.s13_w4.copyWith(
+                          color: const Color.fromRGBO(143, 149, 158, 1))),
+                ])),
+              )),
           InkWell(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => NewPasswordScreen(),
-                  ));
+              context.read<VertifyCubit>().vertifyOtp(
+                  username: widget.username, otp: otpController.text);
             },
             child: const FootPage(
               textfootpage: 'Confirm Code',
@@ -105,10 +187,8 @@ class VertificationCodeScreen extends StatelessWidget {
 class SwitchState extends StatelessWidget {
   const SwitchState({super.key});
 
-  // const SwitchState({super.key, required this.state});
   @override
   Widget build(BuildContext context) {
-    // ignore: unused_local_variable
     bool light = true;
     return Transform.scale(
         scale: 0.7,
@@ -123,10 +203,14 @@ class SwitchState extends StatelessWidget {
 }
 
 class OtpInput extends StatelessWidget {
+  final TextEditingController otp;
+
+  const OtpInput({super.key, required this.otp});
   @override
   Widget build(BuildContext context) {
     // TODO: implement createState
     return PinCodeTextField(
+      controller: otp,
       pinTheme: PinTheme(
         shape: PinCodeFieldShape.box,
         borderRadius: BorderRadius.circular(5),

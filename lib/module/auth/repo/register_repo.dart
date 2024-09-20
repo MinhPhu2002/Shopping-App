@@ -27,6 +27,14 @@ class RegisterRepo {
       {required String username,
       required String password,
       required String email}) async {
+    await apiClient.fetch(ApiPath.register, RequestMethod.post,
+        encodeData: jsonEncode({
+          'username': username,
+          'password': password,
+          'email': email,
+          'verification': '4 digit OTP',
+          'expiresInMins': 1,
+        }));
     final RequestResponse result =
         await apiClient.fetch(ApiPath.register, RequestMethod.post,
             encodeData: jsonEncode({
@@ -40,6 +48,7 @@ class RegisterRepo {
 
     AuthService.instance
         .saveToken(accessToken: token, refreshToken: refreshToken);
+    AuthService.instance.saveLoginType(loginTypeList.systemAccount);
     return result.hasError == false;
   }
 
