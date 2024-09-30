@@ -1,17 +1,25 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
+import 'package:testapp/module/auth/bloc/password_cubit.dart';
+import 'package:testapp/module/auth/bloc/password_state.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/foot_page.dart';
 
 class NewPasswordScreen extends StatelessWidget {
-  const NewPasswordScreen({
+  NewPasswordScreen({
     super.key,
+    required this.username,
   });
-
+  final String username;
+  TextEditingController _password = TextEditingController();
+  TextEditingController _confirmPassword = TextEditingController();
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -56,11 +64,17 @@ class NewPasswordScreen extends StatelessWidget {
                       top: 186 * MediaQuery.sizeOf(context).height / 812),
                   child: Column(
                     children: [
-                      NameList(Credentials: "Password"),
+                      NameList(
+                        Credentials: "Password",
+                        controller: _password,
+                      ),
                       SizedBox(
                         height: 20,
                       ),
-                      NameList(Credentials: "Confirm Password"),
+                      NameList(
+                        Credentials: "Confirm Password",
+                        controller: _confirmPassword,
+                      ),
                       Spacer(),
                       Padding(
                         padding:
@@ -71,6 +85,43 @@ class NewPasswordScreen extends StatelessWidget {
                           style: AppTextStyle.s13_w4.copyWith(
                               color: Color.fromRGBO(143, 149, 158, 1)),
                         ),
+                      ),
+                      BlocListener<PasswordCubit, PasswordState>(
+                        listener: (context, state) {
+                          if (state is PasswordLoadingInProgress) {
+                            showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  Center(child: CircularProgressIndicator()),
+                            );
+                          } else if (state is ResetPassWordSuccess) {
+                            context.pop();
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text('Thông báo'),
+                                content: Text(
+                                    'Đổi mật khẩu thành công, vui lòng đăng nhập lại'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      context.goNamed('login');
+                                    },
+                                    child: Text('OK'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else if (state is ResetPasswordLoadingError) {
+                            context.pop();
+                            showDialog(
+                              context: context,
+                              builder: (context) => Text(state.error),
+                            );
+                          }
+                        },
+                        child: SizedBox(),
                       )
                     ],
                   ),
@@ -82,7 +133,21 @@ class NewPasswordScreen extends StatelessWidget {
       ),
       bottomNavigationBar: InkWell(
         onTap: () {
-          context.goNamed('login');
+          if (_password.text != _confirmPassword.text) {
+            AlertDialog(
+              title: Text('Lỗi đăng nhập'),
+              content: Text('Mật khẩu chưa khớp'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          } else
+            context
+                .read<PasswordCubit>()
+                .resetPassword(username: username, password: _password.text);
         },
         child: const FootPage(
           textfootpage: 'Reset Password',
@@ -113,10 +178,10 @@ class SwitchState extends StatelessWidget {
 }
 
 class NameList extends StatelessWidget {
-  // ignore: non_constant_identifier_names
-  const NameList({super.key, required this.Credentials});
-  // ignore: non_constant_identifier_names
   final String Credentials;
+  final TextEditingController controller;
+  const NameList(
+      {super.key, required this.Credentials, required this.controller});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -127,7 +192,7 @@ class NameList extends StatelessWidget {
         children: [
           const SizedBox(height: 8),
           TextField(
-            // style: TextStyle(fontSize: 18),
+            controller: controller,
             decoration: InputDecoration(
               border: const UnderlineInputBorder(),
               labelText: Credentials,

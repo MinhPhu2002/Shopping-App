@@ -1,10 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testapp/module/auth/bloc/vertify_state.dart';
+import 'package:testapp/module/auth/repo/otp_vertification_repo.dart';
 import 'package:testapp/module/auth/repo/vertify_repo.dart';
 
 class VertifyCubit extends Cubit<VertifyState> {
-  VertifyCubit() : super(VertifyInitialState());
-  VertifyRepository repo = VertifyRepository();
+  VertifyCubit({required this.repo}) : super(VertifyInitialState());
+  final OtpVertificationRepo repo;
   Future<void> vertifyOtp(
       {required String username, required String otp}) async {
     try {

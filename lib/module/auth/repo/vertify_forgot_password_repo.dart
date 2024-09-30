@@ -7,7 +7,7 @@ import 'package:testapp/data/models/request_response.dart';
 import 'package:testapp/data/services/auth_service.dart';
 import 'package:testapp/module/auth/repo/otp_vertification_repo.dart';
 
-class VertifyRepository extends OtpVertificationRepo {
+class VertifyForgotPasswordRepo extends OtpVertificationRepo {
   @override
   Future<bool> vertifyOtp(
       {required String username, required String otp}) async {
@@ -20,11 +20,7 @@ class VertifyRepository extends OtpVertificationRepo {
               'enteredOtp': otp,
               'expiresInMins': 1,
             }));
-    final String token = result.json['token'];
-    final String refreshToken = result.json['refreshToken'];
 
-    AuthService.instance
-        .saveToken(accessToken: token, refreshToken: refreshToken);
     // AuthService.instance.saveUserId(result.json['id'].toString());
     AuthService.instance.saveLoginType(loginTypeList.systemAccount);
 

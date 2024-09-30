@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:testapp/core/app_authentication.dart';
@@ -6,6 +5,9 @@ import 'package:testapp/module/auth/bloc/login_cubit.dart';
 import 'package:testapp/module/auth/bloc/password_cubit.dart';
 import 'package:testapp/module/auth/bloc/register_cubit.dart';
 import 'package:testapp/module/auth/bloc/vertify_cubit.dart';
+import 'package:testapp/module/auth/repo/vertify_forgot_password_repo.dart';
+import 'package:testapp/module/auth/repo/vertify_repo.dart';
+import 'package:testapp/module/auth/screen/change_password_screen.dart';
 import 'package:testapp/module/auth/screen/forgot_password_screen.dart';
 import 'package:testapp/module/auth/screen/login_screen.dart';
 import 'package:testapp/module/auth/screen/new_password_screen.dart';
@@ -62,14 +64,14 @@ final router = GoRouter(
       name: 'vertification',
       path: '/vertification',
       builder: (context, state) {
-        final param = state.uri.queryParameters as Map<String, dynamic>;
+        final param = state.extra as Map<String, String>;
         return MultiBlocProvider(
           providers: [
             BlocProvider(
               create: (context) => LoginCubit(),
             ),
             BlocProvider(
-              create: (context) => VertifyCubit(),
+              create: (context) => VertifyCubit(repo: VertifyRepository()),
             ),
             BlocProvider(
               create: (context) => PasswordCubit(),
@@ -90,25 +92,27 @@ final router = GoRouter(
       name: 'vertifyForgotPassword',
       path: '/vertifyForgotPassword',
       builder: (context, state) {
-        final param = state.uri.queryParameters as Map<String, dynamic>;
+        final param = state.extra as Map<String, String>;
+        final username = param['username'] as String;
         return MultiBlocProvider(
           providers: [
             BlocProvider(
               create: (context) => LoginCubit(),
             ),
             BlocProvider(
-              create: (context) => VertifyCubit(),
+              create: (context) =>
+                  VertifyCubit(repo: VertifyForgotPasswordRepo()),
             ),
             BlocProvider(
               create: (context) => PasswordCubit(),
             )
           ],
           child: VertificationCodeScreen(
-            username: param['username'] as String,
+            username: username,
             onResentOtp: AppAuthenticationBinding
                 .instance!.notifyResetPasswordRequestAccessVertification,
             onVerifySuccess: () {
-              context.pushNamed('newPassword');
+              context.pushNamed('newPassword', extra: {'username': username});
             },
           ),
         );
@@ -117,12 +121,24 @@ final router = GoRouter(
     GoRoute(
       name: 'forgotPassword',
       path: '/forgotPassword',
-      builder: (context, state) => const ForgotPasswordScreen(),
+      builder: (context, state) => BlocProvider(
+        create: (context) => PasswordCubit(),
+        child: ForgotPasswordScreen(),
+      ),
     ),
     GoRoute(
       name: 'newPassword',
       path: '/newPassword',
-      builder: (context, state) => const NewPasswordScreen(),
+      builder: (context, state) {
+        final param = state.extra as Map<String, String>;
+
+        return BlocProvider(
+          create: (context) => PasswordCubit(),
+          child: NewPasswordScreen(
+                  username: param['username'] as String,
+                ),
+        );
+      },
     ),
     GoRoute(
       name: 'recomment',
@@ -217,6 +233,14 @@ final router = GoRouter(
       name: 'addreview',
       path: '/addreview',
       builder: (context, state) => AddReviewScreen(postId: state.extra as int),
+    ),
+    GoRoute(
+      name: 'changepassword',
+      path: '/changepassword',
+      builder: (context, state) => BlocProvider(
+        create: (context) => PasswordCubit(),
+        child: ChangePasswordScreen(),
+      ),
     ),
   ],
 );

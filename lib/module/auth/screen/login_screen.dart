@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen>
                         );
                       } else if (state is LoginSuccess) {
                         context.pop();
-                        context.pushNamed('vertification', queryParameters: {
+                        context.pushNamed('vertification', extra: {
                           'username': _userNameController.text,
                         });
                       } else if (state is LoginLoadingError) {

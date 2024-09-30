@@ -22,6 +22,18 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
     implements AppAuthenticationBindingObserver {
   TextEditingController usernameController = TextEditingController();
+  @override
+  void initState() {
+    AppAuthenticationBinding.instance?.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    AppAuthenticationBinding.instance?.removeObserver(this);
+    usernameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +83,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       NameList(
-                        Credentials: "Email Address",
+                        Credentials: "Username",
                         controller: usernameController,
                       ),
                     ],
@@ -90,6 +102,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                       context.pushNamed('vertifyForgotPassword', extra: {
                         'username': usernameController.text,
                       });
+                    } else if (state is ForgotPasswordLoadingError) {
+                      context.pop();
+                      showDialog(
+                        context: context,
+                        builder: (context) => Text(state.error),
+                      );
                     }
                   },
                   child: SizedBox(),

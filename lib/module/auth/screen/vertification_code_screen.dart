@@ -19,9 +19,12 @@ class VertificationCodeScreen extends StatefulWidget {
     super.key,
     required this.username,
     required this.onResentOtp,
+    required this.onVerifySuccess,
   });
   final String username;
   final VoidCallback onResentOtp;
+  final VoidCallback onVerifySuccess;
+
   @override
   State<VertificationCodeScreen> createState() =>
       _VertificationCodeScreenState();
@@ -126,7 +129,7 @@ class _VertificationCodeScreenState extends State<VertificationCodeScreen> {
                     );
                   } else if (state is VertifySuccess) {
                     context.pop();
-                    context.pushNamed('home');
+                    widget.onVerifySuccess();
                   } else if (state is VertifyLoadingError) {
                     Navigator.pop(context);
                     showDialog(
@@ -153,8 +156,9 @@ class _VertificationCodeScreenState extends State<VertificationCodeScreen> {
                 onTap: () {
                   if (startTimer == 0) {
                     startTimer = 30;
-                    countTimer();
+
                     widget.onResentOtp();
+                    countTimer();
                   }
                 },
                 child: Text.rich(TextSpan(children: [

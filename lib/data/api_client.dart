@@ -196,6 +196,7 @@ class ApiClient {
 
         break;
       } on DioException catch (e) {
+        log('${e.response}');
         if (kDebugMode) {
           log(e.toString(), name: 'ApiClient', stackTrace: StackTrace.current);
         }

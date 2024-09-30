@@ -163,15 +163,15 @@ class HomeDrawer extends StatelessWidget {
               ],
             ),
             const ListMenu(icon: IconPath.point, name: "Account Information"),
-            const ListMenu(icon: IconPath.lock, name: "Password"),
             InkWell(
                 onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CartScreen(),
-                      ));
+                  context.pushNamed('changepassword');
+                },
+                child: const ListMenu(icon: IconPath.lock, name: "Password")),
+            InkWell(
+                onTap: () {
+                  context.pop();
+                  context.pushNamed('cart');
                 },
                 child: const ListMenu(icon: IconPath.bag, name: "Order")),
             const ListMenu(icon: IconPath.wallet, name: "My Cards"),

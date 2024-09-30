@@ -78,6 +78,8 @@ abstract class AppAuthenticationBindingObserver {
   void didLock() {}
 
   void didRefershTokenExpired() {}
+
   void didUserRequestAccessVerification() {}
+
   void didResetPasswordRequestAccessVertification() {}
 }
