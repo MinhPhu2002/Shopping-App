@@ -24,6 +24,7 @@ class VertifyRepository extends OtpVertificationRepo {
     final String token = result.json['token'];
     final String refreshToken = result.json['refreshToken'];
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
     await prefs.setString('token', token);
     AuthService.instance
         .saveToken(accessToken: token, refreshToken: refreshToken);

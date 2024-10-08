@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:testapp/core/app_authentication.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/home/bloc/brands/brands_cubit.dart';
@@ -24,7 +25,8 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    implements AppAuthenticationBindingObserver {
   late final ProductsCubit productsCubit;
   String? search;
   @override
@@ -200,6 +202,45 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: const FootHomePage(),
     );
   }
+
+  @override
+  void didAuthenticated() {}
+
+  @override
+  void didAuthenticationFailed() {}
+
+  @override
+  void didChangeAccessToken() {}
+
+  @override
+  void didLock() {}
+
+  @override
+  void didRefershTokenExpired() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Thông báo'),
+        content: Text('Phiên đăng nhập hết hạn,vui lòng đăng nhập lại !'),
+        actions: [
+          TextButton(
+              onPressed: () {
+                context.goNamed('/');
+              },
+              child: Text("OK"))
+        ],
+      ),
+    );
+  }
+
+  @override
+  void didResetPasswordRequestAccessVertification() {}
+
+  @override
+  void didUnauthenticated() {}
+
+  @override
+  void didUserRequestAccessVerification() {}
 }
 
 class ListMenu extends StatelessWidget {

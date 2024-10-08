@@ -246,6 +246,7 @@ final router = GoRouter(
   ],
   redirect: (context, GoRouterState state) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
     String? token = prefs.getString('token');
     String currentLocation = state.uri.toString();
     if (currentLocation == '/' && token != null) {

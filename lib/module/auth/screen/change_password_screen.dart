@@ -115,7 +115,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         actions: [
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              context.goNamed('home');
                             },
                             child: Text('OK'),
                           ),
@@ -147,7 +147,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 actions: [
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      context.pop();
                     },
                     child: Text('OK'),
                   ),

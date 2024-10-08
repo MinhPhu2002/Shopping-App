@@ -9,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/data/services/auth_service.dart';
-import 'package:testapp/module/cart/screen/cart_screen.dart';
 import 'package:testapp/module/home/bloc/user/user_cubit.dart';
 import 'package:testapp/module/home/bloc/user/user_state.dart';
 import 'package:testapp/module/home/home_screen.dart';

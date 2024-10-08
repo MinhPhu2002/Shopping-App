@@ -88,53 +88,84 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  int selectedSizeIndex = -1;
-  int selectedColorId = -1;
+  Map<int, List<int>> variantData = {};
+
+  late int selectedSizeId;
+  late int selectedColorId;
   bool stockColor = false;
   bool stockSize = false;
+  bool defaultVariant = true;
   Widget numberItems() {
-    if (selectedColorId != -1 && selectedSizeIndex != -1) {
-      for (var variant in widget.model.variants) {
-        if (selectedColorId == variant.option_ids[0] &&
-            selectedSizeIndex == variant.option_ids[1]) {
-          if (variant.stock >= 5) {
-            return Row(
-              children: [
-                SvgPicture.asset(
-                  IconPath.infoCircle,
-                  color: Color.fromRGBO(143, 149, 158, 1),
-                ),
-                SizedBox(
-                  width: 4,
-                ),
-                Text(
-                  '${variant.stock.toString()} in stock',
-                  style: AppTextStyle.s13_w5
-                      .copyWith(color: Color.fromRGBO(143, 149, 158, 1)),
-                ),
-              ],
-            );
-          } else
-            return Row(
-              children: [
-                SvgPicture.asset(
-                  IconPath.infoCircle,
-                  color: Color.fromRGBO(198, 75, 77, 1),
-                ),
-                SizedBox(
-                  width: 4,
-                ),
-                Text(
-                  'Only ${variant.stock.toString()} left',
-                  style: AppTextStyle.s13_w5
-                      .copyWith(color: Color.fromRGBO(198, 75, 77, 1)),
-                ),
-              ],
-            );
+    for (var variant in widget.model.variants) {
+      if (variant.option_ids.contains(selectedColorId) &&
+          variant.option_ids.contains(selectedSizeId)) {
+        if (variant.stock >= 5) {
+          return Row(
+            children: [
+              SvgPicture.asset(
+                IconPath.infoCircle,
+                color: Color.fromRGBO(143, 149, 158, 1),
+              ),
+              SizedBox(
+                width: 4,
+              ),
+              Text(
+                '${variant.stock.toString()} in stock',
+                style: AppTextStyle.s13_w5
+                    .copyWith(color: Color.fromRGBO(143, 149, 158, 1)),
+              ),
+            ],
+          );
+        } else {
+          return Row(
+            children: [
+              SvgPicture.asset(
+                IconPath.infoCircle,
+                color: Color.fromRGBO(198, 75, 77, 1),
+              ),
+              SizedBox(
+                width: 4,
+              ),
+              Text(
+                'Only ${variant.stock.toString()} left',
+                style: AppTextStyle.s13_w5
+                    .copyWith(color: Color.fromRGBO(198, 75, 77, 1)),
+              ),
+            ],
+          );
         }
       }
     }
     return SizedBox();
+  }
+
+  void _setdata() {
+    setState(() {
+      for (var size in widget.model.productSizes) {
+        List<int> list = [];
+        for (var variant in widget.model.variants) {
+          if (variant.option_ids.contains(size.id) && variant.stock > 0) {
+            int color = variant.option_ids.firstWhere(
+              (element) => element != size.id,
+            );
+            list.add(color);
+            if (defaultVariant) {
+              selectedColorId = variant.option_ids.firstWhere(
+                (element) => element != size.id,
+              );
+              selectedSizeId = size.id;
+              defaultVariant = false;
+            }
+          }
+        }
+        variantData[size.id] = list;
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    _setdata();
   }
 
   @override
@@ -250,32 +281,18 @@ class _BodyState extends State<Body> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: widget.model.productSizes.map((productSize) {
-                        for (var variant in widget.model.variants) {
-                          if (selectedColorId == -1 &&
-                                  variant.option_ids.contains(productSize.id) &&
-                                  variant.stock != 0 ||
-                              selectedColorId != -1 &&
-                                  variant.option_ids.contains(productSize.id) &&
-                                  variant.option_ids
-                                      .contains(selectedColorId) &&
-                                  variant.stock != 0) {
-                            stockSize = true;
-                            break;
-                          }
-                          stockSize = false;
-                        }
                         return ProductSize(
                           size: productSize.name,
                           ontap: () {
                             setState(() {
-                              if (selectedSizeIndex != productSize.id)
-                                selectedSizeIndex = productSize.id;
-                              else
-                                selectedSizeIndex = -1;
+                              if (selectedSizeId != productSize.id) {
+                                selectedSizeId = productSize.id;
+                              }
                             });
                           },
-                          selectedIndex: selectedSizeIndex == productSize.id,
-                          stock: stockSize,
+                          selectedIndex: selectedSizeId == productSize.id,
+                          stock: variantData[productSize.id]!
+                              .contains(selectedColorId),
                         );
                       }).toList(),
                     ),
@@ -298,35 +315,19 @@ class _BodyState extends State<Body> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: widget.model.productColors.map((productcolor) {
-                        for (var variant in widget.model.variants) {
-                          if (selectedSizeIndex == -1 &&
-                                  variant.option_ids
-                                      .contains(productcolor.id) &&
-                                  variant.stock != 0 ||
-                              selectedSizeIndex != -1 &&
-                                  variant.option_ids
-                                      .contains(productcolor.id) &&
-                                  variant.stock != 0 &&
-                                  variant.option_ids
-                                      .contains(selectedSizeIndex)) {
-                            stockColor = true;
-                            break;
-                          }
-                          stockColor = false;
-                        }
                         return ColorProduct(
                           color: productcolor.colorCode,
                           nameColor: productcolor.name,
                           ontap: () {
                             setState(() {
-                              if (selectedColorId != productcolor.id)
+                              if (selectedColorId != productcolor.id) {
                                 selectedColorId = productcolor.id;
-                              else
-                                selectedColorId = -1;
+                              }
                             });
                           },
                           selectedIndex: selectedColorId == productcolor.id,
-                          stock: stockColor,
+                          stock: variantData[selectedSizeId]!
+                              .contains(productcolor.id),
                         );
                       }).toList(),
                     ),
@@ -485,10 +486,11 @@ Color hexToColor(String hexString) {
 }
 
 Color bordercolor(String nameColor) {
-  if (nameColor.toLowerCase().contains('white'))
+  if (nameColor.toLowerCase().contains('white')) {
     return Color.fromRGBO(222, 222, 222, 1);
-  else
+  } else {
     return Colors.transparent;
+  }
 }
 
 class ColorProduct extends StatefulWidget {

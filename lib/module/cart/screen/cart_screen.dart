@@ -1,16 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:testapp/module/cart/bloc/cart_cubit.dart';
-import 'package:testapp/module/cart/bloc/cart_state.dart';
-import 'package:testapp/module/cart/screen/address_creen.dart';
-import 'package:testapp/module/cart/screen/order_confirmed_screen.dart';
-
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
+import 'package:testapp/module/cart/bloc/cart_cubit.dart';
+import 'package:testapp/module/cart/bloc/cart_state.dart';
 import 'package:testapp/module/cart/screen/payment_screen.dart';
 import 'package:testapp/module/service/local_notification_controller.dart';
 import 'package:testapp/widget/circle_icon.dart';
