@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testapp/core/constants/api_path.dart';
 import 'package:testapp/data/api_client.dart';
 import 'package:testapp/data/models/request_method.dart';
@@ -22,7 +23,8 @@ class VertifyRepository extends OtpVertificationRepo {
             }));
     final String token = result.json['token'];
     final String refreshToken = result.json['refreshToken'];
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', token);
     AuthService.instance
         .saveToken(accessToken: token, refreshToken: refreshToken);
     // AuthService.instance.saveUserId(result.json['id'].toString());

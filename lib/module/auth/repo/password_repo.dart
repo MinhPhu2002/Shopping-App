@@ -52,13 +52,13 @@ class PasswordRepository {
       {required String oldPassword, required String newPassword}) async {
     final String path =
         AuthService.instance.ensureConfiguration(ApiPath.changePassword);
-    final RequestResponse result =
-        await apiClient.fetch(path, RequestMethod.post,
-            token: AuthService.instance.accessToken,
-            encodeData: jsonEncode({
-              'oldPassword': oldPassword,
-              'newPassword': newPassword,
-            }));
+    final RequestResponse result = await apiClient.fetch(
+        path, RequestMethod.post,
+        token: AuthService.instance.accessToken,
+        data: {
+          'oldPassword': oldPassword,
+          'newPassword': newPassword,
+        });
     if (result.json['result'] == true) return true;
     return false;
   }

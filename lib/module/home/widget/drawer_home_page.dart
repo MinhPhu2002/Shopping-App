@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/data/services/auth_service.dart';
@@ -191,8 +192,12 @@ class HomeDrawer extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 80),
               child: InkWell(
-                onTap: () {
+                onTap: () async {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  await prefs.remove('token');
                   AuthService.instance.invalid();
+
                   context.goNamed('/');
                 },
                 child: Container(

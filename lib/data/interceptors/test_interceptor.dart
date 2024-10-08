@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -21,7 +22,7 @@ class TestInterceptor extends InterceptorsWrapper {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     // TODO: implement onResponse
-    log(response.data.toString(), name: 'data');
+    log(jsonEncode(response.data), name: 'data');
     super.onResponse(response, handler);
   }
 

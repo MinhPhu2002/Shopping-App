@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testapp/core/app_authentication.dart';
 import 'package:testapp/module/auth/bloc/login_cubit.dart';
 import 'package:testapp/module/auth/bloc/password_cubit.dart';
@@ -135,8 +136,8 @@ final router = GoRouter(
         return BlocProvider(
           create: (context) => PasswordCubit(),
           child: NewPasswordScreen(
-                  username: param['username'] as String,
-                ),
+            username: param['username'] as String,
+          ),
         );
       },
     ),
@@ -243,4 +244,16 @@ final router = GoRouter(
       ),
     ),
   ],
+  redirect: (context, GoRouterState state) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+    String currentLocation = state.uri.toString();
+    if (currentLocation == '/' && token != null) {
+      return '/home';
+    }
+    if (currentLocation == '/' && token == null) {
+      return '/';
+    }
+    return null;
+  },
 );

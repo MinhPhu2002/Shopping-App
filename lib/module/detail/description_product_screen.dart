@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:readmore/readmore.dart';
 import 'package:testapp/common/model/product_model.dart';
@@ -10,6 +11,7 @@ import 'package:testapp/module/detail/bloc/product_details/product_details_cubit
 import 'package:testapp/module/detail/bloc/product_details/product_details_state.dart';
 import 'package:testapp/widget/circle_icon.dart';
 import 'package:testapp/widget/comment.dart';
+import 'package:testapp/widget/foot_page.dart';
 
 class DescriptionProductScreen extends StatelessWidget {
   const DescriptionProductScreen({super.key, required this.postId});
@@ -75,11 +77,66 @@ class DescriptionProductScreen extends StatelessWidget {
   }
 }
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
   final int postId;
   final ProductDetailsModel model;
 
-  const Body({super.key, required this.model, required this.postId});
+  Body({super.key, required this.model, required this.postId});
+
+  @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  int selectedSizeIndex = -1;
+  int selectedColorId = -1;
+  bool stockColor = false;
+  bool stockSize = false;
+  Widget numberItems() {
+    if (selectedColorId != -1 && selectedSizeIndex != -1) {
+      for (var variant in widget.model.variants) {
+        if (selectedColorId == variant.option_ids[0] &&
+            selectedSizeIndex == variant.option_ids[1]) {
+          if (variant.stock >= 5) {
+            return Row(
+              children: [
+                SvgPicture.asset(
+                  IconPath.infoCircle,
+                  color: Color.fromRGBO(143, 149, 158, 1),
+                ),
+                SizedBox(
+                  width: 4,
+                ),
+                Text(
+                  '${variant.stock.toString()} in stock',
+                  style: AppTextStyle.s13_w5
+                      .copyWith(color: Color.fromRGBO(143, 149, 158, 1)),
+                ),
+              ],
+            );
+          } else
+            return Row(
+              children: [
+                SvgPicture.asset(
+                  IconPath.infoCircle,
+                  color: Color.fromRGBO(198, 75, 77, 1),
+                ),
+                SizedBox(
+                  width: 4,
+                ),
+                Text(
+                  'Only ${variant.stock.toString()} left',
+                  style: AppTextStyle.s13_w5
+                      .copyWith(color: Color.fromRGBO(198, 75, 77, 1)),
+                ),
+              ],
+            );
+        }
+      }
+    }
+    return SizedBox();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -91,7 +148,7 @@ class Body extends StatelessWidget {
             child: Container(
               height: 347,
               child: Image.network(
-                model.imageUrl[0],
+                widget.model.imageUrl[0],
                 fit: BoxFit.fitHeight,
                 width: double.infinity,
               ),
@@ -110,7 +167,7 @@ class Body extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          model.title,
+                          widget.model.title,
                           style: AppTextStyle.s13_w4.copyWith(
                               color: const Color.fromRGBO(143, 149, 158, 1)),
                         ),
@@ -132,7 +189,7 @@ class Body extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          model.title,
+                          widget.model.title,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: AppTextStyle.s22_w6.copyWith(
@@ -140,7 +197,7 @@ class Body extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '\$' + model.price,
+                        '\$' + widget.model.price,
                         style: AppTextStyle.s22_w6.copyWith(
                             color: const Color.fromRGBO(29, 30, 32, 1)),
                       )
@@ -150,7 +207,7 @@ class Body extends StatelessWidget {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: model.imageUrl.map(
+                      children: widget.model.imageUrl.map(
                         (url) {
                           return Padding(
                             padding: const EdgeInsets.only(right: 9),
@@ -191,15 +248,87 @@ class Body extends StatelessWidget {
                   // ignore: prefer_const_constructors
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: const Row(
-                      children: [
-                        ProductSize(size: "S"),
-                        ProductSize(size: "M"),
-                        ProductSize(size: "L"),
-                        ProductSize(size: "Xl"),
-                        ProductSize(size: "2XL"),
-                        ProductSize(size: "3XL"),
-                      ],
+                    child: Row(
+                      children: widget.model.productSizes.map((productSize) {
+                        for (var variant in widget.model.variants) {
+                          if (selectedColorId == -1 &&
+                                  variant.option_ids.contains(productSize.id) &&
+                                  variant.stock != 0 ||
+                              selectedColorId != -1 &&
+                                  variant.option_ids.contains(productSize.id) &&
+                                  variant.option_ids
+                                      .contains(selectedColorId) &&
+                                  variant.stock != 0) {
+                            stockSize = true;
+                            break;
+                          }
+                          stockSize = false;
+                        }
+                        return ProductSize(
+                          size: productSize.name,
+                          ontap: () {
+                            setState(() {
+                              if (selectedSizeIndex != productSize.id)
+                                selectedSizeIndex = productSize.id;
+                              else
+                                selectedSizeIndex = -1;
+                            });
+                          },
+                          selectedIndex: selectedSizeIndex == productSize.id,
+                          stock: stockSize,
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Color",
+                        style: AppTextStyle.s17_w6.copyWith(
+                            color: const Color.fromRGBO(29, 30, 32, 1)),
+                      ),
+                      numberItems(),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  // ignore: prefer_const_constructors
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: widget.model.productColors.map((productcolor) {
+                        for (var variant in widget.model.variants) {
+                          if (selectedSizeIndex == -1 &&
+                                  variant.option_ids
+                                      .contains(productcolor.id) &&
+                                  variant.stock != 0 ||
+                              selectedSizeIndex != -1 &&
+                                  variant.option_ids
+                                      .contains(productcolor.id) &&
+                                  variant.stock != 0 &&
+                                  variant.option_ids
+                                      .contains(selectedSizeIndex)) {
+                            stockColor = true;
+                            break;
+                          }
+                          stockColor = false;
+                        }
+                        return ColorProduct(
+                          color: productcolor.colorCode,
+                          nameColor: productcolor.name,
+                          ontap: () {
+                            setState(() {
+                              if (selectedColorId != productcolor.id)
+                                selectedColorId = productcolor.id;
+                              else
+                                selectedColorId = -1;
+                            });
+                          },
+                          selectedIndex: selectedColorId == productcolor.id,
+                          stock: stockColor,
+                        );
+                      }).toList(),
                     ),
                   ),
                   const SizedBox(
@@ -211,7 +340,7 @@ class Body extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   ReadMoreText(
-                    model.description,
+                    widget.model.description,
                     textAlign: TextAlign.left,
                     trimMode: TrimMode.Line,
                     trimLines: 2,
@@ -240,7 +369,8 @@ class Body extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                          context.pushNamed('review', extra: {'id': postId});
+                          context.pushNamed('review',
+                              extra: {'id': widget.postId});
                         },
                         child: Text("View All",
                             style: AppTextStyle.s13_w4.copyWith(
@@ -260,6 +390,11 @@ class Body extends StatelessWidget {
               ratingScore: 4,
               comment:
                   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque malesuada eget vitae amet..."),
+          InkWell(
+            child: FootPage(
+              textfootpage: 'Add to Cart',
+            ),
+          ),
         ],
       ),
     );
@@ -288,25 +423,114 @@ class ProductInformation extends StatelessWidget {
   }
 }
 
-class ProductSize extends StatelessWidget {
+class ProductSize extends StatefulWidget {
   final String size;
+  final VoidCallback ontap;
+  final bool selectedIndex;
+  final bool stock;
+  const ProductSize(
+      {super.key,
+      required this.size,
+      required this.ontap,
+      required this.selectedIndex,
+      required this.stock});
 
-  const ProductSize({super.key, required this.size});
+  @override
+  State<ProductSize> createState() => _ProductSizeState();
+}
+
+class _ProductSizeState extends State<ProductSize> {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 9),
-      child: Container(
-        width: (MediaQuery.sizeOf(context).width - 76) / 5,
-        height: (MediaQuery.sizeOf(context).width - 76) / 5,
-        decoration: BoxDecoration(
-          color: const Color.fromRGBO(245, 246, 250, 1),
-          borderRadius: BorderRadius.circular(10),
+      child: GestureDetector(
+        onTap: () {
+          if (widget.stock) widget.ontap();
+        },
+        child: Container(
+          width: (MediaQuery.sizeOf(context).width - 76) / 5,
+          height: (MediaQuery.sizeOf(context).width - 76) / 5,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: widget.selectedIndex
+                  ? Color.fromRGBO(151, 117, 250, 1)
+                  : Colors.transparent,
+              width: widget.selectedIndex ? 2.0 : 1.0,
+            ),
+            color: const Color.fromRGBO(245, 246, 250, 1)
+                .withOpacity(widget.stock ? 1.0 : 0.4),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Center(
+            child: Text(
+              widget.size,
+              style: AppTextStyle.s17_w6.copyWith(
+                  color: Colors.black.withOpacity(widget.stock ? 1.0 : 0.4)),
+            ),
+          ),
         ),
-        child: Center(
-          child: Text(
-            size,
-            style: AppTextStyle.s17_w6.copyWith(color: Colors.black),
+      ),
+    );
+  }
+}
+
+Color hexToColor(String hexString) {
+  final buffer = StringBuffer();
+  if (hexString.length == 7) {
+    buffer.write('ff');
+    buffer.write(hexString.replaceFirst('#', ''));
+  }
+  return Color(int.parse(buffer.toString(), radix: 16));
+}
+
+Color bordercolor(String nameColor) {
+  if (nameColor.toLowerCase().contains('white'))
+    return Color.fromRGBO(222, 222, 222, 1);
+  else
+    return Colors.transparent;
+}
+
+class ColorProduct extends StatefulWidget {
+  final String color;
+  final String nameColor;
+  final VoidCallback ontap;
+  final bool selectedIndex;
+  final bool stock;
+  const ColorProduct(
+      {super.key,
+      required this.color,
+      required this.nameColor,
+      required this.ontap,
+      required this.selectedIndex,
+      required this.stock});
+
+  @override
+  State<ColorProduct> createState() => _ColorProductState();
+}
+
+class _ColorProductState extends State<ColorProduct> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 9),
+      child: GestureDetector(
+        onTap: () {
+          if (widget.stock) widget.ontap();
+        },
+        child: Container(
+          width: (MediaQuery.sizeOf(context).width - 76) / 5,
+          height: (MediaQuery.sizeOf(context).width - 76) / 5,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: widget.selectedIndex
+                  ? Color.fromRGBO(151, 117, 250, 1)
+                  : bordercolor(widget.nameColor),
+              width: widget.selectedIndex ? 2.0 : 1.0,
+            ),
+            color:
+                hexToColor(widget.color).withOpacity(widget.stock ? 1.0 : 0.4),
+            borderRadius: BorderRadius.circular(10),
           ),
         ),
       ),
