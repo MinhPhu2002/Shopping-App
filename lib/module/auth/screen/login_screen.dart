@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:testapp/core/app_authentication.dart';
 import 'package:testapp/core/constants/icon_path.dart';
+import 'package:testapp/core/theme/app_color_theme.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/auth/bloc/login_cubit.dart';
 import 'package:testapp/module/auth/bloc/login_state.dart';
 import 'package:testapp/widget/circle_icon.dart';
+import 'package:testapp/widget/credential.dart';
 import 'package:testapp/widget/foot_page.dart';
 import 'package:testapp/widget/switch_widget.dart';
 
@@ -40,17 +42,18 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
+    final AppColorTheme listColors = AppColorTheme.of(context);
     return (Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: listColors.background,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         leading: Padding(
           padding: const EdgeInsets.only(top: 5, left: 20),
           child: InkWell(
             child: CircleIcon(
                 iconname: IconPath.back,
-                colorCircle: const Color.fromRGBO(245, 246, 250, 1),
+                colorCircle: listColors.colorBox,
                 sizeIcon: const Size(25, 25),
                 sizeCircle: const Size(45, 45),
                 colorBorder: Colors.transparent),
@@ -64,15 +67,16 @@ class _LoginScreenState extends State<LoginScreen>
         children: [
           Column(
             children: [
-              const Text(
+              Text(
                 "Welcome",
-                style: AppTextStyle.s28_w6,
+                style:
+                    AppTextStyle.s28_w6.copyWith(color: listColors.textMeidum),
                 textAlign: TextAlign.center,
               ),
               Text(
                 "Please enter your data to continue",
-                style: AppTextStyle.s15_w4
-                    .copyWith(color: const Color.fromRGBO(143, 149, 158, 1)),
+                style:
+                    AppTextStyle.s15_w4.copyWith(color: listColors.textSmall),
                 textAlign: TextAlign.end,
               )
             ],
@@ -161,9 +165,10 @@ class _LoginScreenState extends State<LoginScreen>
                               style: AppTextStyle.s13_w4.copyWith(
                                   color:
                                       const Color.fromRGBO(143, 149, 158, 1))),
-                          const TextSpan(
+                          TextSpan(
                               text: "Term and Condition",
-                              style: AppTextStyle.s13_w5)
+                              style: AppTextStyle.s13_w5
+                                  .copyWith(color: listColors.textMeidum))
                         ])),
                   )
                 ],
@@ -219,36 +224,4 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   void didResetPasswordRequestAccessVertification() {}
-}
-
-class Credential extends StatelessWidget {
-  const Credential(
-      {super.key,
-      required this.credentials,
-      required this.obscureText,
-      required this.data});
-  final String credentials;
-  final bool obscureText;
-  final TextEditingController data;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(height: 8),
-          TextField(
-            controller: data,
-            decoration: InputDecoration(
-              border: const UnderlineInputBorder(),
-              labelText: credentials,
-            ),
-            obscureText: obscureText,
-          ),
-        ],
-      ),
-    );
-  }
 }

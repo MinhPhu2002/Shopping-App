@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:testapp/core/constants/image_path.dart';
+import 'package:testapp/core/theme/app_color_theme.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/auth/bloc/vertify_cubit.dart';
 import 'package:testapp/module/auth/bloc/vertify_state.dart';
@@ -69,18 +70,18 @@ class _VertificationCodeScreenState extends State<VertificationCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return (Scaffold(
-      backgroundColor: Colors.white,
+    final AppColorTheme listColors = AppColorTheme.of(context);
+    return Scaffold(
+      backgroundColor: listColors.background,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         leading: Padding(
           padding: const EdgeInsets.only(top: 5, left: 20),
           child: InkWell(
             child: CircleIcon(
                 iconname: IconPath.back,
-                colorCircle: Color.fromRGBO(245, 246, 250, 1),
+                colorCircle: listColors.colorBox,
                 sizeIcon: Size(25, 25),
                 sizeCircle: Size(45, 45),
                 colorBorder: Colors.transparent),
@@ -95,12 +96,13 @@ class _VertificationCodeScreenState extends State<VertificationCodeScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Column(
             children: [
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     "Verification Code",
-                    style: AppTextStyle.s28_w6,
+                    style: AppTextStyle.s28_w6
+                        .copyWith(color: listColors.textMeidum),
                   ),
                 ],
               ),
@@ -165,7 +167,8 @@ class _VertificationCodeScreenState extends State<VertificationCodeScreen> {
                   if (startTimer > 0)
                     TextSpan(
                       text: formatTimer(startTimer),
-                      style: AppTextStyle.s13_w5,
+                      style: AppTextStyle.s13_w5
+                          .copyWith(color: listColors.textMeidum),
                     ),
                   TextSpan(
                       text: " resend confirmation code.",
@@ -184,7 +187,7 @@ class _VertificationCodeScreenState extends State<VertificationCodeScreen> {
           ),
         ],
       ),
-    ));
+    );
   }
 }
 
@@ -212,17 +215,18 @@ class OtpInput extends StatelessWidget {
   const OtpInput({super.key, required this.otp});
   @override
   Widget build(BuildContext context) {
-    // TODO: implement createState
+    final AppColorTheme listColors = AppColorTheme.of(context);
     return PinCodeTextField(
+      textStyle: TextStyle(color: listColors.textMeidum),
       controller: otp,
       pinTheme: PinTheme(
         shape: PinCodeFieldShape.box,
         borderRadius: BorderRadius.circular(5),
         fieldHeight: 98,
         fieldWidth: 77 * MediaQuery.sizeOf(context).width / 375,
-        activeFillColor: const Color.fromRGBO(231, 232, 234, 1),
-        activeColor: const Color.fromRGBO(231, 232, 234, 1),
-        inactiveColor: const Color.fromRGBO(231, 232, 234, 1),
+        activeFillColor: listColors.textMeidum,
+        activeColor: listColors.textMeidum,
+        inactiveColor: listColors.textMeidum,
       ),
       length: 4,
       appContext: context,

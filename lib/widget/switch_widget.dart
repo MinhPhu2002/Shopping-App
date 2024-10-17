@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:testapp/core/theme/app_color_theme.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 
 class SwitchWidget extends StatelessWidget {
@@ -8,6 +9,7 @@ class SwitchWidget extends StatelessWidget {
   const SwitchWidget({super.key, required this.nameSwitch});
   @override
   Widget build(BuildContext context) {
+    final AppColorTheme listColors = AppColorTheme.of(context);
     // TODO: implement build
     bool light = true;
     return Row(
@@ -15,7 +17,7 @@ class SwitchWidget extends StatelessWidget {
       children: [
         Text(
           nameSwitch,
-          style: AppTextStyle.s15_w5,
+          style: AppTextStyle.s15_w5.copyWith(color: listColors.textMeidum),
         ),
         Ink(
           width: 45,

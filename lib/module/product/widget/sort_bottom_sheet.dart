@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:testapp/core/constants/icon_path.dart';
+import 'package:testapp/core/theme/app_color_theme.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/core/values/sort_product_by.dart';
 
@@ -29,24 +30,26 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final AppColorTheme listColors = AppColorTheme.of(context);
     return Container(
       width: MediaQuery.sizeOf(context).width,
       height: 349,
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(20)),
+          color: listColors.background,
+          borderRadius: BorderRadius.circular(20)),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Text(
               'Sort',
-              style: AppTextStyle.s17_w5.copyWith(color: Colors.black),
+              style: AppTextStyle.s17_w5.copyWith(color: listColors.textMeidum),
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
             ...SortBottomSheet.sortOptions.entries
                 .map(
                   (e) => Container(
@@ -54,19 +57,19 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
                     height: 48,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Color.fromRGBO(245, 246, 250, 1)),
+                        color: listColors.colorBox),
                     child: sortSelect(e.value, e.key),
                   ),
                 )
                 .expand(
                   (element) => [
                     element,
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     )
                   ],
                 ),
-            SizedBox(
+            const SizedBox(
               height: 32 - 10,
             ),
             Row(
@@ -80,13 +83,13 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
                     height: 46,
                     width: (MediaQuery.sizeOf(context).width - 70) / 2,
                     decoration: BoxDecoration(
-                        color: const Color.fromRGBO(245, 246, 250, 1),
+                        color: listColors.colorBox,
                         borderRadius: BorderRadius.circular(10)),
                     child: Center(
                       child: Text(
                         "Cancel",
                         style: AppTextStyle.s17_w5
-                            .copyWith(color: Color.fromRGBO(143, 149, 158, 1)),
+                            .copyWith(color: listColors.textSmall),
                       ),
                     ),
                   ),
@@ -109,14 +112,14 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
                       child: Text(
                         "Confirms",
                         style: AppTextStyle.s17_w5
-                            .copyWith(color: Color.fromRGBO(255, 255, 255, 1)),
+                            .copyWith(color: listColors.textBottom),
                       ),
                     ),
                   ),
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             )
           ],
@@ -126,6 +129,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
   }
 
   Widget sortSelect(String title, SortProductBy value) {
+    final AppColorTheme listColors = AppColorTheme.of(context);
     return ListTile(
       onTap: () {
         setState(() {
@@ -137,7 +141,10 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
       },
       title: Row(
         children: [
-          Text(title),
+          Text(
+            title,
+            style: TextStyle(color: listColors.textMeidum),
+          ),
           const Spacer(),
           SvgPicture.asset(
               sortBy == value ? IconPath.check : IconPath.notcheck),

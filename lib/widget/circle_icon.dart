@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:testapp/core/theme/app_color_theme.dart';
 
 class CircleIcon extends StatelessWidget {
   final Size sizeIcon;
@@ -17,6 +18,8 @@ class CircleIcon extends StatelessWidget {
       required this.colorBorder});
   @override
   Widget build(BuildContext context) {
+    final AppColorTheme listColors =
+        Theme.of(context).extension<AppColorTheme>()!;
     return Container(
       width: sizeCircle.width,
       height: sizeCircle.height,
@@ -25,7 +28,7 @@ class CircleIcon extends StatelessWidget {
           iconname,
           width: sizeIcon.width,
           height: sizeIcon.height,
-          color: Colors.black,
+          color: listColors.textMeidum,
           fit: BoxFit.scaleDown,
         ),
       ),

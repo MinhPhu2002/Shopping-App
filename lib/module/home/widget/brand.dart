@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
+import 'package:testapp/core/theme/app_color_theme.dart';
 
 class Brand extends StatelessWidget {
   final String nameBrand;
@@ -10,6 +11,8 @@ class Brand extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppColorTheme listColors =
+        Theme.of(context).extension<AppColorTheme>()!;
     return Padding(
       padding: const EdgeInsets.only(right: 10),
       child: InkWell(
@@ -19,7 +22,7 @@ class Brand extends StatelessWidget {
         },
         child: Ink(
           decoration: BoxDecoration(
-            color: const Color.fromRGBO(245, 246, 250, 1),
+            color: listColors.colorBox,
             borderRadius: BorderRadius.circular(10),
           ),
           height: 50,
@@ -31,7 +34,8 @@ class Brand extends StatelessWidget {
               ),
               Text(
                 nameBrand,
-                style: AppTextStyle.s15_w5,
+                style:
+                    AppTextStyle.s15_w5.copyWith(color: listColors.textMeidum),
               ),
               const SizedBox(
                 width: 10,

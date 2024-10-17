@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:testapp/core/constants/icon_path.dart';
+import 'package:testapp/core/theme/app_color_theme.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/widget/circle_icon.dart';
 
@@ -46,17 +45,19 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final AppColorTheme listColors = AppColorTheme.of(context);
     return Container(
       width: MediaQuery.sizeOf(context).width,
       height: 325,
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(20)),
+          color: listColors.background,
+          borderRadius: BorderRadius.circular(20)),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 28,
             ),
             Row(
@@ -64,13 +65,14 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               children: [
                 Text(
                   'Filter',
-                  style: AppTextStyle.s17_w5.copyWith(color: Colors.black),
+                  style: AppTextStyle.s17_w5
+                      .copyWith(color: listColors.textMeidum),
                 ),
                 InkWell(
                   onTap: () {
                     priceFromController?.clear();
                     priceToController?.clear();
-                    widget.onchange?.call(
+                    widget.onchange.call(
                         priceFromController?.text, priceToController?.text);
                     Navigator.pop(context);
                   },
@@ -79,24 +81,24 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     height: 37,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Color.fromRGBO(0, 255, 234, 1)),
+                        color: const Color.fromRGBO(0, 255, 234, 1)),
                     child: Center(
                       child: Text(
                         'Reset',
-                        style:
-                            AppTextStyle.s15_w5.copyWith(color: Colors.black),
+                        style: AppTextStyle.s15_w5
+                            .copyWith(color: listColors.textBottom),
                       ),
                     ),
                   ),
                 )
               ],
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             Text(
               'Price Range',
-              style: AppTextStyle.s17_w5.copyWith(color: Colors.black),
+              style: AppTextStyle.s17_w5.copyWith(color: listColors.textMeidum),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -105,18 +107,17 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   height: 50,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Color.fromRGBO(245, 246, 250, 1)),
+                      color: listColors.colorBox),
                   child: TextField(
                     keyboardType: TextInputType.number,
                     controller: priceFromController,
                     decoration: InputDecoration(
                       hintText: "From",
-                      fillColor: Color.fromRGBO(142, 142, 142, 1),
+                      fillColor: listColors.textSmall,
                       border:
                           const OutlineInputBorder(borderSide: BorderSide.none),
-                      hintStyle: const TextStyle(
-                          fontSize: 17,
-                          color: Color.fromRGBO(143, 149, 158, 1)),
+                      hintStyle:
+                          TextStyle(fontSize: 17, color: listColors.textSmall),
                     ),
                   ),
                 ),
@@ -125,16 +126,15 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   height: 50,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Color.fromRGBO(245, 246, 250, 1)),
+                      color: listColors.colorBox),
                   child: TextField(
                     keyboardType: TextInputType.number,
                     controller: priceToController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: "To",
                       fillColor: Color.fromRGBO(245, 246, 250, 1),
-                      border:
-                          const OutlineInputBorder(borderSide: BorderSide.none),
-                      hintStyle: const TextStyle(
+                      border: OutlineInputBorder(borderSide: BorderSide.none),
+                      hintStyle: TextStyle(
                           fontSize: 17,
                           color: Color.fromRGBO(143, 149, 158, 1)),
                     ),
@@ -142,7 +142,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 14,
             ),
             if (priceFromController?.text.isNotEmpty == true ||
@@ -153,9 +153,9 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   Text(
                     'From ${priceFromController?.text}\$ to ${priceToController?.text}\$',
                     style: AppTextStyle.s11_w5
-                        .copyWith(color: Color.fromRGBO(143, 149, 158, 1)),
+                        .copyWith(color: listColors.textSmall),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   InkWell(
@@ -165,15 +165,15 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     },
                     child: CircleIcon(
                       iconname: IconPath.delete,
-                      colorCircle: Colors.white,
-                      sizeIcon: Size(15, 15),
-                      sizeCircle: Size(25, 25),
-                      colorBorder: Color.fromRGBO(222, 222, 222, 1),
+                      colorCircle: listColors.colorBox,
+                      sizeIcon: const Size(15, 15),
+                      sizeCircle: const Size(25, 25),
+                      colorBorder: listColors.textSmall,
                     ),
                   ),
                 ],
               ),
-            Spacer(),
+            const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -185,13 +185,13 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     height: 46,
                     width: (MediaQuery.sizeOf(context).width - 70) / 2,
                     decoration: BoxDecoration(
-                        color: const Color.fromRGBO(245, 246, 250, 1),
+                        color: listColors.colorBox,
                         borderRadius: BorderRadius.circular(10)),
                     child: Center(
                       child: Text(
                         "Cancel",
                         style: AppTextStyle.s17_w5
-                            .copyWith(color: Color.fromRGBO(143, 149, 158, 1)),
+                            .copyWith(color: listColors.textSmall),
                       ),
                     ),
                   ),
@@ -201,7 +201,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 ),
                 InkWell(
                   onTap: () {
-                    widget.onchange?.call(
+                    widget.onchange.call(
                         priceFromController?.text, priceToController?.text);
                     Navigator.pop(context);
                   },
@@ -215,14 +215,14 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       child: Text(
                         "Confirms",
                         style: AppTextStyle.s17_w5
-                            .copyWith(color: Color.fromRGBO(255, 255, 255, 1)),
+                            .copyWith(color: listColors.textBottom),
                       ),
                     ),
                   ),
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
           ],

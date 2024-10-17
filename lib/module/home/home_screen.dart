@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:testapp/core/app_authentication.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
+import 'package:testapp/core/theme/app_color_theme.dart';
 import 'package:testapp/module/home/bloc/brands/brands_cubit.dart';
 import 'package:testapp/module/home/bloc/brands/brands_state.dart';
 import 'package:testapp/module/home/bloc/products/products_cubit.dart';
@@ -37,10 +38,12 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    final AppColorTheme listColors =
+        Theme.of(context).extension<AppColorTheme>()!;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: listColors.background,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: listColors.background,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         leading: Builder(builder: (context) {
@@ -48,11 +51,12 @@ class _HomeScreenState extends State<HomeScreen>
             padding: const EdgeInsets.only(left: 20),
             onPressed: () => Scaffold.of(context).openDrawer(),
             icon: CircleIcon(
-                iconname: IconPath.menu,
-                colorCircle: const Color.fromRGBO(245, 246, 250, 1),
-                sizeIcon: const Size(25, 25),
-                sizeCircle: const Size(45, 45),
-                colorBorder: Colors.transparent),
+              iconname: IconPath.menu,
+              colorCircle: listColors.colorBox!,
+              sizeIcon: const Size(25, 25),
+              sizeCircle: const Size(45, 45),
+              colorBorder: Colors.transparent,
+            ),
           );
         }),
         actions: [
@@ -62,11 +66,12 @@ class _HomeScreenState extends State<HomeScreen>
                 context.pushNamed('cart');
               },
               icon: CircleIcon(
-                  iconname: IconPath.bag,
-                  colorCircle: const Color.fromRGBO(245, 246, 250, 1),
-                  sizeIcon: const Size(25, 25),
-                  sizeCircle: const Size(45, 45),
-                  colorBorder: Colors.transparent)),
+                iconname: IconPath.bag,
+                colorCircle: listColors.colorBox!,
+                sizeIcon: const Size(25, 25),
+                sizeCircle: const Size(45, 45),
+                colorBorder: Colors.transparent,
+              )),
           const SizedBox(
             width: 20,
           )
@@ -82,11 +87,12 @@ class _HomeScreenState extends State<HomeScreen>
               const SizedBox(
                 height: 20,
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(left: 20),
                 child: Text(
                   "Hemendra",
-                  style: AppTextStyle.s28_w6,
+                  style: AppTextStyle.s28_w6
+                      .copyWith(color: listColors.textMeidum),
                 ),
               ),
               const SizedBox(
@@ -98,8 +104,8 @@ class _HomeScreenState extends State<HomeScreen>
                   children: [
                     Text(
                       "Welcome to Laza.",
-                      style: AppTextStyle.s15_w4.copyWith(
-                          color: const Color.fromRGBO(143, 149, 158, 1)),
+                      style: AppTextStyle.s15_w4
+                          .copyWith(color: listColors.textSmall),
                     ),
                   ],
                 ),
@@ -250,6 +256,8 @@ class ListMenu extends StatelessWidget {
   const ListMenu({super.key, required this.icon, required this.name});
   @override
   Widget build(BuildContext context) {
+    final AppColorTheme listColors =
+        Theme.of(context).extension<AppColorTheme>()!;
     return Container(
       width: 215,
       padding: const EdgeInsets.only(top: 5),
@@ -258,7 +266,7 @@ class ListMenu extends StatelessWidget {
         children: [
           SvgPicture.asset(
             icon,
-            color: Colors.black,
+            color: listColors.textMeidum,
             width: 25,
             height: 25,
             fit: BoxFit.scaleDown,
@@ -266,8 +274,7 @@ class ListMenu extends StatelessWidget {
           const SizedBox(width: 10),
           Text(
             name,
-            style: AppTextStyle.s15_w4
-                .copyWith(color: const Color.fromRGBO(29, 30, 32, 1)),
+            style: AppTextStyle.s15_w4.copyWith(color: listColors.textMeidum),
           )
         ],
       ),

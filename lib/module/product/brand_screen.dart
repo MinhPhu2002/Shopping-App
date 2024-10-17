@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:testapp/common/model/filter_request_model.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
+import 'package:testapp/core/theme/app_color_theme.dart';
 import 'package:testapp/core/values/sort_product_by.dart';
 import 'package:testapp/module/product/bloc/brand_details/brand_details_cubit.dart';
 import 'package:testapp/module/product/bloc/brand_details/brand_details_state.dart';
@@ -50,10 +51,11 @@ class _BrandScreenState extends State<BrandScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final AppColorTheme listColors = AppColorTheme.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: listColors.background,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: listColors.background,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         leading: Padding(
@@ -61,7 +63,7 @@ class _BrandScreenState extends State<BrandScreen> {
           child: InkWell(
             child: CircleIcon(
               iconname: IconPath.back,
-              colorCircle: const Color.fromRGBO(245, 246, 250, 1),
+              colorCircle: listColors.colorBox!,
               sizeIcon: const Size(25, 25),
               sizeCircle: const Size(45, 45),
               colorBorder: Colors.transparent,
@@ -79,13 +81,14 @@ class _BrandScreenState extends State<BrandScreen> {
                 height: 45,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Color.fromRGBO(245, 246, 250, 1)),
+                    color: listColors.colorBox),
                 child: Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
                       widget.nameBrand,
-                      style: AppTextStyle.s17_w6,
+                      style: AppTextStyle.s17_w6
+                          .copyWith(color: listColors.textMeidum),
                     ),
                   ),
                 )),
@@ -99,7 +102,7 @@ class _BrandScreenState extends State<BrandScreen> {
               },
               icon: CircleIcon(
                   iconname: IconPath.bag,
-                  colorCircle: Color.fromRGBO(245, 246, 250, 1),
+                  colorCircle: listColors.colorBox!,
                   sizeIcon: Size(25, 25),
                   sizeCircle: Size(45, 45),
                   colorBorder: Colors.transparent)),
@@ -133,12 +136,13 @@ class _BrandScreenState extends State<BrandScreen> {
                         children: [
                           Text(
                             "$count Items",
-                            style: AppTextStyle.s17_w5,
+                            style: AppTextStyle.s17_w5
+                                .copyWith(color: listColors.textMeidum),
                           ),
                           Text(
                             "Available in stock",
-                            style: AppTextStyle.s15_w4.copyWith(
-                                color: Color.fromRGBO(143, 149, 158, 1)),
+                            style: AppTextStyle.s15_w4
+                                .copyWith(color: listColors.textSmall),
                           )
                         ],
                       ),
@@ -152,9 +156,12 @@ class _BrandScreenState extends State<BrandScreen> {
                           height: 37,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Color.fromRGBO(245, 246, 250, 1)),
+                              color: listColors.colorBox),
                           child: Center(
-                            child: SvgPicture.asset(IconPath.filler),
+                            child: SvgPicture.asset(
+                              IconPath.filler,
+                              color: listColors.textMeidum,
+                            ),
                           ),
                         ),
                       ),
@@ -170,18 +177,22 @@ class _BrandScreenState extends State<BrandScreen> {
                           height: 37,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Color.fromRGBO(245, 246, 250, 1)),
+                              color: listColors.colorBox),
                           child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                SvgPicture.asset(IconPath.sort),
+                                SvgPicture.asset(
+                                  IconPath.sort,
+                                  color: listColors.textMeidum,
+                                ),
                                 SizedBox(
                                   width: 5,
                                 ),
                                 Text(
                                   "Sort",
-                                  style: AppTextStyle.s15_w5,
+                                  style: AppTextStyle.s15_w5
+                                      .copyWith(color: listColors.textMeidum),
                                 )
                               ],
                             ),
@@ -262,7 +273,7 @@ class _BrandScreenState extends State<BrandScreen> {
   }
 
   void showBottomSheetSort() async {
-    final result = await showModalBottomSheet<SortProductBy>(
+    await showModalBottomSheet<SortProductBy>(
         context: context,
         builder: (context) {
           return SortBottomSheet(
@@ -277,7 +288,7 @@ class _BrandScreenState extends State<BrandScreen> {
   }
 
   void showBotomSheetFilter() async {
-    final result = await showModalBottomSheet(
+    await showModalBottomSheet(
         isScrollControlled: true,
         context: context,
         builder: (context) {

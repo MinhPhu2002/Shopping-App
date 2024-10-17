@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testapp/core/theme/app_color_theme.dart';
 
 class BottomActionButton extends StatelessWidget {
   final String textfootpage;
@@ -8,6 +9,7 @@ class BottomActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppColorTheme listColors = AppColorTheme.of(context);
     return InkWell(
       onTap: onTap,
       child: Ink(
@@ -17,7 +19,7 @@ class BottomActionButton extends StatelessWidget {
         child: Center(
           child: Text(
             textfootpage,
-            style: TextStyle(color: Colors.white, fontSize: 17),
+            style: TextStyle(color: listColors.textBottom, fontSize: 17),
           ),
         ),
       ),

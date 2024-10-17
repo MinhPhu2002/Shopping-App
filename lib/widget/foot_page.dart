@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:testapp/core/theme/app_color_theme.dart';
 
 /// This class represents a Flutter widget for a foot page in a mobile application.
 class FootPage extends StatelessWidget {
@@ -9,6 +10,7 @@ class FootPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppColorTheme listColors = AppColorTheme.of(context);
     return Ink(
       width: MediaQuery.sizeOf(context).width,
       color: const Color.fromRGBO(151, 117, 250, 1),
@@ -16,7 +18,7 @@ class FootPage extends StatelessWidget {
       child: Center(
         child: Text(
           textfootpage,
-          style: TextStyle(color: Colors.white, fontSize: 17),
+          style: TextStyle(color: listColors.textBottom, fontSize: 17),
         ),
       ),
     );

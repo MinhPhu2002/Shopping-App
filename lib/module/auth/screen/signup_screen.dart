@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:testapp/core/constants/icon_path.dart';
+import 'package:testapp/core/theme/app_color_theme.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/auth/bloc/register_cubit.dart';
 import 'package:testapp/module/auth/bloc/register_state.dart';
@@ -29,14 +30,12 @@ class _SignupScreenState extends State<SignupScreen> {
   final GlobalKey<FormFieldState> key = GlobalKey();
   @override
   void initState() {
-    // TODO: implement initState
     register = context.read<RegisterCubit>();
     super.initState();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _userNameController.dispose();
     _passWordController.dispose();
     _emailController.dispose();
@@ -46,10 +45,10 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     final double scaleHeight = MediaQuery.sizeOf(context).height / 812;
-    // TODO: implement build
+    final AppColorTheme listColors = AppColorTheme.of(context);
     return WillUnfocusFormScope(
       child: Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: listColors.background,
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
@@ -64,9 +63,9 @@ class _SignupScreenState extends State<SignupScreen> {
                 padding: const EdgeInsets.only(top: 5, left: 20),
                 child: CircleIcon(
                     iconname: IconPath.back,
-                    colorCircle: Color.fromRGBO(245, 246, 250, 1),
-                    sizeIcon: Size(25, 25),
-                    sizeCircle: Size(45, 45),
+                    colorCircle: listColors.colorBox,
+                    sizeIcon: const Size(25, 25),
+                    sizeCircle: const Size(45, 45),
                     colorBorder: Colors.transparent),
               ),
             ),
@@ -78,12 +77,13 @@ class _SignupScreenState extends State<SignupScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           "Sign Up",
-                          style: AppTextStyle.s28_w6,
+                          style: AppTextStyle.s28_w6
+                              .copyWith(color: listColors.textMeidum),
                         ),
                       ],
                     ),
@@ -97,7 +97,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               checkExist: register.checkUsernNameExist,
                               label: 'Username',
                               existsMessage: 'UserName already exists'),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           CustomTextFormField(
@@ -112,7 +112,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             borderColor: Colors.grey,
                             obscureText: true,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           UniqueValueField(
@@ -126,7 +126,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               return null;
                             },
                           ),
-                          Padding(
+                          const Padding(
                             padding: EdgeInsets.symmetric(
                                 vertical: 40, horizontal: 20),
                             child: SwitchWidget(nameSwitch: "Remember me"),
@@ -136,7 +136,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               if (state is RegisterLoadingInProgress) {
                                 showDialog(
                                   context: context,
-                                  builder: (context) => Center(
+                                  builder: (context) => const Center(
                                       child: CircularProgressIndicator()),
                                 );
                               } else if (state is RegisterSuccess) {
@@ -149,7 +149,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 );
                               }
                             },
-                            child: SizedBox(),
+                            child: const SizedBox(),
                           )
                         ],
                       ),
@@ -256,9 +256,12 @@ class CustomTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppColorTheme listColors = AppColorTheme.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: TextFormField(
+        style: TextStyle(color: listColors.textMeidum),
+        cursorColor: listColors.textMeidum,
         textInputAction: TextInputAction.done,
         focusNode: focusNode,
         key: formKey,
@@ -269,10 +272,15 @@ class CustomTextFormField extends StatelessWidget {
         decoration: InputDecoration(
             border: const UnderlineInputBorder(),
             labelText: label,
+            focusColor: listColors.textMeidum,
+            labelStyle: TextStyle(color: listColors.textMeidum),
+            hintStyle: TextStyle(color: listColors.textMeidum),
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: borderColor),
             ),
-            errorBorder: UnderlineInputBorder(
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: listColors.textMeidum)),
+            errorBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.red))),
         obscureText: obscureText,
       ),

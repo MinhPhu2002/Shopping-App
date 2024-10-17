@@ -7,6 +7,7 @@ import 'package:testapp/common/model/product_model.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/constants/product_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
+import 'package:testapp/core/theme/app_color_theme.dart';
 import 'package:testapp/module/detail/bloc/product_details/product_details_cubit.dart';
 import 'package:testapp/module/detail/bloc/product_details/product_details_state.dart';
 import 'package:testapp/widget/circle_icon.dart';
@@ -19,7 +20,8 @@ class DescriptionProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    final AppColorTheme listColors =
+        Theme.of(context).extension<AppColorTheme>()!;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -31,7 +33,7 @@ class DescriptionProductScreen extends StatelessWidget {
           child: InkWell(
             child: CircleIcon(
                 iconname: IconPath.back,
-                colorCircle: Color.fromRGBO(245, 246, 250, 1),
+                colorCircle: listColors.colorBox!,
                 sizeIcon: const Size(25, 25),
                 sizeCircle: const Size(45, 45),
                 colorBorder: Colors.transparent),
@@ -47,7 +49,7 @@ class DescriptionProductScreen extends StatelessWidget {
             },
             icon: CircleIcon(
                 iconname: IconPath.bag,
-                colorCircle: Color.fromRGBO(245, 246, 250, 1),
+                colorCircle: listColors.colorBox!,
                 sizeIcon: const Size(25, 25),
                 sizeCircle: const Size(45, 45),
                 colorBorder: Colors.transparent),
@@ -57,11 +59,11 @@ class DescriptionProductScreen extends StatelessWidget {
           )
         ],
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: listColors.background,
       body: BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
         builder: (context, state) {
           if (state is ProductDetailsLoadingInProgress) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (state is ProductDetailsLoadingError) {
             return Center(child: Text(state.errorMessage));
@@ -95,6 +97,7 @@ class _BodyState extends State<Body> {
   bool stockColor = false;
   bool stockSize = false;
   bool defaultVariant = true;
+  late String selectedImage;
   Widget numberItems() {
     for (var variant in widget.model.variants) {
       if (variant.option_ids.contains(selectedColorId) &&
@@ -104,15 +107,15 @@ class _BodyState extends State<Body> {
             children: [
               SvgPicture.asset(
                 IconPath.infoCircle,
-                color: Color.fromRGBO(143, 149, 158, 1),
+                color: const Color.fromRGBO(143, 149, 158, 1),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 4,
               ),
               Text(
                 '${variant.stock.toString()} in stock',
                 style: AppTextStyle.s13_w5
-                    .copyWith(color: Color.fromRGBO(143, 149, 158, 1)),
+                    .copyWith(color: const Color.fromRGBO(143, 149, 158, 1)),
               ),
             ],
           );
@@ -121,22 +124,22 @@ class _BodyState extends State<Body> {
             children: [
               SvgPicture.asset(
                 IconPath.infoCircle,
-                color: Color.fromRGBO(198, 75, 77, 1),
+                color: const Color.fromRGBO(198, 75, 77, 1),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 4,
               ),
               Text(
                 'Only ${variant.stock.toString()} left',
                 style: AppTextStyle.s13_w5
-                    .copyWith(color: Color.fromRGBO(198, 75, 77, 1)),
+                    .copyWith(color: const Color.fromRGBO(198, 75, 77, 1)),
               ),
             ],
           );
         }
       }
     }
-    return SizedBox();
+    return const SizedBox();
   }
 
   void _setdata() {
@@ -165,21 +168,25 @@ class _BodyState extends State<Body> {
 
   @override
   void initState() {
+    super.initState();
     _setdata();
+    selectedImage = widget.model.imageUrl[0];
   }
 
   @override
   Widget build(BuildContext context) {
+    final AppColorTheme listColors =
+        Theme.of(context).extension<AppColorTheme>()!;
     return SingleChildScrollView(
       child: Column(
         children: [
-          ColoredBox(color: Color.fromRGBO(245, 246, 250, 1)),
+          const ColoredBox(color: Color.fromRGBO(245, 246, 250, 1)),
           Padding(
-            padding: EdgeInsets.only(top: 31),
+            padding: const EdgeInsets.only(top: 31),
             child: Container(
               height: 347,
               child: Image.network(
-                widget.model.imageUrl[0],
+                selectedImage,
                 fit: BoxFit.fitHeight,
                 width: double.infinity,
               ),
@@ -199,8 +206,8 @@ class _BodyState extends State<Body> {
                       Expanded(
                         child: Text(
                           widget.model.title,
-                          style: AppTextStyle.s13_w4.copyWith(
-                              color: const Color.fromRGBO(143, 149, 158, 1)),
+                          style: AppTextStyle.s13_w4
+                              .copyWith(color: listColors.textSmall),
                         ),
                       ),
                       const SizedBox(
@@ -208,8 +215,8 @@ class _BodyState extends State<Body> {
                       ),
                       Text(
                         "Price",
-                        style: AppTextStyle.s13_w4.copyWith(
-                            color: const Color.fromRGBO(143, 149, 158, 1)),
+                        style: AppTextStyle.s13_w4
+                            .copyWith(color: listColors.textSmall),
                       )
                     ],
                   ),
@@ -223,14 +230,14 @@ class _BodyState extends State<Body> {
                           widget.model.title,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: AppTextStyle.s22_w6.copyWith(
-                              color: const Color.fromRGBO(29, 30, 32, 1)),
+                          style: AppTextStyle.s22_w6
+                              .copyWith(color: listColors.textMeidum),
                         ),
                       ),
                       Text(
                         '\$' + widget.model.price,
-                        style: AppTextStyle.s22_w6.copyWith(
-                            color: const Color.fromRGBO(29, 30, 32, 1)),
+                        style: AppTextStyle.s22_w6
+                            .copyWith(color: listColors.textSmall),
                       )
                     ],
                   ),
@@ -242,14 +249,28 @@ class _BodyState extends State<Body> {
                         (url) {
                           return Padding(
                             padding: const EdgeInsets.only(right: 9),
-                            child: Container(
-                              clipBehavior: Clip.antiAlias,
-                              width: 77,
-                              height: 77,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Image.network(
-                                url,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selectedImage = url;
+                                });
+                              },
+                              child: Container(
+                                clipBehavior: Clip.antiAlias,
+                                width: 77,
+                                height: 77,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      width: 2,
+                                      color: url == selectedImage
+                                          ? const Color.fromRGBO(
+                                              151, 117, 250, 1)
+                                          : Colors.transparent,
+                                    )),
+                                child: Image.network(
+                                  url,
+                                ),
                               ),
                             ),
                           );
@@ -265,13 +286,13 @@ class _BodyState extends State<Body> {
                     children: [
                       Text(
                         "Size",
-                        style: AppTextStyle.s17_w6.copyWith(
-                            color: const Color.fromRGBO(29, 30, 32, 1)),
+                        style: AppTextStyle.s17_w6
+                            .copyWith(color: listColors.textMeidum),
                       ),
                       Text(
                         "Size Guide ",
-                        style: AppTextStyle.s15_w4.copyWith(
-                            color: const Color.fromRGBO(143, 149, 158, 1)),
+                        style: AppTextStyle.s15_w4
+                            .copyWith(color: listColors.textSmall),
                       )
                     ],
                   ),
@@ -303,8 +324,8 @@ class _BodyState extends State<Body> {
                     children: [
                       Text(
                         "Color",
-                        style: AppTextStyle.s17_w6.copyWith(
-                            color: const Color.fromRGBO(29, 30, 32, 1)),
+                        style: AppTextStyle.s17_w6
+                            .copyWith(color: listColors.textMeidum),
                       ),
                       numberItems(),
                     ],
@@ -337,7 +358,8 @@ class _BodyState extends State<Body> {
                   ),
                   Text(
                     'Description',
-                    style: AppTextStyle.s17_w6,
+                    style: AppTextStyle.s17_w6
+                        .copyWith(color: listColors.textMeidum),
                   ),
                   const SizedBox(height: 10),
                   ReadMoreText(
@@ -346,15 +368,15 @@ class _BodyState extends State<Body> {
                     trimMode: TrimMode.Line,
                     trimLines: 2,
                     style: AppTextStyle.s15_w4.copyWith(
-                      color: const Color.fromRGBO(143, 149, 158, 1),
+                      color: listColors.textSmall,
                     ),
                     colorClickableText: Colors.black,
                     trimCollapsedText: 'Read more',
                     trimExpandedText: 'Show less',
-                    lessStyle:
-                        AppTextStyle.s15_w6.copyWith(color: Colors.black),
-                    moreStyle:
-                        AppTextStyle.s15_w6.copyWith(color: Colors.black),
+                    lessStyle: AppTextStyle.s15_w6
+                        .copyWith(color: listColors.textMeidum),
+                    moreStyle: AppTextStyle.s15_w6
+                        .copyWith(color: listColors.textMeidum),
                   ),
 
                   const SizedBox(
@@ -365,8 +387,8 @@ class _BodyState extends State<Body> {
                     children: [
                       Text(
                         "Review",
-                        style: AppTextStyle.s17_w6.copyWith(
-                            color: const Color.fromRGBO(29, 30, 32, 1)),
+                        style: AppTextStyle.s17_w6
+                            .copyWith(color: listColors.textMeidum),
                       ),
                       InkWell(
                         onTap: () {
@@ -375,7 +397,7 @@ class _BodyState extends State<Body> {
                         },
                         child: Text("View All",
                             style: AppTextStyle.s13_w4.copyWith(
-                              color: const Color.fromRGBO(143, 149, 158, 1),
+                              color: listColors.textSmall,
                             )),
                       )
                     ],
@@ -391,7 +413,7 @@ class _BodyState extends State<Body> {
               ratingScore: 4,
               comment:
                   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque malesuada eget vitae amet..."),
-          InkWell(
+          const InkWell(
             child: FootPage(
               textfootpage: 'Add to Cart',
             ),
@@ -443,6 +465,7 @@ class ProductSize extends StatefulWidget {
 class _ProductSizeState extends State<ProductSize> {
   @override
   Widget build(BuildContext context) {
+    final AppColorTheme listColors = AppColorTheme.of(context);
     return Padding(
       padding: const EdgeInsets.only(right: 9),
       child: GestureDetector(
@@ -455,19 +478,19 @@ class _ProductSizeState extends State<ProductSize> {
           decoration: BoxDecoration(
             border: Border.all(
               color: widget.selectedIndex
-                  ? Color.fromRGBO(151, 117, 250, 1)
+                  ? const Color.fromRGBO(151, 117, 250, 1)
                   : Colors.transparent,
               width: widget.selectedIndex ? 2.0 : 1.0,
             ),
-            color: const Color.fromRGBO(245, 246, 250, 1)
-                .withOpacity(widget.stock ? 1.0 : 0.4),
+            color: listColors.colorBox.withOpacity(widget.stock ? 1.0 : 0.4),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Center(
             child: Text(
               widget.size,
               style: AppTextStyle.s17_w6.copyWith(
-                  color: Colors.black.withOpacity(widget.stock ? 1.0 : 0.4)),
+                  color: listColors.textMeidum
+                      .withOpacity(widget.stock ? 1.0 : 0.4)),
             ),
           ),
         ),
@@ -487,7 +510,7 @@ Color hexToColor(String hexString) {
 
 Color bordercolor(String nameColor) {
   if (nameColor.toLowerCase().contains('white')) {
-    return Color.fromRGBO(222, 222, 222, 1);
+    return const Color.fromRGBO(222, 222, 222, 1);
   } else {
     return Colors.transparent;
   }
@@ -526,7 +549,7 @@ class _ColorProductState extends State<ColorProduct> {
           decoration: BoxDecoration(
             border: Border.all(
               color: widget.selectedIndex
-                  ? Color.fromRGBO(151, 117, 250, 1)
+                  ? const Color.fromRGBO(151, 117, 250, 1)
                   : bordercolor(widget.nameColor),
               width: widget.selectedIndex ? 2.0 : 1.0,
             ),

@@ -22,7 +22,7 @@ class NotificationService {
         // Show notification or use a method to display it in your UI
       }
     });
-    NotificationSettings settings = await messaging.requestPermission(
+    await messaging.requestPermission(
       alert: true,
       announcement: true,
       badge: true,

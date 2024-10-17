@@ -6,10 +6,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:testapp/core/constants/icon_path.dart';
+import 'package:testapp/core/theme/app_color_theme.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/auth/bloc/password_cubit.dart';
 import 'package:testapp/module/auth/bloc/password_state.dart';
+import 'package:testapp/module/auth/screen/login_screen.dart';
 import 'package:testapp/widget/circle_icon.dart';
+import 'package:testapp/widget/credential.dart';
 import 'package:testapp/widget/foot_page.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -37,18 +40,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    final AppColorTheme listColors = AppColorTheme.of(context);
     return (Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: listColors.background,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         leading: Padding(
           padding: const EdgeInsets.only(top: 5, left: 20),
           child: InkWell(
             child: CircleIcon(
                 iconname: IconPath.back,
-                colorCircle: const Color.fromRGBO(245, 246, 250, 1),
+                colorCircle: listColors.colorBox,
                 sizeIcon: const Size(25, 25),
                 sizeCircle: const Size(45, 45),
                 colorBorder: Colors.transparent),
@@ -66,27 +69,28 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             children: [
               Text(
                 "Change Password",
-                style: AppTextStyle.s28_w6,
+                style:
+                    AppTextStyle.s28_w6.copyWith(color: listColors.textMeidum),
               ),
               Spacer(),
-              NameList(
-                Credentials: "Old Password",
-                controller: _oldpassword,
-              ),
+              Credential(
+                  credentials: "Old Password",
+                  obscureText: true,
+                  data: _oldpassword),
               SizedBox(
                 height: 20,
               ),
-              NameList(
-                Credentials: "New Password",
-                controller: _newPassword,
-              ),
+              Credential(
+                  credentials: "New Password",
+                  obscureText: true,
+                  data: _newPassword),
               SizedBox(
                 height: 20,
               ),
-              NameList(
-                Credentials: "Confirm New Password",
-                controller: _confirmnewPassword,
-              ),
+              Credential(
+                  credentials: "Confirm New Password",
+                  obscureText: true,
+                  data: _confirmnewPassword),
               Spacer(),
               Padding(
                 padding: EdgeInsets.only(left: 36, right: 36, bottom: 20),
@@ -183,33 +187,5 @@ class SwitchState extends StatelessWidget {
             light = value;
           },
         ));
-  }
-}
-
-class NameList extends StatelessWidget {
-  final String Credentials;
-  final TextEditingController controller;
-  const NameList(
-      {super.key, required this.Credentials, required this.controller});
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(height: 8),
-          TextField(
-            controller: controller,
-            decoration: InputDecoration(
-              border: const UnderlineInputBorder(),
-              labelText: Credentials,
-            ),
-            obscureText: true,
-          ),
-        ],
-      ),
-    );
   }
 }

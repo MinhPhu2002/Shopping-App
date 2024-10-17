@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:testapp/core/theme/app_color_theme.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/auth/repo/login_repo.dart';
 import 'package:testapp/widget/bottom_action_button.dart';
@@ -20,8 +21,9 @@ class StartScreen extends StatefulWidget {
 class _StartScreenState extends State<StartScreen> {
   @override
   Widget build(BuildContext context) {
+    final AppColorTheme listColors = AppColorTheme.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: listColors.background,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -43,12 +45,13 @@ class _StartScreenState extends State<StartScreen> {
           child: Column(
               // crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       "Let's Get Started",
-                      style: AppTextStyle.s28_w6,
+                      style: AppTextStyle.s28_w6
+                          .copyWith(color: listColors.textMeidum),
                     ),
                   ],
                 ),
@@ -105,9 +108,10 @@ class _StartScreenState extends State<StartScreen> {
                   text: "Already have an account? ",
                   style: AppTextStyle.s15_w4
                       .copyWith(color: const Color.fromRGBO(143, 149, 158, 1))),
-              const TextSpan(
+              TextSpan(
                 text: "Signin",
-                style: AppTextStyle.s15_w5,
+                style:
+                    AppTextStyle.s15_w5.copyWith(color: listColors.textMeidum),
               )
             ])),
           ),

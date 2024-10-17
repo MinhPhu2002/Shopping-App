@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testapp/module/auth/bloc/vertify_state.dart';
 import 'package:testapp/module/auth/repo/otp_vertification_repo.dart';
-import 'package:testapp/module/auth/repo/vertify_repo.dart';
 
 class VertifyCubit extends Cubit<VertifyState> {
   VertifyCubit({required this.repo}) : super(VertifyInitialState());

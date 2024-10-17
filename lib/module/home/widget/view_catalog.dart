@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
+import 'package:testapp/core/theme/app_color_theme.dart';
 
 class ViewCatalog extends StatelessWidget {
   final String nameView;
@@ -9,6 +10,8 @@ class ViewCatalog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    final AppColorTheme listColors =
+        Theme.of(context).extension<AppColorTheme>()!;
     return Padding(
       padding: const EdgeInsets.only(right: 20, left: 20),
       child: Row(
@@ -16,13 +19,11 @@ class ViewCatalog extends StatelessWidget {
         children: [
           Text(
             nameView,
-            style: AppTextStyle.s17_w5
-                .copyWith(color: const Color.fromRGBO(29, 30, 32, 1)),
+            style: AppTextStyle.s17_w5.copyWith(color: listColors.textMeidum),
           ),
-          const Text(
+          Text(
             "View All",
-            style: TextStyle(
-                color: Color.fromRGBO(143, 149, 158, 1), fontSize: 13),
+            style: TextStyle(color: listColors.textSmall, fontSize: 13),
           )
         ],
       ),

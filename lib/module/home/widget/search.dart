@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:testapp/core/constants/icon_path.dart';
+import 'package:testapp/core/theme/app_color_theme.dart';
 
 class Search extends StatefulWidget {
   const Search({
@@ -28,10 +29,12 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
+    final AppColorTheme listColors =
+        Theme.of(context).extension<AppColorTheme>()!;
     return Ink(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: const Color.fromRGBO(245, 246, 250, 1),
+        color: listColors.colorBox,
       ),
       child: TextField(
         onSubmitted: (value) {

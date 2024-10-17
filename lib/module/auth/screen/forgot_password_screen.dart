@@ -4,10 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:testapp/core/app_authentication.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/constants/image_path.dart';
+import 'package:testapp/core/theme/app_color_theme.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
 import 'package:testapp/module/auth/bloc/password_cubit.dart';
 import 'package:testapp/module/auth/bloc/password_state.dart';
 import 'package:testapp/widget/circle_icon.dart';
+import 'package:testapp/widget/credential.dart';
 import 'package:testapp/widget/foot_page.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -37,19 +39,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
 
   @override
   Widget build(BuildContext context) {
+    final AppColorTheme listColors = AppColorTheme.of(context);
     return (Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: listColors.background,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         leading: Padding(
           padding: const EdgeInsets.only(top: 5, left: 20),
           child: InkWell(
             child: CircleIcon(
                 iconname: IconPath.back,
-                colorCircle: Color.fromRGBO(245, 246, 250, 1),
-                sizeIcon: Size(25, 25),
-                sizeCircle: Size(45, 45),
+                colorCircle: listColors.colorBox,
+                sizeIcon: const Size(25, 25),
+                sizeCircle: const Size(45, 45),
                 colorBorder: Colors.transparent),
             onTap: () {
               Navigator.pop(context);
@@ -64,12 +67,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       "Forgot Password",
-                      style: AppTextStyle.s28_w6,
+                      style: AppTextStyle.s28_w6
+                          .copyWith(color: listColors.textMeidum),
                     ),
                   ],
                 ),
@@ -78,14 +82,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                   child: Image.asset(ImagePath.forgotPasswordIllustrator),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 80),
+                  padding: const EdgeInsets.only(top: 80),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      NameList(
-                        Credentials: "Username",
-                        controller: usernameController,
-                      ),
+                      Credential(
+                          credentials: "Username",
+                          obscureText: false,
+                          data: usernameController)
                     ],
                   ),
                 ),
@@ -110,7 +114,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                       );
                     }
                   },
-                  child: SizedBox(),
+                  child: const SizedBox(),
                 )
               ],
             ),
@@ -121,12 +125,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: EdgeInsets.only(left: 36, right: 36, bottom: 25),
+            padding: const EdgeInsets.only(left: 36, right: 36, bottom: 25),
             child: Text(
               "Please write your email to receive a confirmation code to set a new password.",
               textAlign: TextAlign.center,
               style: AppTextStyle.s13_w4
-                  .copyWith(color: Color.fromRGBO(143, 149, 158, 1)),
+                  .copyWith(color: const Color.fromRGBO(143, 149, 158, 1)),
             ),
           ),
           InkWell(
@@ -170,32 +174,5 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
     context
         .read<PasswordCubit>()
         .forgotpassword(username: usernameController.text);
-  }
-}
-
-class NameList extends StatelessWidget {
-  final String Credentials;
-  final TextEditingController controller;
-  const NameList(
-      {super.key, required this.Credentials, required this.controller});
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(height: 8),
-          TextField(
-            controller: controller,
-            decoration: InputDecoration(
-              border: const UnderlineInputBorder(),
-              labelText: Credentials,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

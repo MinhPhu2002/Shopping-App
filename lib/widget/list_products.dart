@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:testapp/core/constants/image_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
+import 'package:testapp/core/theme/app_color_theme.dart';
 import 'package:testapp/utils/ui/mediaquery_extention.dart';
 
 class ListProducts extends StatelessWidget {
@@ -21,6 +22,8 @@ class ListProducts extends StatelessWidget {
   Widget build(BuildContext context) {
     final imageSize =
         context.getResponSizeBasOnWidth(designWidth: 160, designHeight: 203);
+    final AppColorTheme listColors =
+        Theme.of(context).extension<AppColorTheme>()!;
     return InkWell(
       onTap: () {
         context.pushNamed('description', extra: id);
@@ -35,6 +38,7 @@ class ListProducts extends StatelessWidget {
                 width: imageSize.width,
                 height: imageSize.height,
                 decoration: BoxDecoration(
+                  color: Theme.of(context).canvasColor,
                   borderRadius: BorderRadius.circular(20),
                   image: DecorationImage(
                     image: NetworkImage(productImage),
@@ -61,13 +65,12 @@ class ListProducts extends StatelessWidget {
           Text(
             overflow: TextOverflow.ellipsis,
             productName,
-            style: AppTextStyle.s11_w5,
+            style: AppTextStyle.s11_w5.copyWith(color: listColors.textMeidum),
           ),
           const SizedBox(height: 5),
           Text(
             "\$" + productCost,
-            style: AppTextStyle.s13_w6
-                .copyWith(color: const Color.fromRGBO(29, 30, 32, 1)),
+            style: AppTextStyle.s13_w6.copyWith(color: listColors.textMeidum),
           )
         ],
       ),

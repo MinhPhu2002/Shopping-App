@@ -6,8 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testapp/common/app_setting.dart';
 import 'package:testapp/core/constants/icon_path.dart';
 import 'package:testapp/core/theme/app_text_style.dart';
+import 'package:testapp/core/theme/app_color_theme.dart';
 import 'package:testapp/data/services/auth_service.dart';
 import 'package:testapp/module/home/bloc/user/user_cubit.dart';
 import 'package:testapp/module/home/bloc/user/user_state.dart';
@@ -48,7 +50,7 @@ class DrawerHomePage extends StatelessWidget {
   }
 }
 
-class HomeDrawer extends StatelessWidget {
+class HomeDrawer extends StatefulWidget {
   const HomeDrawer({
     super.key,
     required this.avatar,
@@ -59,11 +61,33 @@ class HomeDrawer extends StatelessWidget {
   final String name;
 
   @override
+  State<HomeDrawer> createState() => _HomeDrawerState();
+}
+
+class _HomeDrawerState extends State<HomeDrawer> {
+  bool darkmode = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    loadtheme();
+    super.initState();
+  }
+
+  void loadtheme() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      darkmode = preferences.getBool('darkmode') ?? false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final AppColorTheme listColors =
+        Theme.of(context).extension<AppColorTheme>()!;
     return Drawer(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       width: 300,
-      backgroundColor: Colors.white,
+      backgroundColor: listColors.background,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -72,7 +96,7 @@ class HomeDrawer extends StatelessWidget {
             InkWell(
               child: CircleIcon(
                   iconname: IconPath.menu2,
-                  colorCircle: const Color.fromRGBO(245, 245, 245, 1),
+                  colorCircle: listColors.colorBox!,
                   sizeIcon: const Size(25, 25),
                   sizeCircle: const Size(45, 45),
                   colorBorder: Colors.transparent),
@@ -83,7 +107,7 @@ class HomeDrawer extends StatelessWidget {
             ),
             Row(
               children: [
-                if (avatar.isNotEmpty)
+                if (widget.avatar.isNotEmpty)
                   Container(
                     width: 40,
                     height: 40,
@@ -95,36 +119,40 @@ class HomeDrawer extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           image: DecorationImage(
-                            image: NetworkImage(avatar),
+                            image: NetworkImage(widget.avatar),
                             fit: BoxFit.cover,
                           ),
                         ),
                       ),
                     ),
                   ),
-                if (avatar.isEmpty)
+                if (widget.avatar.isEmpty)
                   Container(
                     width: 40,
                     height: 40,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                     ),
-                    child: SvgPicture.asset(IconPath.avatarDefault),
+                    child: SvgPicture.asset(
+                      IconPath.avatarDefault,
+                      color: listColors.textMeidum,
+                    ),
                   ),
                 const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      name,
-                      style: AppTextStyle.s15_w5,
+                      widget.name,
+                      style: AppTextStyle.s15_w5
+                          .copyWith(color: listColors.textMeidum),
                     ),
                     const SizedBox(width: 7),
                     Row(
                       children: [
                         Text("Verified Profile",
-                            style: AppTextStyle.s11_w5.copyWith(
-                                color: const Color.fromRGBO(143, 149, 158, 1))),
+                            style: AppTextStyle.s11_w5
+                                .copyWith(color: listColors.textSmall)),
                         const SizedBox(width: 5),
                         SvgPicture.asset(IconPath.badge),
                       ],
@@ -137,11 +165,12 @@ class HomeDrawer extends StatelessWidget {
                   height: 32,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: const Color.fromRGBO(245, 245, 245, 1)),
-                  child: const Center(
+                      color: listColors.colorBox),
+                  child: Center(
                       child: Text(
                     "3 Orders",
-                    style: AppTextStyle.s11_w5,
+                    style: AppTextStyle.s11_w5
+                        .copyWith(color: listColors.textSmall),
                   )),
                 )
               ],
@@ -155,9 +184,23 @@ class HomeDrawer extends StatelessWidget {
                   height: 25,
                   decoration: const BoxDecoration(),
                   child: CupertinoSwitch(
-                    value: false,
-                    activeColor: const Color.fromRGBO(214, 214, 214, 1),
-                    onChanged: (bool value) {},
+                    value: darkmode,
+                    activeColor: darkmode
+                        ? Colors.green
+                        : Color.fromRGBO(214, 214, 214, 1),
+                    onChanged: (bool value) async {
+                      SharedPreferences pref =
+                          await SharedPreferences.getInstance();
+                      setState(() {
+                        darkmode = !darkmode;
+                        value = darkmode;
+                        pref.setBool('darkmode', darkmode);
+                        if (darkmode == true)
+                          AppSetting.enableDarkMode();
+                        else
+                          AppSetting.disableDarkMode();
+                      });
+                    },
                   ),
                 )
               ],
