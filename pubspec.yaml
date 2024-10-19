@@ -52,6 +52,20 @@ dependencies:
   go_router: ^14.2.7
   shared_preferences: ^2.3.2
   flutter_native_splash: ^2.4.1
+  flutter_launcher_icons: ^0.14.1
+flutter_native_splash:
+  android: true
+  ios: true
+  image : assets/Image/splash.jpg
+  color: "#ffffff"
+  android_gravity: fill
+  ios_content_mode: scaleAspectFill 
+flutter_icons:
+  android: true         
+  ios: true            
+  image_path: "assets/Image/icon.png" # Đường dẫn tới file ảnh icon của bạn
+  adaptive_icon_background: "#FFFFFF"    # Màu nền cho Android Adaptive Icons
+  adaptive_icon_foreground: "assets/Image/icon.png"
 dev_dependencies:
   flutter_test:
     sdk: flutter

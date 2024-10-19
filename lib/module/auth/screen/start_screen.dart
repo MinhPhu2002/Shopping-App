@@ -32,7 +32,7 @@ class _StartScreenState extends State<StartScreen> {
           child: InkWell(
             child: CircleIcon(
                 iconname: IconPath.back,
-                colorCircle: const Color.fromRGBO(245, 246, 250, 1),
+                colorCircle: listColors.colorBox,
                 sizeIcon: const Size(25, 25),
                 sizeCircle: const Size(45, 45),
                 colorBorder: Colors.transparent),

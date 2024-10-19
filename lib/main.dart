@@ -25,9 +25,21 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
 }
 
-class InkWellExampleApp extends StatelessWidget {
+class InkWellExampleApp extends StatefulWidget {
   InkWellExampleApp({super.key});
 
+  @override
+  State<InkWellExampleApp> createState() => _InkWellExampleAppState();
+}
+
+class _InkWellExampleAppState extends State<InkWellExampleApp> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void initialization() async {}
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
